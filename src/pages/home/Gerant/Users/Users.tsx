@@ -1,13 +1,15 @@
 import { useState } from "react";
 import UserFieled from "../../../../components/Users/UserFieled";
 import { User } from "../../../../api/auth";
+import useQuery from "../../../../hook/useQuery";
 
 const activeTab = "inline-flex text-nowrap bg-white px-4 rounded-lg shadow dark:bg-gradient-to-br dark:text-neutral-300 dark:from-gray-800 dark:to-gray-700";
 const noActiveTab = "inline-flex text-nowrap px-4 dark:text-neutral-300";
 
 function Users() {
+    const idQuery = useQuery('id');
+    const edit = useQuery('edit');
     const [tab, setTab] = useState("");
-
     const users : User[] = JSON.parse(localStorage.getItem('users') || "[]")
 
     return (
@@ -19,7 +21,7 @@ function Users() {
                             onClick={() => setTab("Gerant")}
                             className={`group relative w-full flex items-center p-2
                   transition-all duration-200 cursor-pointer
-                  ${tab === "banque" ? activeTab : noActiveTab}`}
+                  ${tab === "Gerant" ? activeTab : noActiveTab}`}
                         >
                             {/* <CreditCardIcon className="md:mr-3 h-4 w-4" /> */}
                             <button className="hidden md:block font-medium">Gerant</button>
@@ -27,7 +29,7 @@ function Users() {
                         <button
                             className={`group relative w-full flex items-center justify-center p-2
                   transition-all duration-200 cursor-pointer text-center
-                  ${tab === "caisse" ? activeTab : noActiveTab}`}
+                  ${tab === "Vendeur" ? activeTab : noActiveTab}`}
                             onClick={() => setTab("Vendeur")}
                         >
                             {/* <WalletIcon className="md:mr-3 h-4 w-4" /> */}
@@ -36,7 +38,7 @@ function Users() {
                         <button
                             className={`group relative w-full flex items-center justify-center p-2
                   transition-all duration-200 cursor-pointer
-                  ${tab === "mobile" ? activeTab : noActiveTab}`}
+                  ${tab === "Magasinier" ? activeTab : noActiveTab}`}
                             onClick={() => setTab("Magasinier")}
                         >
                             {/* <SmartphoneIcon className="md:mr-3 h-4 w-4" /> */}
@@ -45,7 +47,7 @@ function Users() {
                         <button
                             className={`group relative w-full flex items-center justify-end p-2
                   transition-all duration-200 cursor-pointer
-                  ${tab === "autres" ? activeTab : noActiveTab}`}
+                  ${tab === "Caissier" ? activeTab : noActiveTab}`}
                             onClick={() => setTab("Caissier")}
                         >
                             {/* <PiggyBankIcon className="md:mr-3 h-4 w-4" /> */}
@@ -57,7 +59,7 @@ function Users() {
 
             <div className="flex flex-wrap gap-6">
                 {
-                    users?.filter((user) => user.Role.toLowerCase() === tab.toLowerCase()).map((user) => <UserFieled user={user}/>)
+                    users?.filter((user) => user.Role.toLowerCase() === tab.toLowerCase()).map((user) => <UserFieled user={user} idQuery={idQuery} edit={edit}/>)
                 }
             </div>
         </div>
