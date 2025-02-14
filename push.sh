@@ -1,1 +1,1 @@
-sshpass -p "74btr16h?" scp -r dist fabrich@193.108.53.226:/home/fabrich/Mandroso-prev
+npm run build && git add . && git commit -m "$1" && git push
