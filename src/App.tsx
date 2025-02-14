@@ -13,11 +13,11 @@ function App() {
       <Toaster />
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Protected> <Home /> </Protected>}/>
-        <Route
+        <Route path="/*" element={<Protected> <Home /> </Protected>}/>
+        {/* <Route
           path="/:tab"
           element={<Protected> <Home /> </Protected>}
-        />
+        /> */}
         <Route path="/reset_password" element={<ResetPassword />} />
       </Routes>
     </div>
