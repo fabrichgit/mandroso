@@ -1,17 +1,8 @@
 import { Link } from "react-router-dom"
 import { User } from "../../api/auth"
 import { image } from "../../utils/image"
-import UserDetails from "./UserDetails"
 
-function UserFieled({ user, idQuery, edit }: { user: User, idQuery: string | null, edit: string | null }) {
-
-    if (idQuery === user?.ID) {
-        return (
-            <div className="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black/70 overflow-y-auto">
-                <UserDetails user={user} edit={edit} />
-            </div>
-        )
-    }
+function UserFieled({ user }: { user: User }) {
 
     return (
         <div className="max-w-sm bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
@@ -29,7 +20,7 @@ function UserFieled({ user, idQuery, edit }: { user: User, idQuery: string | nul
                     <Link to={`?id=${user?.ID}`} className="flex-1 rounded-full bg-blue-600 dark:bg-blue-800 text-white dark:text-white antialiased font-bold hover:bg-blue-800 dark:hover:bg-blue-900 px-4  py-1">
                         Details
                     </Link>
-                    <Link to={`?id=${user?.ID}?edit=true`} className="flex-1 rounded-full border-2 border-gray-400 dark:border-gray-700 font-semibold text-black dark:text-white px-4 py-1">
+                    <Link to={`?id=${user?.ID}&&edit=true`} className="flex-1 rounded-full border-2 border-gray-400 dark:border-gray-700 font-semibold text-black dark:text-white px-4 py-1">
                         Edit
                     </Link>
                 </div>

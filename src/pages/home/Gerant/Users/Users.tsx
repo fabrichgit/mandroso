@@ -2,6 +2,7 @@ import { useState } from "react";
 import UserFieled from "../../../../components/Users/UserFieled";
 import { User } from "../../../../api/auth";
 import useQuery from "../../../../hook/useQuery";
+import UserDetails from "../../../../components/Users/UserDetails";
 
 const activeTab = "inline-flex text-nowrap bg-white px-4 rounded-lg shadow dark:bg-gradient-to-br dark:text-neutral-300 dark:from-gray-800 dark:to-gray-700";
 const noActiveTab = "inline-flex text-nowrap px-4 dark:text-neutral-300";
@@ -10,7 +11,15 @@ function Users() {
     const idQuery = useQuery('id');
     const edit = useQuery('edit');
     const [tab, setTab] = useState("");
-    const users : User[] = JSON.parse(localStorage.getItem('users') || "[]")
+    const users: User[] = JSON.parse(localStorage.getItem('users') || "[]")
+
+    if (idQuery) {
+        return (
+            <div className="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black/70 overflow-y-auto">
+                <UserDetails idQuery={idQuery} edit={edit} />
+            </div>
+        )
+    }
 
     return (
         <div className="w-full">
@@ -59,7 +68,7 @@ function Users() {
 
             <div className="flex flex-wrap gap-6">
                 {
-                    users?.filter((user) => user.Role.toLowerCase() === tab.toLowerCase()).map((user) => <UserFieled user={user} idQuery={idQuery} edit={edit}/>)
+                    users?.filter((user) => user.Role.toLowerCase() === tab.toLowerCase()).map((user) => <UserFieled user={user} />)
                 }
             </div>
         </div>

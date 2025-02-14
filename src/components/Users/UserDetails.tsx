@@ -1,13 +1,17 @@
-import { User } from "../../api/auth"
 import { AiFillCloseCircle } from "react-icons/ai"
+import { User } from "../../api/auth"
+import { Link } from "react-router-dom"
 
 // @ts-ignore
-function UserDetails({ user, edit }: { user: User, edit: string | null }) {
+function UserDetails({ idQuery, edit }: { idQuery: string | null, edit: string | null }) {
+
+    const user: User = JSON.parse(localStorage.getItem('users') || "[]").find((u: User) => u.ID === idQuery)
+
     return (
         <div className="bg-white p-6 rounded-2xl shadow-2xl w-96 relative">
-            <button className="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
-                <AiFillCloseCircle size={24}/>
-            </button>
+            <Link to="?" className="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+                <AiFillCloseCircle size={24} />
+            </Link>
             <h1 className="text-2xl font-bold text-center text-gray-800">Détails de l'utilisateur</h1>
             <div className="mt-6 space-y-3 text-gray-700">
                 <p><strong>Nom:</strong> {user.Name}</p>
@@ -20,9 +24,11 @@ function UserDetails({ user, edit }: { user: User, edit: string | null }) {
                 <p><strong>Rôle:</strong> {user.Role}</p>
             </div>
             <div className="mt-6 flex justify-center">
-                <button className="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-lg" >
-                    Fermer
-                </button>
+                <Link to={`?id=${idQuery}&&edit=true`} className="bg-blue-600 p-1 rounded-lg shadow-lg" >
+                    <span className="block bg-white py-1 px-6 rounded-lg">
+                        editer
+                    </span>
+                </Link>
             </div>
         </div>
 
