@@ -1,5 +1,5 @@
-import axios from "axios";
-import { api, token } from "../constant";
+// import axios from "axios";
+// import { api, token } from "../constant";
 
 export type User = {
   ID: string;

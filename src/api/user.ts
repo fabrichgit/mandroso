@@ -1,7 +1,6 @@
 import axios from "axios";
 import { api, token } from "../constant";
 import { User } from "./auth";
-import { LowercaseKeys } from "../types/generic";
 
 export async function createUser(data: {name: string, email: string, role: string, password: string}) {
     const res = await axios.post(`${api()}/user/register`, data, {
@@ -69,7 +68,7 @@ export async function updateStatus(id: string, available: boolean) {
     return res.data
 }
 
-export async function updateUser({data}: {data: Partial<LowercaseKeys<User>>}, id: string | undefined) {
+export async function updateUser({data}: {data: Partial<User>}, id: string | undefined) {
     console.log(data);
     
     const res = await axios.post(`${api()}/user/byadmin`, data, {
