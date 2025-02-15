@@ -69,16 +69,22 @@ export async function updateStatus(id: string, available: boolean) {
 }
 
 export async function updateUser({data}: {data: Partial<User>}, id: string | undefined) {
-    console.log(data);
     
-    const res = await axios.post(`${api()}/user/byadmin`, data, {
-        headers: {
-            "Authorization": token()
-        },
-        params: {
-            id
-        }
-    })
+    const users : User[] = JSON.parse(localStorage.getItem('users') || "[]")
 
-    return res.data
+    const updated = users.map(user => user.ID !== id ? user : {ID: id, ...data})
+    localStorage.setItem('users', JSON.stringify(updated))
+
+    return updated as User[]
+
+    // const res = await axios.post(`${api()}/user/byadmin`, data, {
+    //     headers: {
+    //         "Authorization": token()
+    //     },
+    //     params: {
+    //         id
+    //     }
+    // })
+
+    // return res.data
 }

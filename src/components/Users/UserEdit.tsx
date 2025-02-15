@@ -1,11 +1,15 @@
 import React from "react";
 import { useStore_Users } from "../../store/data";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { updateUser } from "../../api/user";
+import toast from "react-hot-toast";
 
 function UserEdit({ idQuery }: { idQuery: string | null }) {
 
-    const user = useStore_Users().find(u => u.ID === idQuery)
+    const nav = useNavigate()
+    const {data: users, reFetch} = useStore_Users();
+    const user = users ? users?.find(u => u.ID === idQuery) : null
 
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -21,7 +25,16 @@ function UserEdit({ idQuery }: { idQuery: string | null }) {
             Role: formData.get("Role") as string,
             Available: formData.get("Available") === "on",
         };
-    
+        
+        if (idQuery) {
+            updateUser({data: updatedUser}, idQuery)
+            .then(() => {
+                toast.success('success !')
+                reFetch()
+                nav('?')
+            })
+        }
+        
         console.log("Données soumises :", updatedUser);
 
     }

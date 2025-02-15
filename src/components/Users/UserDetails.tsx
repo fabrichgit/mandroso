@@ -6,7 +6,7 @@ import { useStore_Users } from "../../store/data"
 
 function UserDetails({ idQuery }: { idQuery: string | null }) {
 
-    const user: User | undefined = useStore_Users().find(u => u.ID === idQuery)
+    const user: User | undefined = useStore_Users(u => u.data).find(u => u.ID === idQuery)
 
     return (
         <div className="bg-white p-6 rounded-2xl shadow-2xl w-96 relative">

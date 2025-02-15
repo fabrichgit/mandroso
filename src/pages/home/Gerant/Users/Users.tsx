@@ -12,7 +12,7 @@ function Users() {
     const idQuery = useQuery('id');
     const edit = useQuery('edit');
     const [tab, setTab] = useState("");
-    const users = useStore_Users()
+    const {data: users} = useStore_Users()
 
     if (idQuery) {
 
@@ -43,7 +43,7 @@ function Users() {
                   ${tab === "Gerant" ? activeTab : noActiveTab}`}
                         >
                             {/* <CreditCardIcon className="md:mr-3 h-4 w-4" /> */}
-                            <button className="hidden md:block font-medium">Gerant</button>
+                            <button className="font-medium">Gerant</button>
                         </button>
                         <button
                             className={`group relative w-full flex items-center justify-center p-2
@@ -52,7 +52,7 @@ function Users() {
                             onClick={() => setTab("Vendeur")}
                         >
                             {/* <WalletIcon className="md:mr-3 h-4 w-4" /> */}
-                            <button className="hidden md:block font-medium text-center">Vendeur</button>
+                            <button className="font-medium text-center">Vendeur</button>
                         </button>
                         <button
                             className={`group relative w-full flex items-center justify-center p-2
@@ -61,7 +61,7 @@ function Users() {
                             onClick={() => setTab("Magasinier")}
                         >
                             {/* <SmartphoneIcon className="md:mr-3 h-4 w-4" /> */}
-                            <button className="hidden md:block font-medium">Magasinier</button>
+                            <button className="font-medium">Magasinier</button>
                         </button>
                         <button
                             className={`group relative w-full flex items-center justify-end p-2
@@ -70,7 +70,7 @@ function Users() {
                             onClick={() => setTab("Caissier")}
                         >
                             {/* <PiggyBankIcon className="md:mr-3 h-4 w-4" /> */}
-                            <button className="hidden md:block font-medium">Caissier</button>
+                            <button className="font-medium">Caissier</button>
                         </button>
                     </div>
                 </nav>
