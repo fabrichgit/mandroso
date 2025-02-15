@@ -1,8 +1,9 @@
 import { useState } from "react";
 import UserFieled from "../../../../components/Users/UserFieled";
-import { User } from "../../../../api/auth";
 import useQuery from "../../../../hook/useQuery";
 import UserDetails from "../../../../components/Users/UserDetails";
+import { useStore_Users } from "../../../../store/data";
+import UserEdit from "../../../../components/Users/UserEdit";
 
 const activeTab = "inline-flex text-nowrap bg-white px-4 rounded-lg shadow dark:bg-gradient-to-br dark:text-neutral-300 dark:from-gray-800 dark:to-gray-700";
 const noActiveTab = "inline-flex text-nowrap px-4 dark:text-neutral-300";
@@ -11,12 +12,21 @@ function Users() {
     const idQuery = useQuery('id');
     const edit = useQuery('edit');
     const [tab, setTab] = useState("");
-    const users: User[] = JSON.parse(localStorage.getItem('users') || "[]")
+    const users = useStore_Users()
 
     if (idQuery) {
+
+        if(edit === "true"){
+            return (
+                <div className="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black/70 overflow-y-auto">
+                    <UserEdit idQuery={idQuery} />
+                </div>
+            )
+        }
+
         return (
             <div className="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black/70 overflow-y-auto">
-                <UserDetails idQuery={idQuery} edit={edit} />
+                <UserDetails idQuery={idQuery} />
             </div>
         )
     }
