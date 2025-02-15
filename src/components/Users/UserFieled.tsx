@@ -8,7 +8,7 @@ function UserFieled({ user }: { user: User }) {
         <div className="max-w-sm bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow">
             <div className="border-b p-4">
                 <div className="text-center">
-                    <img className="h-14 w-14 rounded-full border-4 border-white dark:border-gray-800 mx-auto my-4" src={user?.Avatar || image(Math.random().toString())} />
+                    <img className="h-14 w-14 rounded-full border-4 border-white dark:border-gray-800 mx-auto my-4" src={user?.Avatar || image(user?.ID)} />
                     <div className="py-2">
                         <h3 className="font-bold text-xl text-gray-800 dark:text-white">{user?.Name}</h3>
                         <div className="inline-flex text-gray-700 dark:text-gray-300 items-center text-sm">
