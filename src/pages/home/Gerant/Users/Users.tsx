@@ -4,6 +4,9 @@ import useQuery from "../../../../hook/useQuery";
 import UserDetails from "../../../../components/Users/UserDetails";
 import { useStore_Users } from "../../../../store/data";
 import UserEdit from "../../../../components/Users/UserEdit";
+import { Link } from "react-router-dom";
+import { AiOutlineUserAdd } from "react-icons/ai";
+import UserAdd from "../../../../components/Users/UserAdd";
 
 const activeTab = "inline-flex text-nowrap bg-white px-4 rounded-lg shadow dark:bg-gradient-to-br dark:text-neutral-300 dark:from-gray-800 dark:to-gray-700";
 const noActiveTab = "inline-flex text-nowrap px-4 dark:text-neutral-300";
@@ -11,19 +14,26 @@ const noActiveTab = "inline-flex text-nowrap px-4 dark:text-neutral-300";
 function Users() {
     const idQuery = useQuery('id');
     const edit = useQuery('edit');
-    const [tab, setTab] = useState("");
-    const {data: users} = useStore_Users()
+    const add = useQuery('add');
+    const [tab, setTab] = useState("Gerant");
+    const { data: users } = useStore_Users()
+
+    if (add && tab) {
+        return (
+            <div className="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black/70 overflow-y-auto">
+                <UserAdd role={tab}/>
+            </div>
+        )
+    }
 
     if (idQuery) {
-
-        if(edit === "true"){
+        if (edit === "true") {
             return (
                 <div className="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black/70 overflow-y-auto">
                     <UserEdit idQuery={idQuery} />
                 </div>
             )
         }
-
         return (
             <div className="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black/70 overflow-y-auto">
                 <UserDetails idQuery={idQuery} />
@@ -75,10 +85,14 @@ function Users() {
                     </div>
                 </nav>
             </div>
-
-            <div className="flex flex-wrap gap-6">
+            <div className="flex justify-center items-center fixed z-50 border flex-1 bottom-3 right-3 text-lg text-white bg-slate-900 p-3 rounded-full">
+                <Link to={`?add=true&&type=${tab.toLowerCase()}`}>
+                    <AiOutlineUserAdd />
+                </Link>
+            </div>
+            <div className="flex flex-wrap gap-6 w-full">
                 {
-                    users?.filter((user) => user.Role.toLowerCase() === tab.toLowerCase()).map((user) => <UserFieled user={user} />)
+                    users?.filter((user) => !user.archived && user.Role.toLowerCase() === tab.toLowerCase()).map((user) => <UserFieled user={user} />)
                 }
             </div>
         </div>

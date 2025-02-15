@@ -4,17 +4,19 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { updateUser } from "../../api/user";
 import toast from "react-hot-toast";
+import { FaArchive } from "react-icons/fa";
 
 function UserEdit({ idQuery }: { idQuery: string | null }) {
 
     const nav = useNavigate()
-    const {data: users, reFetch} = useStore_Users();
+    const { data: users, reFetch } = useStore_Users();
     const user = users ? users?.find(u => u.ID === idQuery) : null
 
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
+
         const updatedUser = {
             Name: formData.get("Name") as string,
             Email: formData.get("Email") as string,
@@ -25,24 +27,35 @@ function UserEdit({ idQuery }: { idQuery: string | null }) {
             Role: formData.get("Role") as string,
             Available: formData.get("Available") === "on",
         };
-        
+
         if (idQuery) {
-            updateUser({data: updatedUser}, idQuery)
-            .then(() => {
-                toast.success('success !')
-                reFetch()
-                nav('?')
-            })
+            updateUser({ data: updatedUser }, idQuery)
+                .then(() => {
+                    toast.success('success !')
+                    reFetch()
+                    nav('?')
+                })
         }
-        
+
         console.log("Données soumises :", updatedUser);
 
     }
 
+    const archiver = (archived?: boolean) => {
+        if (idQuery) {
+            updateUser({ data: { archived } }, idQuery)
+                .then(() => {
+                    toast.success('archived !')
+                    reFetch()
+                    nav('?')
+                })
+        }
+    }
+
     return (
-        <form onSubmit={submit} className="bg-white p-6 rounded-2xl shadow-2xl w-[27rem] relative">
+        <form onSubmit={submit} className="bg-white p-6 md:rounded-2xl md:shadow-2xl h-max w-full md:w-[27rem] relative">
             <Link to="?" className="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
-                <AiFillCloseCircle size={24}/>
+                <AiFillCloseCircle size={24} />
             </Link>
             <h1 className="text-2xl font-bold text-center text-gray-800">Modifier les informations</h1>
             <div className="mt-6 grid grid-cols-2 gap-4 text-gray-700">
@@ -76,8 +89,12 @@ function UserEdit({ idQuery }: { idQuery: string | null }) {
                 </div>
                 <div className="flex items-center gap-2">
                     <input type="checkbox" name="Available" defaultChecked={user?.Available} />
-                    <label className="font-medium">Disponible</label>
+                    <label className="font-medium">Activer/Desactiver</label>
                 </div>
+                <button onClick={() => archiver(!Boolean(user?.archived))} className="flex items-center gap-2 w-max">
+                    <FaArchive className="text-red-500" />
+                    <span className="font-medium">Archiver</span>
+                </button>
             </div>
             <div className="mt-6 flex justify-center gap-4">
                 <Link to={`?id=${idQuery}`} className="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg shadow-lg">

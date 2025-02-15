@@ -9,7 +9,7 @@ function UserDetails({ idQuery }: { idQuery: string | null }) {
     const user: User | undefined = useStore_Users(u => u.data).find(u => u.ID === idQuery)
 
     return (
-        <div className="bg-white p-6 rounded-2xl shadow-2xl w-96 relative">
+        <div className="bg-white p-6 md:rounded-2xl md:shadow-2xl h-max w-full md:w-[27rem] relative">
             <Link to="?" className="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
                 <AiFillCloseCircle size={24} />
             </Link>

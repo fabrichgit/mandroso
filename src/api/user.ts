@@ -2,14 +2,22 @@ import axios from "axios";
 import { api, token } from "../constant";
 import { User } from "./auth";
 
-export async function createUser(data: {name: string, email: string, role: string, password: string}) {
-    const res = await axios.post(`${api()}/user/register`, data, {
-        headers: {
-            "Authorization": token()
-        }
-    })
+export async function createUser(data: User) {
 
-    return res.data
+    const users : User[] = JSON.parse(localStorage.getItem('users') || "[]")
+
+    const updated = [data, ...users]
+    localStorage.setItem('users', JSON.stringify(updated))
+
+    return updated as User[]
+
+    // const res = await axios.post(`${api()}/user/register`, data, {
+    //     headers: {
+    //         "Authorization": token()
+    //     }
+    // })
+
+    // return res.data
 }
 
 export async function deleteUser(id: string) {

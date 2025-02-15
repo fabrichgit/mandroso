@@ -12,6 +12,7 @@ export type User = {
   birthDate: string;
   Contact: string;
   Post: string;
+  archived?: boolean;
 };
 
 export type Auth = {
@@ -23,8 +24,8 @@ export async function login(data: Auth) {
   // const res = await axios.post(`${api()}/user/login`, data);
   // return res.data;
   if (data.name === "admin" && data.password === "admin") {
-    return {Token: "afsghdjklfsf"}; 
-  } else{
+    return { Token: "afsghdjklfsf" };
+  } else {
     throw new Error("auth failed");
   }
 }
@@ -36,5 +37,8 @@ export async function auth() {
   //   },
   // });
   // return res.data;
-  return {Name: "Mr Gerant", Role: "gerant", Available: true, Email: "admin@gmail.com", ID: "sfdgjkl", Avatar: ""} as User
+  if (!localStorage.getItem("token")) {
+    throw new Error("invalid token")
+  }
+  return { Name: "Mr Gerant", Role: "gerant", Available: true, Email: "admin@gmail.com", ID: "sfdgjkl", Avatar: "" } as User
 }

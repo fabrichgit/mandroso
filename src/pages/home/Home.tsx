@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { User } from "../../api/auth"
 import { user_store } from "../../store/user";
 import HomeGerant from "./Gerant/HomeGerant";
+import { useStore_Users } from "../../store/data";
 
 const defaultUsers = [
   {
@@ -56,11 +57,13 @@ const defaultUsers = [
 
 function Home() {
 
-  useEffect(() => {
-    localStorage.getItem('users') ? null : localStorage.setItem('users', JSON.stringify(defaultUsers))
-  }, [])
+  const {reFetch} = useStore_Users()
+  const { data: user } = user_store();
 
-  const { data: user } = user_store()
+  useEffect(() => {
+    localStorage.getItem('users') ? null : localStorage.setItem('users', JSON.stringify(defaultUsers));
+    reFetch()
+  }, [])
 
   const HomeManager = ({ user }: { user: User | null }) => {
     switch (user?.Role) {
@@ -71,9 +74,7 @@ function Home() {
     }
   }
 
-  return (
-    <HomeManager user={user} />
-  )
+  return <HomeManager user={user} />
 }
 
-export default Home
+export default Home;
