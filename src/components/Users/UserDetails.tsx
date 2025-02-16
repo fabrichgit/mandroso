@@ -23,8 +23,14 @@ function UserDetails({ idQuery }: { idQuery: string | null }) {
                 <p><strong>Contact:</strong> {user?.Contact}</p>
                 <p><strong>Poste:</strong> {user?.Post || "Non renseigné"}</p>
                 <p><strong>Rôle:</strong> {user?.Role}</p>
+                <p><strong>Rôle:</strong> {user?.Role}</p>
             </div>
-            <div className="mt-6 flex justify-center">
+            <div className="mt-6 flex justify-between">
+                <Link to={`/user/${idQuery}`} className="flex items-center text-indigo-500 font-bold hover:underline" >
+                    <span className="">
+                        voir plus
+                    </span>
+                </Link>
                 <Link to={`?id=${idQuery}&&edit=true`} className="flex items-center" >
                     <FaEdit />
                     <span className="">

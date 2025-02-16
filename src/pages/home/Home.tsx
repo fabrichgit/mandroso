@@ -7,7 +7,7 @@ import { useStore_Users } from "../../store/data";
 const defaultUsers = [
   {
     ID: "267",
-    Name: "User 1",
+    Name: "magasinier 1",
     Email: "user1@contact.com",
     Available: true,
     birthAt: "Nowhere",
@@ -19,7 +19,7 @@ const defaultUsers = [
   },
   {
     ID: "y31",
-    Name: "User 2",
+    Name: "magasinier 2",
     Email: "user2@contact.com",
     Available: true,
     birthAt: "Nowhere",
@@ -31,7 +31,7 @@ const defaultUsers = [
   },
   {
     ID: "aka",
-    Name: "User 3",
+    Name: "gerant 1",
     Email: "user3@contact.com",
     Available: true,
     birthAt: "Nowhere",
@@ -43,7 +43,7 @@ const defaultUsers = [
   },
   {
     ID: "qls",
-    Name: "User 4",
+    Name: "caissier 1",
     Email: "user4@contact.com",
     Available: true,
     birthAt: "Nowhere",
