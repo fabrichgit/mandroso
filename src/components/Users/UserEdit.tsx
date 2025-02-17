@@ -19,6 +19,7 @@ function UserEdit({ idQuery }: { idQuery: string | null }) {
 
         const updatedUser = {
             Name: formData.get("Name") as string,
+            LastName: formData.get("LastName") as string,
             Email: formData.get("Email") as string,
             birthAt: formData.get("birthAt") as string,
             birthDate: formData.get("birthDate") as string,
@@ -62,6 +63,10 @@ function UserEdit({ idQuery }: { idQuery: string | null }) {
                 <div>
                     <label className="block font-medium">Nom</label>
                     <input type="text" name="Name" defaultValue={user?.Name} className="w-full px-3 py-2 border rounded-lg" />
+                </div>
+                <div>
+                    <label className="block font-medium">Prenom</label>
+                    <input type="text" name="LastName" defaultValue={user?.LastName} className="w-full px-3 py-2 border rounded-lg" />
                 </div>
                 <div>
                     <label className="block font-medium">Email</label>

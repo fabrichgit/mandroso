@@ -11,7 +11,7 @@ function UserFieled({ user, view }: { user: User, view: string }) {
                     <img src={user.Avatar || image(user.ID)} alt="" className="w-10 h-10 rounded-full" />
                 </td>
                 <td className="p-2 text-nowrap">{user.Name}</td>
-                <td className="p-2 text-nowrap">{user.Email}</td>
+                <td className="p-2 text-nowrap">{user.LastName}</td>
                 <td className="p-2 text-nowrap">
                     <Link to={`?id=${user?.ID}`} className="bg-blue-500 text-white px-3 py-1 rounded mr-2">
                         Details
@@ -29,7 +29,7 @@ function UserFieled({ user, view }: { user: User, view: string }) {
                         <div className="py-2">
                             <h3 className="font-bold text-xl text-gray-800 dark:text-white">{user?.Name}</h3>
                             <div className="inline-flex text-gray-700 dark:text-gray-300 items-center text-sm">
-                                {user?.Email}
+                                {user?.LastName}
                             </div>
                         </div>
                     </div>

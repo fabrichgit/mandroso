@@ -5,8 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { createUser } from "../../api/user";
 import toast from "react-hot-toast";
 import { User } from "../../api/auth";
+import { useData_roles } from "../../hook/data";
 
 function UserAdd({ role }: { role: string | null }) {
+
+    const {data: roles} = useData_roles()
 
     const nav = useNavigate()
     const { reFetch } = useStore_Users();
@@ -18,12 +21,13 @@ function UserAdd({ role }: { role: string | null }) {
         const updatedUser : User = {
             ID: Date.now().toString(),
             Name: formData.get("Name") as string,
+            LastName: formData.get("LastName") as string,
             Email: formData.get("Email") as string,
             birthAt: formData.get("birthAt") as string,
             birthDate: formData.get("birthDate") as string,
             Contact: formData.get("Contact") as string,
             Post: formData.get("Post") as string,
-            Role: role?.toLowerCase() || "",
+            Role: formData.get("role") as string,
             Available: formData.get("Available") === "on",
         };
 
@@ -43,11 +47,15 @@ function UserAdd({ role }: { role: string | null }) {
             <Link to="?" className="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
                 <AiFillCloseCircle size={24} />
             </Link>
-            <h1 className="text-2xl font-bold text-center text-gray-800">Ajouter un(e) {role}</h1>
+            <h1 className="text-2xl font-bold text-center text-gray-800">Ajouter utilisateur</h1>
             <div className="mt-6 grid grid-cols-2 gap-4 text-gray-700">
                 <div>
                     <label className="block font-medium">Nom</label>
                     <input type="text" name="Name" className="w-full px-3 py-2 border rounded-lg" />
+                </div>
+                <div>
+                    <label className="block font-medium">Prenom</label>
+                    <input type="text" name="LastName" className="w-full px-3 py-2 border rounded-lg" />
                 </div>
                 <div>
                     <label className="block font-medium">Email</label>
@@ -68,6 +76,16 @@ function UserAdd({ role }: { role: string | null }) {
                 <div>
                     <label className="block font-medium">Poste</label>
                     <input type="text" name="Post" className="w-full px-3 py-2 border rounded-lg" />
+                </div>
+                <div>
+                    <label className="block font-medium">Role</label>
+                    <select name="role" id="" defaultValue={roles?.find(rl => rl.id === role)?.id}>
+                        {
+                            roles?.map(rl => (
+                                <option value={rl.id}>{rl.label}</option>
+                            ))
+                        }
+                    </select>
                 </div>
             </div>
             <div className="mt-6 flex justify-center gap-4">

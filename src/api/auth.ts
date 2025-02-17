@@ -4,6 +4,7 @@
 export type User = {
   ID: string;
   Name: string;
+  LastName: string;
   Email: string;
   Avatar?: string;
   Role: "gerant" | string;

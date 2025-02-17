@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserFieled from "../../../../components/Users/UserFieled";
 import useQuery from "../../../../hook/useQuery";
 import UserDetails from "../../../../components/Users/UserDetails";
@@ -9,7 +9,6 @@ import FloatingActionButton from "../../../../components/FloatingActionButton";
 import RoleAdd from "../../../../components/Users/RoleAdd";
 import { useData_roles } from "../../../../hook/data";
 import RoleTabs from "../../../../components/Users/RoleTabs";
-import { Link } from "react-router-dom";
 import { FaTable } from "react-icons/fa";
 import { MdOutlineDashboard } from "react-icons/md";
 
@@ -21,10 +20,20 @@ function Users() {
     const edit = useQuery('edit');
     const add = useQuery('add');
     const type = useQuery('type');
-    const [tab, setTab] = useState("Gerant");
     const { data: users } = useStore_Users();
     const { data: roles } = useData_roles()
-    const view = useQuery("view") || "cards";
+
+    const [tab, setTab] = useState(() => sessionStorage.getItem("tabId") || "Gerant");
+
+    useEffect(() => {
+      sessionStorage.setItem("tabId", tab);
+    }, [tab]);
+    
+    const [view, setView] = useState(() => sessionStorage.getItem("view") || "table");
+
+    useEffect(() => {
+      sessionStorage.setItem("view", view);
+    }, [view]);
 
     if (add && type === "user") {
         return (
@@ -70,10 +79,10 @@ function Users() {
                             roles?.map((role) => (
                                 <button
                                     key={role.id}
-                                    onClick={() => setTab(role.label)}
+                                    onClick={() => setTab(role.id)}
                                     className={`group relative w-full flex items-center p-2
                       transition-all duration-200 cursor-pointer
-                      ${tab === role.label ? activeTab : noActiveTab}`}
+                      ${tab === role.id ? activeTab : noActiveTab}`}
                                 >
                                     <span className="font-medium">{role.label}</span>
                                 </button>
@@ -84,21 +93,21 @@ function Users() {
 
                 <div className="flex w-max px-4">
                     {view === "cards" ?
-                        <Link
+                        <button
                             title="voir en tant que tableau"
-                            to="?view=table"
+                            onClick={() => setView("table")}
                             className="h-max mr-2 px-4 py-2 bg-gray-200 rounded"
                         >
                             <FaTable />
-                        </Link>
+                        </button>
                         :
-                        <Link
+                        <button
                             title="voir en tant que carte"
-                            to="?view=cards"
+                            onClick={() => setView("cards")}
                             className="h-max px-4 py-2 bg-gray-200 rounded"
                         >
                             <MdOutlineDashboard />
-                        </Link>}
+                        </button>}
                 </div>
             </div>
             {view === "table" ? (
@@ -108,7 +117,7 @@ function Users() {
                             <tr className="bg-gray-100 border-b">
                                 <th className="p-2 text-left">Avatar</th>
                                 <th className="p-2 text-left">Nom</th>
-                                <th className="p-2 text-left">Email</th>
+                                <th className="p-2 text-left">Prenom</th>
                                 <th className="p-2 text-left">Actions</th>
                             </tr>
                         </thead>
