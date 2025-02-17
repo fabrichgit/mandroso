@@ -102,19 +102,21 @@ function Users() {
                 </div>
             </div>
             {view === "table" ? (
-                <table className="w-full bg-white border border-gray-200">
-                    <thead>
-                        <tr className="bg-gray-100 border-b">
-                            <th className="p-2 text-left">Avatar</th>
-                            <th className="p-2 text-left">Nom</th>
-                            <th className="p-2 text-left">Email</th>
-                            <th className="p-2 text-left">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users?.filter((user) => !user.archived && user.Role.toLowerCase() === tab.toLowerCase())?.map((user) => <UserFieled user={user} view={view} key={user.ID} />)}
-                    </tbody>
-                </table>
+                <div className="w-full overflow-x-auto">
+                    <table className="w-full bg-white border border-gray-200">
+                        <thead>
+                            <tr className="bg-gray-100 border-b">
+                                <th className="p-2 text-left">Avatar</th>
+                                <th className="p-2 text-left">Nom</th>
+                                <th className="p-2 text-left">Email</th>
+                                <th className="p-2 text-left">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {users?.filter((user) => !user.archived && user.Role.toLowerCase() === tab.toLowerCase())?.map((user) => <UserFieled user={user} view={view} key={user.ID} />)}
+                        </tbody>
+                    </table>
+                </div>
             ) : (
                 <div className="flex flex-wrap gap-6 w-full">
                     {users?.filter((user) => !user.archived && user.Role.toLowerCase() === tab.toLowerCase())?.map((user) => <UserFieled user={user} view={view} key={user.ID} />)}

@@ -10,9 +10,9 @@ function UserFieled({ user, view }: { user: User, view: string }) {
                 <td className="p-2">
                     <img src={user.Avatar || image(user.ID)} alt="" className="w-10 h-10 rounded-full" />
                 </td>
-                <td className="p-2">{user.Name}</td>
-                <td className="p-2">{user.Email}</td>
-                <td className="p-2">
+                <td className="p-2 text-nowrap">{user.Name}</td>
+                <td className="p-2 text-nowrap">{user.Email}</td>
+                <td className="p-2 text-nowrap">
                     <Link to={`?id=${user?.ID}`} className="bg-blue-500 text-white px-3 py-1 rounded mr-2">
                         Details
                     </Link>
