@@ -8,9 +8,9 @@ function Layout({children}: {children: React.ReactNode}) {
   console.log(tab);
 
   return (
-    <div className="flex h-full">
+    <div className="flex w-full h-full">
       <Sidebar tab={tab}/>
-      <div className="flex-1 w-full h-full overflow-y-auto">
+      <div className="flex-grow w-full h-full overflow-y-auto">
         {children}
       </div>
     </div>
