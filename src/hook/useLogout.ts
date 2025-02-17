@@ -1,16 +1,16 @@
 import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
 
 function useHandleSession() {
-  const nav = useNavigate()
 
   useEffect(() => {
     const token = localStorage.getItem("token")
     if(token) {
-      return nav("/")
+      location.href="/"
+      return;
     }
     localStorage.clear()
   })
+
 }
 
 export default useHandleSession

@@ -26,7 +26,7 @@ export default function RoleTabs({roles, setTab}: {roles: any[], setTab: React.D
                 key={role.id}
                 onClick={() => {
                   setSelectedRole(role);
-                  setTab(role.id)
+                  setTab(role.id);
                   setOpen(false);
                 }}
                 className="block w-full text-left p-3 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
