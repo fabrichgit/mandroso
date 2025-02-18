@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { FaUserPlus } from "react-icons/fa";
-import { FiPlus, FiLogOut } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
 import { MdOutlinePostAdd } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const FloatingActionButton = () => {
 
-  const nav = useNavigate()
+  // const nav = useNavigate()
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleLogout = () => {
-    nav('/login');
-    localStorage.clear()
-  }
+  // const handleLogout = () => {
+  //   nav('/login');
+  //   localStorage.clear()
+  // }
 
   return (
     <div className="fixed bottom-6 right-6 flex flex-col items-end gap-2">
@@ -27,10 +27,10 @@ const FloatingActionButton = () => {
             <FaUserPlus className="text-blue-500" />
             Utilisateur
           </Link>
-          <button onClick={handleLogout} className="flex items-center gap-2 p-3 bg-white shadow-lg rounded-lg hover:bg-gray-100 transition">
+          {/* <button onClick={handleLogout} className="flex items-center gap-2 p-3 bg-white shadow-lg rounded-lg hover:bg-gray-100 transition">
             <FiLogOut className="text-red-500" />
             Déconnexion
-          </button>
+          </button> */}
         </div>
       )}
 

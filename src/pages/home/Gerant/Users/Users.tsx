@@ -26,13 +26,13 @@ function Users() {
     const [tab, setTab] = useState(() => sessionStorage.getItem("tabId") || "Gerant");
 
     useEffect(() => {
-      sessionStorage.setItem("tabId", tab);
+        sessionStorage.setItem("tabId", tab);
     }, [tab]);
-    
+
     const [view, setView] = useState(() => sessionStorage.getItem("view") || "table");
 
     useEffect(() => {
-      sessionStorage.setItem("view", view);
+        sessionStorage.setItem("view", view);
     }, [view]);
 
     if (add && type === "user") {
@@ -75,6 +75,14 @@ function Users() {
                         <RoleTabs roles={roles} setTab={setTab} />
                     </div>
                     <div className="text-muted-foreground hidden md:inline-flex h-14 items-center justify-center md:gap-4 gap-2 rounded-xl bg-neutral-50 dark:bg-gray-800 dark:border dark:border-gray-700 p-2 mb-6">
+                        <button
+                            onClick={() => setTab('')}
+                            className={`group relative w-full flex items-center p-2
+                      transition-all duration-200 cursor-pointer
+                      ${tab === '' ? activeTab : noActiveTab}`}
+                        >
+                            <span className="font-medium">tous</span>
+                        </button>
                         {
                             roles?.map((role) => (
                                 <button
