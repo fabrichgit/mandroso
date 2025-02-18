@@ -13,8 +13,8 @@ import { FaTable } from "react-icons/fa";
 import { MdOutlineDashboard } from "react-icons/md";
 import { reactiveClass } from "../../../../utils/class";
 
-const activeTab = "inline-flex text-nowrap bg-white font-bold px-4 border-b-2 border-black";
-const noActiveTab = "inline-flex text-nowrap px-4 dark:text-neutral-300";
+export const activeTab = "inline-flex text-nowrap bg-white font-bold px-4 border-b-2 border-black";
+export const noActiveTab = "inline-flex text-nowrap px-4 dark:text-neutral-300";
 
 function Users() {
     const idQuery = useQuery('id');
@@ -66,6 +66,7 @@ function Users() {
             </div>
         )
     }
+    console.log(users);
 
     return (
         <div className="w-full">
@@ -131,13 +132,13 @@ function Users() {
                             </tr>
                         </thead>
                         <tbody>
-                            {users?.filter((user) => tab === '' ? true : (!user.archived && user.Role.toLowerCase() === tab.toLowerCase()))?.map((user) => <UserFieled user={user} view={view} key={user.ID} />)}
+                            {users?.filter(user => !Boolean(user.archived)).filter((user) => tab === '' ? true : (!user.archived && user.Role.toLowerCase() === tab.toLowerCase()))?.map((user) => <UserFieled user={user} view={view} key={user.ID} />)}
                         </tbody>
                     </table>
                 </div>
             ) : (
                 <div className="flex flex-wrap gap-6 w-full">
-                    {users?.filter((user) => tab === '' ? true : (!user.archived && user.Role.toLowerCase() === tab.toLowerCase()))?.map((user) => <UserFieled user={user} view={view} key={user.ID} />)}
+                    {users?.filter(user => !Boolean(user.archived)).filter((user) => tab === '' ? true : (!user.archived && user.Role.toLowerCase() === tab.toLowerCase()))?.map((user) => <UserFieled user={user} view={view} key={user.ID} />)}
                 </div>
             )}
         </div>

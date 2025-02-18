@@ -18,7 +18,7 @@ export default function RoleTabs({roles, setTab}: {roles: any[], setTab: React.D
 
       {/* Liste déroulante */}
       {open && (
-        <div className="absolute left-0 mt-52 w-max bg-neutral-50 dark:bg-gray-800 dark:border dark:border-gray-700 rounded-xl shadow-md z-10 border">
+        <div className="absolute left-0 mt-52 min-w-max w-full bg-neutral-50 dark:bg-gray-800 dark:border dark:border-gray-700 rounded-xl shadow-md z-10 border">
           {roles
             ?.filter((role) => role.id !== selectedRole.id)
             .map((role) => (
