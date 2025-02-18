@@ -24,13 +24,13 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-blue-600 to-cyan-300 flex items-center justify-center p-4">
+    <div className="min-h-screen w-full bg-gradient-to-br from-blue-600/5 to-cyan-300/70 flex items-center justify-center p-4">
 
       <div className="w-full max-w-md">
         <form onSubmit={submit}>
           <div className="bg-white px-10 py-8 rounded-xl w-screen shadow-xl max-w-sm">
             <div className="space-y-4">
-              <h1 className="text-center text-2xl font-semibold text-gray-600">Login</h1>
+              <h1 className="text-center text-2xl font-semibold text-gray-600">MANDROSO | login</h1>
               <hr />
               <div className="flex items-center border-2 py-2 px-3 rounded-md mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -45,7 +45,7 @@ function Login() {
                 <input className="pl-2 outline-none border-none w-full" type="password" name="password" placeholder="Password" required />
               </div>
             </div>
-            <button type="submit" value="login" id="login" className="mt-6 w-full shadow-xl bg-gradient-to-tr from-blue-600 to-red-400 hover:to-red-700 text-indigo-100 py-2 rounded-md text-lg tracking-wide transition duration-1000">Login</button>
+            <button type="submit" value="login" id="login" className="mt-6 w-full shadow-xl bg-gradient-to-tr from-orange-600 to-red-400 hover:to-red-700 text-indigo-100 py-2 rounded-md text-lg tracking-wide transition duration-1000">Login</button>
           </div>
         </form>
 
