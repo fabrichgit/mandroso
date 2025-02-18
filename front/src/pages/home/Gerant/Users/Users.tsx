@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import UserFieled from "../../../../components/Users/UserFieled";
 import useQuery from "../../../../hook/useQuery";
 import UserDetails from "../../../../components/Users/UserDetails";
@@ -12,6 +11,7 @@ import RoleTabs from "../../../../components/Users/RoleTabs";
 import { FaTable } from "react-icons/fa";
 import { MdOutlineDashboard } from "react-icons/md";
 import { reactiveClass } from "../../../../utils/class";
+import useStorage from "../../../../hook/useStorage";
 
 export const activeTab = "inline-flex text-nowrap bg-white font-bold px-4 border-b-2 border-black";
 export const noActiveTab = "inline-flex text-nowrap px-4 dark:text-neutral-300";
@@ -24,17 +24,8 @@ function Users() {
     const { data: users } = useStore_Users();
     const { data: roles } = useData_roles()
 
-    const [tab, setTab] = useState(() => sessionStorage.getItem("tabId") || "");
-
-    useEffect(() => {
-        sessionStorage.setItem("tabId", tab);
-    }, [tab]);
-
-    const [view, setView] = useState(() => sessionStorage.getItem("view") || "table");
-
-    useEffect(() => {
-        sessionStorage.setItem("view", view);
-    }, [view]);
+    const { tab, setTab } = useStorage("");
+    const { tab: view, setTab: setView } = useStorage("cards");
 
     if (add && type === "user") {
         return (
@@ -101,23 +92,21 @@ function Users() {
                     </div>
                 </nav>
 
-                <div className="flex w-max px-4">
-                    {view === "cards" ?
-                        <button
-                            title="voir en tant que tableau"
-                            onClick={() => setView("table")}
-                            className="h-max mr-2 px-4 py-2 bg-gray-200 rounded"
-                        >
-                            <FaTable />
-                        </button>
-                        :
-                        <button
-                            title="voir en tant que carte"
-                            onClick={() => setView("cards")}
-                            className="h-max px-4 py-2 bg-gray-200 rounded"
-                        >
-                            <MdOutlineDashboard />
-                        </button>}
+                <div className="flex w-max p-1 bg-neutral-100 border rounded-lg mx-2">
+                    <button
+                        title="voir en tant que tableau"
+                        onClick={() => setView("table")}
+                        className={`text-sm h-max px-2 py-1 rounded-lg ${reactiveClass('table', view, 'bg-white border', '')}`}
+                    >
+                        <FaTable />
+                    </button>
+                    <button
+                        title="voir en tant que carte"
+                        onClick={() => setView("cards")}
+                        className={`text-sm h-max px-2 py-1 rounded-lg ${reactiveClass('cards', view, 'bg-white border', '')}`}
+                    >
+                        <MdOutlineDashboard />
+                    </button>
                 </div>
             </div>
             {view === "table" ? (
@@ -125,7 +114,7 @@ function Users() {
                     <table className="w-full bg-white border border-gray-200">
                         <thead>
                             <tr className="bg-gray-100 border-b">
-                                <th className="p-2 text-left">Avatar</th>
+                                <th className="p-2 text-left">Portrait</th>
                                 <th className="p-2 text-left">Nom</th>
                                 <th className="p-2 text-left">Prenom</th>
                                 <th className="p-2 text-left">Actions</th>

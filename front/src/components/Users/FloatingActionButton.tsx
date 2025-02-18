@@ -34,10 +34,9 @@ const FloatingActionButton = () => {
         </div>
       )}
 
-      {/* Bouton principal */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-8 h-8 flex items-center justify-center bg-orange-600 text-white rounded-full"
+        className="w-10 h-10 flex items-center justify-center text-orange-600 bg-gray-100 rounded-full shadow-lg"
       >
         <FiPlus className="text-lg" />
       </button>
