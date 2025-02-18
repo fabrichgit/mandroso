@@ -23,7 +23,7 @@ function Users() {
     const { data: users } = useStore_Users();
     const { data: roles } = useData_roles()
 
-    const [tab, setTab] = useState(() => sessionStorage.getItem("tabId") || "Gerant");
+    const [tab, setTab] = useState(() => sessionStorage.getItem("tabId") || "");
 
     useEffect(() => {
         sessionStorage.setItem("tabId", tab);
@@ -130,13 +130,13 @@ function Users() {
                             </tr>
                         </thead>
                         <tbody>
-                            {users?.filter((user) => !user.archived && user.Role.toLowerCase() === tab.toLowerCase())?.map((user) => <UserFieled user={user} view={view} key={user.ID} />)}
+                            {users?.filter((user) => tab === '' ? true : (!user.archived && user.Role.toLowerCase() === tab.toLowerCase()))?.map((user) => <UserFieled user={user} view={view} key={user.ID} />)}
                         </tbody>
                     </table>
                 </div>
             ) : (
                 <div className="flex flex-wrap gap-6 w-full">
-                    {users?.filter((user) => !user.archived && user.Role.toLowerCase() === tab.toLowerCase())?.map((user) => <UserFieled user={user} view={view} key={user.ID} />)}
+                    {users?.filter((user) => tab === '' ? true : (!user.archived && user.Role.toLowerCase() === tab.toLowerCase()))?.map((user) => <UserFieled user={user} view={view} key={user.ID} />)}
                 </div>
             )}
         </div>
