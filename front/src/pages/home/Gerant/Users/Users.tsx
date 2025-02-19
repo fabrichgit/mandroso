@@ -47,7 +47,7 @@ function Users() {
         if (edit === "true") {
             return (
                 <div className="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black/70 overflow-y-auto">
-                    <UserEdit idQuery={idQuery} />
+                    <UserEdit idQuery={idQuery} role={tab}/>
                 </div>
             )
         }

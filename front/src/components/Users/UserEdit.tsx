@@ -5,12 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { updateUser } from "../../api/user";
 import toast from "react-hot-toast";
 import { FaArchive } from "react-icons/fa";
+import { useData_roles } from "../../hook/data";
 
-function UserEdit({ idQuery }: { idQuery: string | null }) {
+function UserEdit({ idQuery, role }: { idQuery: string | null, role: string | null }) {
 
     const nav = useNavigate()
     const { data: users, reFetch } = useStore_Users();
-    const user = users ? users?.find(u => u.ID === idQuery) : null
+    const user = users ? users?.find(u => u.ID === idQuery) : null;
+    const { data: roles } = useData_roles()
 
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -89,8 +91,14 @@ function UserEdit({ idQuery }: { idQuery: string | null }) {
                     <input type="text" name="Post" defaultValue={user?.Post} className="w-full px-3 py-2 border rounded-lg" />
                 </div>
                 <div>
-                    <label className="block font-medium">Rôle</label>
-                    <input type="text" name="Role" defaultValue={user?.Role} className="w-full px-3 py-2 border rounded-lg" />
+                    <label className="block font-medium">Role</label>
+                    <select name="role" id="" defaultValue={roles?.find(rl => rl.id === role)?.id}>
+                        {
+                            roles?.map(rl => (
+                                <option value={rl.id}>{rl.label}</option>
+                            ))
+                        }
+                    </select>
                 </div>
                 <div className="flex items-center gap-2">
                     <input type="checkbox" name="Available" defaultChecked={user?.Available} />
