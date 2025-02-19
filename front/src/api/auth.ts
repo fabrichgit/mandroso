@@ -11,7 +11,7 @@ export type User = {
   Available: boolean;
   birthAt: string;
   birthDate: string;
-  Contact: string;
+  Contact: string | string[];
   Post: string;
   archived?: boolean;
 };

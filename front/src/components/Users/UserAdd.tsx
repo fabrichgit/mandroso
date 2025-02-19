@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useStore_Users } from "../../store/data";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,10 +6,20 @@ import { createUser } from "../../api/user";
 import toast from "react-hot-toast";
 import { User } from "../../api/auth";
 import { useData_roles } from "../../hook/data";
+import { ChevronDown } from "lucide-react";
 
 function UserAdd({ role }: { role: string | null }) {
 
-    const {data: roles} = useData_roles()
+    const [contacts, setContacts] = useState<string[]>([]);
+    let input_contact: string | undefined;
+    const addContacts = () => {
+        if (input_contact) {
+            setContacts(prev => [input_contact!, ...prev]);
+            input_contact = undefined
+        }
+    }
+
+    const { data: roles } = useData_roles();
 
     const nav = useNavigate()
     const { reFetch } = useStore_Users();
@@ -18,7 +28,7 @@ function UserAdd({ role }: { role: string | null }) {
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
-        const updatedUser : User = {
+        const updatedUser: User = {
             ID: Date.now().toString(),
             Name: formData.get("Name") as string,
             LastName: formData.get("LastName") as string,
@@ -70,14 +80,6 @@ function UserAdd({ role }: { role: string | null }) {
                     <input type="date" name="birthDate" className="w-full px-3 py-2 border rounded-lg" />
                 </div>
                 <div>
-                    <label className="block font-medium">Contact</label>
-                    <input type="text" name="Contact" className="w-full px-3 py-2 border rounded-lg" />
-                </div>
-                <div>
-                    <label className="block font-medium">Poste</label>
-                    <input type="text" name="Post" className="w-full px-3 py-2 border rounded-lg" />
-                </div>
-                <div>
                     <label className="block font-medium">Role</label>
                     <select name="role" id="" defaultValue={roles?.find(rl => rl.id === role)?.id}>
                         {
@@ -87,6 +89,30 @@ function UserAdd({ role }: { role: string | null }) {
                         }
                     </select>
                 </div>
+            </div>
+            <div className="mt-5">
+                <div className="flex items-center justify-between">
+                    <div className="dropdown dropdown-bottom dropdown-center">
+                        <div tabIndex={0} role="button" className="flex font-medium">
+                            <span className="flex items-center justify-center w-4 h-4 text-xs font-bold p-1 rounded-full mr-1 bg-sky-600 text-white shadow-lg shadow-sky-400">{contacts.length}</span>
+                            <span className="voir contacts">Contacts</span>
+                            <ChevronDown />
+                        </div>
+                        <ul tabIndex={0} className="dropdown-content menu rounded-box z-[1] min-w-52 w-max p-2 shadow bg-slate-200">
+                            {
+                                contacts?.map(ct => <li title="effacer"><a>{ct}</a></li>)
+                            }
+                        </ul>
+                    </div>
+                    <button onClick={addContacts} type="button" className="text-sm font-bold m-1 text-orange-500 underline">+ ajouter</button>
+                </div>
+                <input onChange={e => {
+                    input_contact = e.currentTarget.value;
+                }} type="text" name="Contact" className="w-full px-3 py-2 border rounded-lg" />
+            </div>
+            <div className="mt-4">
+                <label className="block font-medium">Poste</label>
+                <input type="text" name="Post" className="w-full px-3 py-2 border rounded-lg" />
             </div>
             <div className="mt-6 flex justify-center gap-4">
                 <Link to="?" className="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg shadow-lg">
