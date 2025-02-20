@@ -1,0 +1,43 @@
+kind: pipeline
+type: docker
+name: Gestion-de-Tresorerie-Backend
+
+steps:
+  # Étape de tests pour le backend
+  - name: test
+    image: golang:1.22
+    environment:
+      MONGO_URI: "mongodb://mongo:20348b2O463DYt@localhost:27017/"
+    commands:
+      - go mod tidy
+      - go test ./...
+
+  # Étape de build pour le backend
+  - name: build
+    image: golang:1.22
+    commands:
+      - go build -o main main.go
+
+  # Étape de déploiement pour le backend
+  - name: deploy
+    image: appleboy/drone-scp
+    settings:
+      host:
+        from_secret: SSH_HOST
+      username:
+        from_secret: SSH_USERNAME
+      password:
+        from_secret: SSH_PASSWORD
+      port: 22
+      source: ./main
+      target:
+        from_secret: SSH_TARGET_BACK
+
+services:
+  # Service MongoDB pour les tests du backend
+  - name: mongo
+    image: mongo:4.4
+    environment:
+      MONGO_INITDB_DATABASE: nofi
+    ports:
+      - 27017

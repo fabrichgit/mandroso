@@ -1,0 +1,11 @@
+{
+    "defaultUser": {
+      "_id": "671ca516710682421e142a92",
+      "name": "admin",
+      "email": "admin@gmail.com",
+      "role": "admin",
+      "available": true,
+      "password": "$2a$10$wT2v2XTW3h01WvzaNoKafekoTcf7mdWZ.cfHe95mcSSVTVa4jWaTK"
+    }
+  }
+  
