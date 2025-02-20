@@ -9,19 +9,22 @@ import { useData_roles } from "../../hook/data";
 import { ChevronDown } from "lucide-react";
 
 function UserAdd({ role }: { role: string | null }) {
-
     const [contacts, setContacts] = useState<string[]>([]);
-    let input_contact: string | undefined;
+    const [inputContact, setInputContact] = useState<string>("");
+
     const addContacts = () => {
-        if (input_contact) {
-            setContacts(prev => [input_contact!, ...prev]);
-            input_contact = undefined
+        if (contacts.length >= 3) {
+            toast.error("Vous ne pouvez ajouter que 3 contacts maximum.");
+            return;
         }
-    }
+        if (inputContact.trim()) {
+            setContacts(prev => [inputContact.trim(), ...prev]);
+            setInputContact(""); // Réinitialiser l'input après ajout
+        }
+    };
 
     const { data: roles } = useData_roles();
-
-    const nav = useNavigate()
+    const nav = useNavigate();
     const { reFetch } = useStore_Users();
 
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,7 +38,7 @@ function UserAdd({ role }: { role: string | null }) {
             Email: formData.get("Email") as string,
             birthAt: formData.get("birthAt") as string,
             birthDate: formData.get("birthDate") as string,
-            Contact: formData.get("Contact") as string,
+            Contact: contacts, // Utiliser le tableau des contacts
             Post: formData.get("Post") as string,
             Role: formData.get("role") as string,
             Available: formData.get("Available") === "on",
@@ -43,14 +46,13 @@ function UserAdd({ role }: { role: string | null }) {
 
         createUser(updatedUser)
             .then(() => {
-                toast.success('success !')
-                reFetch()
-                nav('?')
-            })
+                toast.success("Utilisateur ajouté avec succès !");
+                reFetch();
+                nav("?");
+            });
 
         console.log("Données soumises :", updatedUser);
-
-    }
+    };
 
     return (
         <form onSubmit={submit} className="bg-white p-6 md:rounded-2xl md:shadow-2xl h-max w-full md:w-[27rem] relative">
@@ -64,7 +66,7 @@ function UserAdd({ role }: { role: string | null }) {
                     <input type="text" name="Name" className="w-full px-3 py-2 border rounded-lg" />
                 </div>
                 <div>
-                    <label className="block font-medium">Prenom</label>
+                    <label className="block font-medium">Prénom</label>
                     <input type="text" name="LastName" className="w-full px-3 py-2 border rounded-lg" />
                 </div>
                 <div>
@@ -82,14 +84,13 @@ function UserAdd({ role }: { role: string | null }) {
                 <div>
                     <label className="block font-medium">Role</label>
                     <select name="role" id="" defaultValue={roles?.find(rl => rl.id === role)?.id}>
-                        {
-                            roles?.map(rl => (
-                                <option value={rl.id}>{rl.label}</option>
-                            ))
-                        }
+                        {roles?.map(rl => (
+                            <option key={rl.id} value={rl.id}>{rl.label}</option>
+                        ))}
                     </select>
                 </div>
             </div>
+
             <div className="mt-5">
                 <div className="flex items-center justify-between">
                     <div className="dropdown dropdown-bottom dropdown-center">
@@ -99,21 +100,31 @@ function UserAdd({ role }: { role: string | null }) {
                             <ChevronDown />
                         </div>
                         <ul tabIndex={0} className="dropdown-content menu rounded-box z-[1] min-w-52 w-max p-2 shadow bg-slate-200">
-                            {
-                                contacts?.map(ct => <li title="effacer"><a>{ct}</a></li>)
-                            }
+                            {contacts.map((ct, index) => (
+                                <li key={index} title="Effacer">
+                                    <a>{ct}</a>
+                                </li>
+                            ))}
                         </ul>
                     </div>
-                    <button onClick={addContacts} type="button" className="text-sm font-bold m-1 text-orange-500 underline">+ ajouter</button>
+                    <button onClick={addContacts} type="button" className="text-sm font-bold m-1 text-orange-500 underline">
+                        + ajouter
+                    </button>
                 </div>
-                <input onChange={e => {
-                    input_contact = e.currentTarget.value;
-                }} type="text" name="Contact" className="w-full px-3 py-2 border rounded-lg" />
+                <input
+                    type="text"
+                    value={inputContact}
+                    onChange={e => setInputContact(e.currentTarget.value)}
+                    className="w-full px-3 py-2 border rounded-lg"
+                    placeholder="Ajoutez un contact"
+                />
             </div>
+
             <div className="mt-4">
                 <label className="block font-medium">Poste</label>
                 <input type="text" name="Post" className="w-full px-3 py-2 border rounded-lg" />
             </div>
+
             <div className="mt-6 flex justify-center gap-4">
                 <Link to="?" className="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg shadow-lg">
                     Annuler
@@ -123,7 +134,7 @@ function UserAdd({ role }: { role: string | null }) {
                 </button>
             </div>
         </form>
-    )
+    );
 }
 
-export default UserAdd
+export default UserAdd;
