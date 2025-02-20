@@ -7,13 +7,14 @@ import ResetPassword from "./pages/ResetPassword";
 import { Toaster } from "react-hot-toast";
 
 function App() {
+  console.log("app running ...");
 
   return (
     <div className="flex w-screen h-screen">
       <Toaster />
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/*" element={<Protected> <Home /> </Protected>}/>
+        <Route path="/*" element={<Protected> <Home /> </Protected>} />
         {/* <Route
           path="/:tab"
           element={<Protected> <Home /> </Protected>}
