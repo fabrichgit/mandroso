@@ -78,3 +78,12 @@ body {
     animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+@layer{
+    .my-modal{
+        @apply w-full md:w-[35rem] h-max
+    }
+
+    .my-modal-full{
+        @apply w-full h-full
+    }
+}

@@ -12,9 +12,9 @@ const statusColors: Record<string, string> = {
 
 const UserListAcions = () => {
   return (
-    <div className="max-w-4xl bg-white shadow-lg rounded-lg">
-      <div className="overflow-x-auto">
-        <table className="w-max bg-white border border-gray-200 rounded-lg">
+    <div className="w-full bg-white shadow-lg rounded-lg">
+      <div className="overflow-x-auto w-full">
+        <table className="w-full bg-white border border-gray-200 rounded-lg">
           <thead>
             <tr className="bg-gray-100">
               <th className="py-3 px-4 text-left border-b">Date</th>

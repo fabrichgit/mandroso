@@ -6,7 +6,8 @@ import { createUser } from "../../api/user";
 import toast from "react-hot-toast";
 import { User } from "../../api/auth";
 import { useData_roles } from "../../hook/data";
-import { ChevronDown, Trash } from "lucide-react";
+import { ChevronDown, Maximize, Trash } from "lucide-react";
+import resize from "../../utils/maximise";
 
 function UserAdd({ role }: { role: string | null }) {
     const [contacts, setContacts] = useState<string[]>([]);
@@ -61,31 +62,34 @@ function UserAdd({ role }: { role: string | null }) {
     };
 
     return (
-        <form onSubmit={submit} className="bg-white p-6 md:rounded-2xl md:shadow-2xl h-max w-full md:w-[27rem] relative">
-            <Link to="?" className="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+        <form onSubmit={submit} className="bg-white p-6 md:rounded-2xl md:shadow-2xl modal-field my-modal relative">
+            <Link to="?" className="absolute top-4 left-4 text-gray-500 hover:text-gray-800">
                 <AiFillCloseCircle size={24} />
             </Link>
+            <button type="button" onClick={resize} className="maximise absolute top-4 right-4 text-gray-500 hover:text-gray-800" title="pleine ecran">
+                <Maximize size={24} />
+            </button>
             <h1 className="text-2xl font-bold text-center text-gray-800">Ajouter utilisateur</h1>
             <div className="mt-6 grid grid-cols-2 gap-4 text-gray-700">
                 <div>
                     <label className="block font-medium">Nom</label>
-                    <input type="text" name="Name" className="w-full px-3 py-2 border rounded-lg" required/>
+                    <input type="text" name="Name" className="w-full px-3 py-2 border rounded-lg" required />
                 </div>
                 <div>
                     <label className="block font-medium">Prénom</label>
-                    <input type="text" name="LastName" className="w-full px-3 py-2 border rounded-lg" required/>
+                    <input type="text" name="LastName" className="w-full px-3 py-2 border rounded-lg" required />
                 </div>
                 <div>
                     <label className="block font-medium">Email</label>
-                    <input type="email" name="Email" className="w-full px-3 py-2 border rounded-lg" required/>
+                    <input type="email" name="Email" className="w-full px-3 py-2 border rounded-lg" required />
                 </div>
                 <div>
                     <label className="block font-medium">Lieu de naissance</label>
-                    <input type="text" name="birthAt" className="w-full px-3 py-2 border rounded-lg" required/>
+                    <input type="text" name="birthAt" className="w-full px-3 py-2 border rounded-lg" required />
                 </div>
                 <div>
                     <label className="block font-medium">Date de naissance</label>
-                    <input type="date" name="birthDate" className="w-full px-3 py-2 border rounded-lg" required/>
+                    <input type="date" name="birthDate" className="w-full px-3 py-2 border rounded-lg" required />
                 </div>
                 <div>
                     <label className="block font-medium">Role</label>
@@ -132,7 +136,7 @@ function UserAdd({ role }: { role: string | null }) {
 
             <div className="mt-4">
                 <label className="block font-medium">Poste</label>
-                <input type="text" name="Post" className="w-full px-3 py-2 border rounded-lg" required/>
+                <input type="text" name="Post" className="w-full px-3 py-2 border rounded-lg" required />
             </div>
 
             <div className="mt-6 flex justify-center gap-4">

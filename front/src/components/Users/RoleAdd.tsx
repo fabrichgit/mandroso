@@ -2,41 +2,46 @@ import { Link, useNavigate } from "react-router-dom";
 import { useData_operations, useData_roles } from "../../hook/data";
 import { AiFillCloseCircle } from "react-icons/ai";
 import React from "react";
+import { Maximize } from "lucide-react";
+import resize from "../../utils/maximise";
 
 function RoleAdd() {
 
     const nav = useNavigate();
-    const {add} = useData_roles()
+    const { add } = useData_roles()
     const ops = useData_operations()
-    let operations: {id: string, label: string}[] = [];
+    let operations: { id: string, label: string }[] = [];
     let title = ""
 
     const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault()
-        const {id, label} = JSON.parse(e.currentTarget.name)
+        const { id, label } = JSON.parse(e.currentTarget.name)
 
         const found = operations.find(op => op.id === id)
 
         if (found) {
             operations = operations.filter(op => op.id !== id)
-        }else{
-            operations.push({id, label})
+        } else {
+            operations.push({ id, label })
         }
     }
 
     const submit = async () => {
-        if(!title || !operations)
+        if (!title || !operations)
             return;
         // roles.setState(prv => [{id: Date.now().toString(), label: title, operations} , ...prv]);
-        add({id: Date.now().toString(), label: title, operations})
+        add({ id: Date.now().toString(), label: title, operations })
         nav('?')
     }
 
     return (
-        <div className="bg-white p-6 md:rounded-2xl md:shadow-2xl h-max w-full md:w-[27rem] relative">
-            <Link to="?" className="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+        <div className="bg-white p-6 md:rounded-2xl md:shadow-2xl modal-field my-modal relative">
+            <Link to="?" className="absolute top-4 left-4 text-gray-500 hover:text-gray-800">
                 <AiFillCloseCircle size={24} />
             </Link>
+            <button type="button" onClick={resize} className="maximise absolute top-4 right-4 text-gray-500 hover:text-gray-800" title="pleine ecran">
+                <Maximize size={24} />
+            </button>
             <div>
                 <label className="block font-medium mb-2">Nom de la role :</label>
                 <input onChange={e => {
@@ -47,7 +52,7 @@ function RoleAdd() {
                 {
                     ops?.map(op => (
                         <div key={op.id} className="flex items-center">
-                            <input name={JSON.stringify(op)} type="checkbox" onChange={handleChange}/>
+                            <input name={JSON.stringify(op)} type="checkbox" onChange={handleChange} />
                             <label className="font-medium ml-2">{op.label}</label>
                         </div>
                     ))

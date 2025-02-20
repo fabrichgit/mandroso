@@ -6,7 +6,8 @@ import { updateUser } from "../../api/user";
 import toast from "react-hot-toast";
 import { FaArchive } from "react-icons/fa";
 import { useData_roles } from "../../hook/data";
-import { ChevronDown, Trash } from "lucide-react";
+import { ChevronDown, Maximize, Trash } from "lucide-react";
+import resize from "../../utils/maximise";
 
 function UserEdit({ idQuery, role }: { idQuery: string | null, role: string | null }) {
 
@@ -77,10 +78,13 @@ function UserEdit({ idQuery, role }: { idQuery: string | null, role: string | nu
     }
 
     return (
-        <form onSubmit={submit} className="bg-white p-6 md:rounded-2xl md:shadow-2xl h-max w-full md:w-[27rem] relative">
-            <Link to="?" className="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+        <form onSubmit={submit} className="bg-white p-6 md:rounded-2xl md:shadow-2xl modal-field my-modal relative">
+            <Link to="?" className="absolute top-4 left-4 text-gray-500 hover:text-gray-800">
                 <AiFillCloseCircle size={24} />
             </Link>
+            <button type="button" onClick={resize} className="maximise absolute top-4 right-4 text-gray-500 hover:text-gray-800" title="pleine ecran">
+                <Maximize size={24} />
+            </button>
             <h1 className="text-2xl font-bold text-center text-gray-800">Modifier les informations</h1>
             <div className="mt-6 grid grid-cols-2 gap-4 text-gray-700">
                 <div>

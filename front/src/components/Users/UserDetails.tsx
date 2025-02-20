@@ -7,6 +7,8 @@ import { reactiveClass } from "../../utils/class";
 import { activeTab, noActiveTab } from "../../pages/home/Gerant/Users/Users";
 import UserStatistic from "./details/UserStatistic";
 import UserListAcions from "./details/UserListAcions";
+import { Maximize } from "lucide-react";
+import resize from "../../utils/maximise";
 
 function UserDetails({ idQuery }: { idQuery: string | null }) {
   const { tab, setTab } = useStorage("");
@@ -15,11 +17,14 @@ function UserDetails({ idQuery }: { idQuery: string | null }) {
   );
 
   return (
-    <div className="bg-white p-6 md:rounded-2xl md:shadow-2xl w-full md:w-[35rem] relative">
+    <div className="bg-white p-6 md:rounded-2xl md:shadow-2xl modal-field my-modal relative">
       {/* Bouton de fermeture */}
-      <Link to="?" className="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+      <Link to="?" className="absolute top-4 left-4 text-gray-500 hover:text-gray-800">
         <AiFillCloseCircle size={24} />
       </Link>
+      <button type="button" onClick={resize} className="maximise absolute top-4 right-4 text-gray-500 hover:text-gray-800" title="pleine ecran">
+        <Maximize size={24} />
+      </button>
 
       {/* Onglets */}
       <div className="flex justify-between border-b pb-2 mb-4">
@@ -29,9 +34,8 @@ function UserDetails({ idQuery }: { idQuery: string | null }) {
             <button
               key={tabKey}
               onClick={() => setTab(tabKey)}
-              className={`flex-1 text-center p-2 font-medium ${
-                reactiveClass(tabKey, tab, activeTab, noActiveTab)
-              }`}
+              className={`flex-1 text-center p-2 font-medium ${reactiveClass(tabKey, tab, activeTab, noActiveTab)
+                }`}
             >
               {label}
             </button>
@@ -52,7 +56,7 @@ function UserDetails({ idQuery }: { idQuery: string | null }) {
                     <p><strong>Prénom :</strong> {user?.LastName || "Non renseigné"}</p>
                     <p><strong>Email :</strong> {user?.Email || "Non renseigné"}</p>
                     <p>
-                      <strong>Disponible :</strong> 
+                      <strong>Disponible :</strong>
                       <span className={`ml-2 px-2 py-1 rounded ${user?.Available ? "bg-green-500 text-white" : "bg-red-500 text-white"}`}>
                         {user?.Available ? "Oui" : "Non"}
                       </span>
