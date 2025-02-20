@@ -7,7 +7,7 @@ import ResetPassword from "./pages/ResetPassword";
 import { Toaster } from "react-hot-toast";
 
 function App() {
-  console.log("app running 2 ...");
+  console.log("app running new repo ...");
 
   return (
     <div className="flex w-screen h-screen">
