@@ -56,7 +56,7 @@ function UserAdd({ role }: { role: string | null }) {
             Contact: contacts,
             Post: formData.get("Post") as string,
             Role: formData.get("Role") as string,
-            Available: formData.get("Available") === "on",
+            Available: true,
             startTime, // Heure de début
             endTime, // Heure de fin
         };
