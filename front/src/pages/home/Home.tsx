@@ -13,7 +13,7 @@ const defaultUsers: User[] = [
     Available: true,
     birthAt: "Nowhere",
     birthDate: "1992-12-12",
-    Contact: "+2613427715",
+    Contact: ["+2613427715"],
     Post: "",
     Role: "magasinier",
     Avatar: ""
@@ -26,7 +26,7 @@ const defaultUsers: User[] = [
     Available: true,
     birthAt: "Nowhere",
     birthDate: "1992-12-12",
-    Contact: "+2613427715",
+    Contact: ["+2613427715"],
     Post: "",
     Role: "magasinier",
     Avatar: ""
@@ -39,7 +39,7 @@ const defaultUsers: User[] = [
     Available: true,
     birthAt: "Nowhere",
     birthDate: "1992-12-12",
-    Contact: "+2613427715",
+    Contact: ["+2613427715"],
     Post: "",
     Role: "gerant",
     Avatar: ""
@@ -52,7 +52,7 @@ const defaultUsers: User[] = [
     Available: true,
     birthAt: "Nowhere",
     birthDate: "1992-12-12",
-    Contact: "+2613427715",
+    Contact: ["+2613427715"],
     Post: "",
     Role: "caissier",
     Avatar: ""

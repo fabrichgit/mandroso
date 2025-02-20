@@ -6,21 +6,27 @@ import { createUser } from "../../api/user";
 import toast from "react-hot-toast";
 import { User } from "../../api/auth";
 import { useData_roles } from "../../hook/data";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Trash } from "lucide-react";
 
 function UserAdd({ role }: { role: string | null }) {
     const [contacts, setContacts] = useState<string[]>([]);
     const [inputContact, setInputContact] = useState<string>("");
 
+    // Ajouter un contact
     const addContacts = () => {
         if (contacts.length >= 3) {
             toast.error("Vous ne pouvez ajouter que 3 contacts maximum.");
             return;
         }
-        if (inputContact.trim()) {
+        if (inputContact.trim() && !contacts.includes(inputContact.trim())) {
             setContacts(prev => [inputContact.trim(), ...prev]);
-            setInputContact(""); // Réinitialiser l'input après ajout
+            setInputContact("");
         }
+    };
+
+    // Supprimer un contact
+    const removeContact = (contact: string) => {
+        setContacts(prev => prev.filter(c => c !== contact));
     };
 
     const { data: roles } = useData_roles();
@@ -38,9 +44,9 @@ function UserAdd({ role }: { role: string | null }) {
             Email: formData.get("Email") as string,
             birthAt: formData.get("birthAt") as string,
             birthDate: formData.get("birthDate") as string,
-            Contact: contacts, // Utiliser le tableau des contacts
+            Contact: contacts,
             Post: formData.get("Post") as string,
-            Role: formData.get("role") as string,
+            Role: formData.get("Role") as string,
             Available: formData.get("Available") === "on",
         };
 
@@ -63,27 +69,27 @@ function UserAdd({ role }: { role: string | null }) {
             <div className="mt-6 grid grid-cols-2 gap-4 text-gray-700">
                 <div>
                     <label className="block font-medium">Nom</label>
-                    <input type="text" name="Name" className="w-full px-3 py-2 border rounded-lg" />
+                    <input type="text" name="Name" className="w-full px-3 py-2 border rounded-lg" required/>
                 </div>
                 <div>
                     <label className="block font-medium">Prénom</label>
-                    <input type="text" name="LastName" className="w-full px-3 py-2 border rounded-lg" />
+                    <input type="text" name="LastName" className="w-full px-3 py-2 border rounded-lg" required/>
                 </div>
                 <div>
                     <label className="block font-medium">Email</label>
-                    <input type="email" name="Email" className="w-full px-3 py-2 border rounded-lg" />
+                    <input type="email" name="Email" className="w-full px-3 py-2 border rounded-lg" required/>
                 </div>
                 <div>
                     <label className="block font-medium">Lieu de naissance</label>
-                    <input type="text" name="birthAt" className="w-full px-3 py-2 border rounded-lg" />
+                    <input type="text" name="birthAt" className="w-full px-3 py-2 border rounded-lg" required/>
                 </div>
                 <div>
                     <label className="block font-medium">Date de naissance</label>
-                    <input type="date" name="birthDate" className="w-full px-3 py-2 border rounded-lg" />
+                    <input type="date" name="birthDate" className="w-full px-3 py-2 border rounded-lg" required/>
                 </div>
                 <div>
                     <label className="block font-medium">Role</label>
-                    <select name="role" id="" defaultValue={roles?.find(rl => rl.id === role)?.id}>
+                    <select name="Role" defaultValue={roles?.find(rl => rl.id === role)?.id}>
                         {roles?.map(rl => (
                             <option key={rl.id} value={rl.id}>{rl.label}</option>
                         ))}
@@ -91,6 +97,7 @@ function UserAdd({ role }: { role: string | null }) {
                 </div>
             </div>
 
+            {/* Section Contacts */}
             <div className="mt-5">
                 <div className="flex items-center justify-between">
                     <div className="dropdown dropdown-bottom dropdown-center">
@@ -101,9 +108,12 @@ function UserAdd({ role }: { role: string | null }) {
                         </div>
                         <ul tabIndex={0} className="dropdown-content menu rounded-box z-[1] min-w-52 w-max p-2 shadow bg-slate-200">
                             {contacts.map((ct, index) => (
-                                <li key={index} title="Effacer">
-                                    <a>{ct}</a>
-                                </li>
+                                <div key={index} className="flex justify-between items-center p-2 bg-white rounded-lg shadow-sm">
+                                    <span>{ct}</span>
+                                    <button type="button" onClick={() => removeContact(ct)} className="inline w-max text-red-500 hover:text-red-700">
+                                        <Trash size={16} />
+                                    </button>
+                                </div>
                             ))}
                         </ul>
                     </div>
@@ -122,7 +132,7 @@ function UserAdd({ role }: { role: string | null }) {
 
             <div className="mt-4">
                 <label className="block font-medium">Poste</label>
-                <input type="text" name="Post" className="w-full px-3 py-2 border rounded-lg" />
+                <input type="text" name="Post" className="w-full px-3 py-2 border rounded-lg" required/>
             </div>
 
             <div className="mt-6 flex justify-center gap-4">
