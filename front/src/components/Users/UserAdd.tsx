@@ -13,6 +13,9 @@ function UserAdd({ role }: { role: string | null }) {
     const [contacts, setContacts] = useState<string[]>([]);
     const [inputContact, setInputContact] = useState<string>("");
 
+    const [startTime, setStartTime] = useState<string | undefined | null>();
+    const [endTime, setEndTime] = useState<string | undefined | null>();
+
     // Ajouter un contact
     const addContacts = () => {
         if (contacts.length >= 3) {
@@ -37,6 +40,11 @@ function UserAdd({ role }: { role: string | null }) {
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        if (startTime && endTime && startTime >= endTime) {
+            toast.error("L'heure de fin doit être après l'heure de début.");
+            return;
+        }
+
         const formData = new FormData(e.currentTarget);
         const updatedUser: User = {
             ID: Date.now().toString(),
@@ -49,6 +57,8 @@ function UserAdd({ role }: { role: string | null }) {
             Post: formData.get("Post") as string,
             Role: formData.get("Role") as string,
             Available: formData.get("Available") === "on",
+            startTime, // Heure de début
+            endTime, // Heure de fin
         };
 
         createUser(updatedUser)
@@ -98,6 +108,26 @@ function UserAdd({ role }: { role: string | null }) {
                             <option key={rl.id} value={rl.id}>{rl.label}</option>
                         ))}
                     </select>
+                </div>
+            </div>
+
+            {/* Plage horaire de connexion */}
+            <div className="mt-4">
+                <label className="block font-medium">Plage horaire de connexion</label>
+                <div className="flex gap-4">
+                    <input
+                        type="time"
+                        value={startTime || ''}
+                        onChange={(e) => setStartTime(e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg"
+                    />
+                    <span className="text-xl font-bold">→</span>
+                    <input
+                        type="time"
+                        value={endTime || ''}
+                        onChange={(e) => setEndTime(e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg"
+                    />
                 </div>
             </div>
 

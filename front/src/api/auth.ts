@@ -14,6 +14,8 @@ export type User = {
   Contact: string[];
   Post: string;
   archived?: boolean;
+  startTime?: string | null;
+  endTime?: string | null;
 };
 
 export type Auth = {

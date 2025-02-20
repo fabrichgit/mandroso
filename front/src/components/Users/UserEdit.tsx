@@ -19,6 +19,9 @@ function UserEdit({ idQuery, role }: { idQuery: string | null, role: string | nu
     const [contacts, setContacts] = useState<string[]>(user?.Contact || []);
     const [inputContact, setInputContact] = useState<string>("");
 
+    const [startTime, setStartTime] = useState<string | undefined | null>(user?.startTime);
+    const [endTime, setEndTime] = useState<string | undefined | null>(user?.endTime);
+
     // Ajouter un contact
     const addContacts = () => {
         if (contacts.length >= 3) {
@@ -51,6 +54,8 @@ function UserEdit({ idQuery, role }: { idQuery: string | null, role: string | nu
             Post: formData.get("Post") as string,
             Role: formData.get("role") as string,
             Available: formData.get("Available") === "on",
+            startTime,
+            endTime
         };
 
         if (idQuery) {
@@ -125,10 +130,26 @@ function UserEdit({ idQuery, role }: { idQuery: string | null, role: string | nu
                     <input type="checkbox" name="Available" defaultChecked={user?.Available} />
                     <label className="font-medium">Activer/Desactiver</label>
                 </div>
-                <button onClick={() => archiver(!Boolean(user?.archived))} className="flex items-center gap-2 w-max">
-                    <FaArchive className="text-red-500" />
-                    <span className="font-medium">Archiver</span>
-                </button>
+            </div>
+
+            {/* Plage horaire de connexion */}
+            <div className="mt-4">
+                <label className="block font-medium">Plage horaire de connexion</label>
+                <div className="flex gap-4">
+                    <input
+                        type="time"
+                        value={startTime || ''}
+                        onChange={(e) => setStartTime(e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg"
+                    />
+                    <span className="text-xl font-bold">→</span>
+                    <input
+                        type="time"
+                        value={endTime || ''}
+                        onChange={(e) => setEndTime(e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg"
+                    />
+                </div>
             </div>
 
             <div className="mt-5">
@@ -163,6 +184,12 @@ function UserEdit({ idQuery, role }: { idQuery: string | null, role: string | nu
                 />
             </div>
 
+            <div className="flex justify-end w-full mt-2">
+                <button onClick={() => archiver(!Boolean(user?.archived))} className="flex items-center gap-2 w-max">
+                    <FaArchive className="text-red-500" />
+                    <span className="font-medium">Archiver</span>
+                </button>
+            </div>
             <div className="mt-6 flex justify-center gap-4">
                 <Link to={`?id=${idQuery}`} className="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg shadow-lg">
                     Annuler
