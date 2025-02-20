@@ -13,16 +13,16 @@ function UserFieled({ user, view }: { user: User, view: string }) {
                 <td className="p-2 text-nowrap">{user.Name}</td>
                 <td className="p-2 text-nowrap">{user.LastName}</td>
                 <td className="p-2 text-nowrap">
-                    <Link to={`?id=${user?.ID}`} className=" text-orange-500 font-bold px-3 py-1 rounded mr-2 shadow">
+                    <Link to={`?id=${user?.ID}`} className="border border-orange-500 text-orange-500 font-bold px-3 py-1 rounded mr-2 shadow">
                         Details
                     </Link>
-                    <Link to={`?id=${user?.ID}&&edit=true`} className="border px-3 py-1 rounded">Edit</Link>
+                    <Link to={`?id=${user?.ID}&&edit=true`} className="border px-3 py-1 rounded">modifier</Link>
                 </td>
             </tr>
         )
     } else if (view === "cards") {
         return (
-            <div className="w-full sm:w-[12rem] bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow">
+            <div className="w-full sm:w-[14em] bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow">
                 <div className="border-b p-4">
                     <div className="text-center">
                         <img className="h-14 w-14 rounded-full border-4 border-white dark:border-gray-800 mx-auto my-4" src={user?.Avatar || image(user?.ID)} />
@@ -34,11 +34,11 @@ function UserFieled({ user, view }: { user: User, view: string }) {
                         </div>
                     </div>
                     <div className="flex justify-between gap-2 px-2 text-sm">
-                        <Link to={`?id=${user?.ID}`} className=" text-orange-500 font-bold px-3 py-1 rounded mr-2 shadow">
+                        <Link to={`?id=${user?.ID}`} className="border border-orange-500 text-orange-500 font-bold px-3 py-1 rounded mr-2">
                             Details
                         </Link>
                         <Link to={`?id=${user?.ID}&&edit=true`} className="border px-3 py-1 rounded">
-                            Edit
+                            modifier
                         </Link>
                     </div>
                 </div>
