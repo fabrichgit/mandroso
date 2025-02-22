@@ -58,11 +58,11 @@ function Sidebar({ tab }: { tab: string | undefined }) {
                         <div className="flex flex-col items-end gap-2 text-black">
                             <Link to="#" className="flex items-center gap-2 p-3 bg-white shadow-lg rounded-lg hover:bg-gray-100 transition">
                                 <FaUser className="text-blue-500" />
-                                Profile
+                                <span className="hidden md:inline">Profile</span>
                             </Link>
                             <button onClick={handleLogout} className="flex items-center gap-2 p-3 bg-white shadow-lg rounded-lg hover:bg-gray-100 transition">
                                 <FiLogOut className="text-red-500" />
-                                Déconnexion
+                                <span className="hidden md:inline">Déconnexion</span>
                             </button>
                         </div>
                     </div>

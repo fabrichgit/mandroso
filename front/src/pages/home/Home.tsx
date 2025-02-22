@@ -3,6 +3,7 @@ import { User } from "../../api/auth"
 import { user_store } from "../../store/user";
 import HomeGerant from "./Gerant/HomeGerant";
 import { useStore_Users } from "../../store/data";
+import HomeVendeur from "./Vendeur/HomeVendeur";
 
 const defaultUsers: User[] = [
   {
@@ -56,12 +57,25 @@ const defaultUsers: User[] = [
     Post: "",
     Role: "caissier",
     Avatar: ""
+  },
+  {
+    ID: "safd",
+    Name: "vendeur",
+    LastName: "son prenom",
+    Email: "user4@contact.com",
+    Available: true,
+    birthAt: "Nowhere",
+    birthDate: "1992-12-12",
+    Contact: ["+2613427715"],
+    Post: "",
+    Role: "vendeur",
+    Avatar: ""
   }
 ]
 
 function Home() {
 
-  const {reFetch} = useStore_Users()
+  const { reFetch } = useStore_Users()
   const { data: user } = user_store();
 
   useEffect(() => {
@@ -72,7 +86,9 @@ function Home() {
   const HomeManager = ({ user }: { user: User | null }) => {
     switch (user?.Role) {
       case "gerant":
-        return <HomeGerant />
+        return <HomeGerant />;
+      case "vendeur":
+        return <HomeVendeur />;
       default:
         break;
     }
