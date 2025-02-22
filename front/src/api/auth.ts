@@ -27,11 +27,16 @@ export async function login(data: Auth) {
   // const res = await axios.post(`${api()}/user/login`, data);
   // return res.data;
   if (data.name === "admin" && data.password === "admin") {
-    return { Token: "afsghdjklfsf" };
+    return { Token: "gerant" };
+  } else if (data.name === "vendeur" && data.password === "vendeur") {
+    return { Token: "vendeur" };
   } else {
     throw new Error("auth failed");
   }
 }
+
+const gerant = { Name: "Mr Gerant", Role: "gerant", Available: true, Email: "admin@gmail.com", ID: "sfdgjkl", Avatar: "" }
+const vendeur = { Name: "Mr vendeur", Role: "vendeur", Available: true, Email: "vendeur@gmail.com", ID: "wjekshhd", Avatar: "" }
 
 export async function auth() {
   // const res = await axios.get<User>(`${api()}/user/`, {
@@ -43,5 +48,14 @@ export async function auth() {
   if (!localStorage.getItem("token")) {
     throw new Error("invalid token")
   }
-  return { Name: "Mr Gerant", Role: "gerant", Available: true, Email: "admin@gmail.com", ID: "sfdgjkl", Avatar: "" } as User
+
+  switch (localStorage.getItem("token")) {
+    case "gerant":
+      return gerant as User
+    case "vendeur":
+      return vendeur as User
+    default:
+      break;
+  }
+
 }
