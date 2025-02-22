@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { FolderTree } from 'lucide-react';
+import { FolderTree, Maximize } from 'lucide-react';
 import type { Product } from '../../../../types/product';
 import type { Category } from '../../../../types/category';
 import { ProductForm } from '../../../../components/Product/ProductForm';
 import { ProductCard } from '../../../../components/Product/ProductCard';
 import { CategoryForm } from '../../../../components/Product/CategoryForm';
 import { CategoryList } from '../../../../components/Product/CategoryList';
-import { AiFillProduct } from 'react-icons/ai';
+import { AiFillCloseCircle, AiFillProduct } from 'react-icons/ai';
 import FloatingActionButton from '../../../../components/Product/FloatingActionButton';
+import resize from '../../../../utils/maximise';
 
 function ProductDash() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -31,7 +32,7 @@ function ProductDash() {
 
   const handleUpdateProduct = (productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
     if (!editingProduct) return;
-    
+
     const updatedProduct: Product = {
       ...productData,
       id: editingProduct.id,
@@ -62,7 +63,7 @@ function ProductDash() {
 
   const handleUpdateCategory = (categoryData: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>) => {
     if (!editingCategory) return;
-    
+
     const updatedCategory: Category = {
       ...categoryData,
       id: editingCategory.id,
@@ -85,7 +86,7 @@ function ProductDash() {
 
   return (
     <div className="w-full">
-      <FloatingActionButton setIsCategoryFormOpen={setIsCategoryFormOpen} setIsProductFormOpen={setIsProductFormOpen}/>
+      <FloatingActionButton setIsCategoryFormOpen={setIsCategoryFormOpen} setIsProductFormOpen={setIsProductFormOpen} />
       <div className="w-full sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0 w-full">
           {/* Tabs */}
@@ -93,54 +94,84 @@ function ProductDash() {
             <nav className="-mb-px flex space-x-8">
               <button
                 onClick={() => setActiveTab('products')}
-                className={`${
-                  activeTab === 'products'
-                    ? 'border-b-2 border-black'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                className={`${activeTab === 'products'
+                  ? 'border-b-2 border-black'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
               >
                 Produits
               </button>
               <button
                 onClick={() => setActiveTab('categories')}
-                className={`${
-                  activeTab === 'categories'
-                    ? 'border-b-2 border-black'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                className={`${activeTab === 'categories'
+                  ? 'border-b-2 border-black'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
               >
                 Catégories
               </button>
             </nav>
             {
               activeTab === "categories" ?
-              <FolderTree/>
-              :
-              <AiFillProduct/>
+                <FolderTree />
+                :
+                <AiFillProduct />
             }
           </div>
 
+          {(isProductFormOpen || editingProduct) && (
+            <div className="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black/70 overflow-y-auto">
+              <div className="bg-white p-6 md:rounded-2xl md:shadow-2xl modal-field my-modal relative">
+                <button onClick={() => setIsProductFormOpen(false)} className="absolute top-4 left-4 text-gray-500 hover:text-gray-800">
+                  <AiFillCloseCircle size={24} />
+                </button>
+                <button type="button" onClick={resize} className="maximise absolute top-4 right-4 text-gray-500 hover:text-gray-800" title="pleine ecran">
+                  <Maximize size={24} />
+                </button>
+                <h2 className="text-xl font-semibold mb-4">
+                  {editingProduct ? 'Modifier le produit' : 'Ajouter un nouveau produit'}
+                </h2>
+                <ProductForm
+                  onSubmit={editingProduct ? handleUpdateProduct : handleCreateProduct}
+                  onCancel={() => {
+                    setIsProductFormOpen(false);
+                    setEditingProduct(null);
+                  }}
+                  initialProduct={editingProduct ?? undefined}
+                  categories={categories}
+                />
+              </div>
+            </div>
+          )}
+
+
+          {(isCategoryFormOpen || editingCategory) && (
+            <div className="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black/70 overflow-y-auto">
+              <div className="bg-white p-6 md:rounded-2xl md:shadow-2xl modal-field my-modal relative">
+                <button onClick={() => setIsCategoryFormOpen(false)} className="absolute top-4 left-4 text-gray-500 hover:text-gray-800">
+                  <AiFillCloseCircle size={24} />
+                </button>
+                <button type="button" onClick={resize} className="maximise absolute top-4 right-4 text-gray-500 hover:text-gray-800" title="pleine ecran">
+                  <Maximize size={24} />
+                </button>
+                <h2 className="text-xl font-semibold mb-4">
+                  {editingCategory ? 'Modifier la catégorie' : 'Ajouter une nouvelle catégorie'}
+                </h2>
+                <CategoryForm
+                  onSubmit={editingCategory ? handleUpdateCategory : handleCreateCategory}
+                  onCancel={() => {
+                    setIsCategoryFormOpen(false);
+                    setEditingCategory(null);
+                  }}
+                  initialCategory={editingCategory ?? undefined}
+                  categories={categories}
+                />
+              </div>
+            </div>
+          )}
+
           {activeTab === 'products' ? (
             <>
-
-              {(isProductFormOpen || editingProduct) && (
-                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
-                  <div className="bg-white rounded-lg p-6 max-w-md w-full">
-                    <h2 className="text-xl font-semibold mb-4">
-                      {editingProduct ? 'Modifier le produit' : 'Ajouter un nouveau produit'}
-                    </h2>
-                    <ProductForm
-                      onSubmit={editingProduct ? handleUpdateProduct : handleCreateProduct}
-                      onCancel={() => {
-                        setIsProductFormOpen(false);
-                        setEditingProduct(null);
-                      }}
-                      initialProduct={editingProduct ?? undefined}
-                      categories={categories}
-                    />
-                  </div>
-                </div>
-              )}
 
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {products?.map(product => (
@@ -164,25 +195,6 @@ function ProductDash() {
             </>
           ) : (
             <>
-
-              {(isCategoryFormOpen || editingCategory) && (
-                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
-                  <div className="bg-white rounded-lg p-6 max-w-md w-full">
-                    <h2 className="text-xl font-semibold mb-4">
-                      {editingCategory ? 'Modifier la catégorie' : 'Ajouter une nouvelle catégorie'}
-                    </h2>
-                    <CategoryForm
-                      onSubmit={editingCategory ? handleUpdateCategory : handleCreateCategory}
-                      onCancel={() => {
-                        setIsCategoryFormOpen(false);
-                        setEditingCategory(null);
-                      }}
-                      initialCategory={editingCategory ?? undefined}
-                      categories={categories}
-                    />
-                  </div>
-                </div>
-              )}
 
               <CategoryList
                 categories={categories}
