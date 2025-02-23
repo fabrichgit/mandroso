@@ -55,6 +55,7 @@ export async function auth() {
     case "vendeur":
       return vendeur as User
     default:
+      throw new Error("invalid token")
       break;
   }
 
