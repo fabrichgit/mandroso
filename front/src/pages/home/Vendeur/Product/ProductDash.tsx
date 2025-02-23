@@ -9,6 +9,7 @@ import { CategoryList } from '../../../../components/Product/CategoryList';
 import { AiFillCloseCircle, AiFillProduct } from 'react-icons/ai';
 import FloatingActionButton from '../../../../components/Product/FloatingActionButton';
 import resize from '../../../../utils/maximise';
+import { HiOutlineViewGridAdd } from 'react-icons/hi';
 
 function ProductDash() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -186,10 +187,14 @@ function ProductDash() {
               </div>
 
               {products.length === 0 && (
-                <div className="text-center py-12">
+                <div className="flex flex-col gap-5 items-center text-center py-12">
                   <p className="text-gray-500">
-                    Aucun produit pour le moment. Cliquez sur "Ajouter un produit" pour en créer un.
+                    Aucun produit pour le moment.
                   </p>
+                  <button onClick={() => setIsProductFormOpen(true)} className="flex items-center gap-2 p-3 bg-white rounded-lg hover:bg-gray-100 bg-gray-50 transition">
+                    <HiOutlineViewGridAdd className="text-orange-500" />
+                    nouveau produit
+                  </button>
                 </div>
               )}
             </>
@@ -200,6 +205,7 @@ function ProductDash() {
                 categories={categories}
                 onEdit={setEditingCategory}
                 onDelete={handleDeleteCategory}
+                setIsCategoryFormOpen={setIsCategoryFormOpen}
               />
             </>
           )}

@@ -1,13 +1,15 @@
 import { Pencil, Trash2, FolderTree } from 'lucide-react';
 import type { Category } from '../../types/category';
+import { RiFolderAddFill } from 'react-icons/ri';
 
 interface CategoryListProps {
   categories: Category[];
   onEdit: (category: Category) => void;
   onDelete: (id: string) => void;
+  setIsCategoryFormOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export function CategoryList({ categories, onEdit, onDelete }: CategoryListProps) {
+export function CategoryList({ categories, onEdit, onDelete, setIsCategoryFormOpen }: CategoryListProps) {
   const getCategoryHierarchy = (categoryId: string | null): Category[] => {
     const result: Category[] = [];
     let currentId = categoryId;
@@ -31,7 +33,7 @@ export function CategoryList({ categories, onEdit, onDelete }: CategoryListProps
 
   const renderCategory = (category: Category) => {
     const children = getChildCategories(category.id);
-    
+
     return (
       <div key={category.id} className="border rounded-lg p-4 space-y-2">
         <div className="flex items-start justify-between">
@@ -68,7 +70,7 @@ export function CategoryList({ categories, onEdit, onDelete }: CategoryListProps
             </button>
           </div>
         </div>
-        
+
         {children.length > 0 && (
           <div className="ml-4 mt-2 space-y-2 border-l-2 border-gray-200 pl-4">
             {children.map(child => renderCategory(child))}
@@ -84,9 +86,15 @@ export function CategoryList({ categories, onEdit, onDelete }: CategoryListProps
     <div className="space-y-4">
       {rootCategories.map(category => renderCategory(category))}
       {categories.length === 0 && (
-        <p className="text-center text-gray-500">
-          Aucune catégorie. Créez votre première catégorie en cliquant sur le bouton ci-dessus.
-        </p>
+        <div className="flex flex-col gap-5 items-center text-center py-12">
+          <p className="text-center text-gray-500">
+            Aucune catégorie. Créez votre première catégorie en cliquant sur le bouton ci-dessus.
+          </p>
+          <button onClick={() => setIsCategoryFormOpen(true)} className="flex items-center gap-2 p-3 bg-white rounded-lg hover:bg-gray-100 bg-gray-50 transition">
+            <RiFolderAddFill className="text-blue-500" />
+            categorie
+          </button>
+        </div>
       )}
     </div>
   );
