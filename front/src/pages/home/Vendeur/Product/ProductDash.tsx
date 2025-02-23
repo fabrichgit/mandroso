@@ -191,7 +191,7 @@ function ProductDash() {
                   <p className="text-gray-500">
                     Aucun produit pour le moment.
                   </p>
-                  <button onClick={() => setIsProductFormOpen(true)} className="flex items-center gap-2 p-3 bg-white rounded-lg hover:bg-gray-100 bg-gray-50 transition">
+                  <button onClick={() => setIsProductFormOpen(true)} className="flex items-center gap-2 p-3 rounded-lg hover:bg-gray-100 bg-gray-50 transition">
                     <HiOutlineViewGridAdd className="text-orange-500" />
                     nouveau produit
                   </button>

@@ -90,7 +90,7 @@ export function CategoryList({ categories, onEdit, onDelete, setIsCategoryFormOp
           <p className="text-center text-gray-500">
             Aucune catégorie. Créez votre première catégorie en cliquant sur le bouton ci-dessus.
           </p>
-          <button onClick={() => setIsCategoryFormOpen(true)} className="flex items-center gap-2 p-3 bg-white rounded-lg hover:bg-gray-100 bg-gray-50 transition">
+          <button onClick={() => setIsCategoryFormOpen(true)} className="flex items-center gap-2 p-3 rounded-lg hover:bg-gray-100 bg-gray-50 transition">
             <RiFolderAddFill className="text-blue-500" />
             categorie
           </button>

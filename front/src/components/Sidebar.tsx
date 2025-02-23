@@ -6,6 +6,7 @@ import { FiLogOut } from "react-icons/fi";
 import { AiFillProduct } from "react-icons/ai";
 import { MdMapsHomeWork } from "react-icons/md";
 import { user_store } from "../store/user";
+import { Users } from "lucide-react";
 
 function Sidebar({ tab }: { tab: string | undefined }) {
 
@@ -48,6 +49,10 @@ function Sidebar({ tab }: { tab: string | undefined }) {
                         <Link to="/products" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-gray-700 hover:text-gray-300')} >
                             <AiFillProduct />
                             <span className="ml-2 text-sm font-medium md:inline hidden">Produits</span>
+                        </Link>
+                        <Link to="/clients" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-gray-700 hover:text-gray-300')} >
+                            <Users />
+                            <span className="ml-2 text-sm font-medium md:inline hidden">Clients</span>
                         </Link>
                         {user?.Role === "gerant" ? <Link to="/users" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-gray-700 hover:text-gray-300')} >
                             <FaUser />
