@@ -1,6 +1,7 @@
 import { Users } from 'lucide-react';
 import { ClientForm } from '../../../../components/Client/ClientForm';
 import { ClientList } from '../../../../components/Client/ClientList';
+import { ClientModal } from '../../../../components/Client/ClientModal';
 import { useClientStore } from '../../../../store/useClientStore';
 
 function ClientDash() {
@@ -12,7 +13,7 @@ function ClientDash() {
         <div className="px-4 py-6 sm:px-0">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center">
-              <Users className="h-8 w-8 text-blue-600 mr-3" />
+              <Users className="h-50 w-5 text-blue-600 mr-3" />
               <h1 className="text-2xl font-bold text-gray-900">
                 Gestion des Clients
               </h1>
@@ -24,9 +25,8 @@ function ClientDash() {
 
           <div className="space-y-8">
             <ClientForm
-              onSubmit={editingClient ? useClientStore.getState().editClient : useClientStore.getState().addClient}
-              initialData={editingClient || undefined}
-              isEditing={!!editingClient}
+              onSubmit={useClientStore.getState().addClient}
+              isEditing={false}
             />
 
             <ClientList
@@ -37,6 +37,15 @@ function ClientDash() {
           </div>
         </div>
       </div>
+
+      {editingClient && (
+        <ClientModal
+          isOpen={!!editingClient}
+          onClose={() => setEditingClient(null)}
+          client={editingClient}
+          onSubmit={useClientStore.getState().editClient}
+        />
+      )}
     </div>
   );
 }

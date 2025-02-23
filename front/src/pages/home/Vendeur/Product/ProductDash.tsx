@@ -10,6 +10,7 @@ import { AiFillCloseCircle, AiFillProduct } from 'react-icons/ai';
 import FloatingActionButton from '../../../../components/Product/FloatingActionButton';
 import resize from '../../../../utils/maximise';
 import { HiOutlineViewGridAdd } from 'react-icons/hi';
+import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 
 function ProductDash() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -90,6 +91,12 @@ function ProductDash() {
       <FloatingActionButton setIsCategoryFormOpen={setIsCategoryFormOpen} setIsProductFormOpen={setIsProductFormOpen} />
       <div className="w-full sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0 w-full">
+          <div className="flex items-center mb-6">
+            <MdOutlineProductionQuantityLimits className="h-5 w-5 text-blue-600 mr-3" />
+            <h1 className="text-2xl font-bold text-gray-900">
+              Gestion des Produits
+            </h1>
+          </div>
           {/* Tabs */}
           <div className="flex justify-between items-center w-full border-b border-gray-200 mb-6">
             <nav className="-mb-px flex space-x-8">

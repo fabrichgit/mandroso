@@ -57,7 +57,6 @@ function Users() {
             </div>
         )
     }
-    console.log(users);
 
     return (
         <div className="w-full">

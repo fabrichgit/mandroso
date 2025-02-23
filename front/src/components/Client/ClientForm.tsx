@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Save } from 'lucide-react';
 import { Client, ClientFormData } from '../../types/client';
 
@@ -10,11 +10,22 @@ interface ClientFormProps {
 
 export function ClientForm({ onSubmit, initialData, isEditing = false }: ClientFormProps) {
   const [formData, setFormData] = useState<ClientFormData>({
-    name: initialData?.name || '',
-    contact: initialData?.contact || '',
-    nif: initialData?.nif || '',
-    stat: initialData?.stat || '',
+    name: '',
+    contact: '',
+    nif: '',
+    stat: '',
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        name: initialData.name,
+        contact: initialData.contact,
+        nif: initialData.nif,
+        stat: initialData.stat,
+      });
+    }
+  }, [initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,7 +111,7 @@ export function ClientForm({ onSubmit, initialData, isEditing = false }: ClientF
       <div className="flex justify-end">
         <button
           type="submit"
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-orange-500 hover:bg-orange-600"
         >
           {isEditing ? (
             <>
