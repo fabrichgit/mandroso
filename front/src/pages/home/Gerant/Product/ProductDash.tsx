@@ -11,15 +11,19 @@ import FloatingActionButton from '../../../../components/Product/FloatingActionB
 import resize from '../../../../utils/maximise';
 import { HiOutlineViewGridAdd } from 'react-icons/hi';
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
+import { useProductStore } from '../../../../store/useProductStore';
 
 function ProductDash() {
-  const [products, setProducts] = useState<Product[]>([]);
+
+  const {products, setProducts} = useProductStore()
+  // const [products, setProducts] = useState<Product[]>([]);
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
   const [isCategoryFormOpen, setIsCategoryFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const [activeTab, setActiveTab] = useState<'products' | 'categories'>('products');
+  const [activeTab, setActiveTab] = useState<'products' | 'categories' | 'cart'>('products');
 
   const handleCreateProduct = (productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
     const newProduct: Product = {
@@ -118,6 +122,15 @@ function ProductDash() {
               >
                 Catégories
               </button>
+              <button
+                onClick={() => setActiveTab('cart')}
+                className={`${activeTab === 'cart'
+                  ? 'border-b-2 border-black'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+              >
+                Panier
+              </button>
             </nav>
             {
               activeTab === "categories" ?
@@ -178,47 +191,54 @@ function ProductDash() {
             </div>
           )}
 
-          {activeTab === 'products' ? (
-            <>
+          {((tab: typeof activeTab) => {
+            switch (tab) {
+              case 'products':
+                return (
+                  <>
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                      {products?.map(product => (
+                        <ProductCard
+                          key={product.id}
+                          product={product}
+                          categorie={categories?.find(cg => cg.id === product.category)?.name}
+                          onEdit={setEditingProduct}
+                          onDelete={handleDeleteProduct}
+                        />
+                      ))}
+                    </div>
 
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {products?.map(product => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    categorie={categories?.find(cg => cg.id === product.category)?.name}
-                    onEdit={setEditingProduct}
-                    onDelete={handleDeleteProduct}
-                  />
-                ))}
-              </div>
-
-              {products.length === 0 && (
-                <div className="flex flex-col gap-5 items-center text-center py-12">
-                  <p className="text-gray-500">
-                    Aucun produit pour le moment.
-                  </p>
-                  <button onClick={() => setIsProductFormOpen(true)} className="flex items-center gap-2 p-3 rounded-lg hover:bg-gray-100 bg-gray-50 transition">
-                    <HiOutlineViewGridAdd className="text-orange-500" />
-                    nouveau produit
-                  </button>
-                </div>
-              )}
-            </>
-          ) : (
-            <>
-
-              <CategoryList
-                categories={categories}
-                onEdit={setEditingCategory}
-                onDelete={handleDeleteCategory}
-                setIsCategoryFormOpen={setIsCategoryFormOpen}
-              />
-            </>
-          )}
+                    {products.length === 0 && (
+                      <div className="flex flex-col gap-5 items-center text-center py-12">
+                        <p className="text-gray-500">
+                          Aucun produit pour le moment.
+                        </p>
+                        <button onClick={() => setIsProductFormOpen(true)} className="flex items-center gap-2 p-3 rounded-lg hover:bg-gray-100 bg-gray-50 transition">
+                          <HiOutlineViewGridAdd className="text-orange-500" />
+                          nouveau produit
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )
+              case 'categories':
+                return (
+                  <>
+                    <CategoryList
+                      categories={categories}
+                      onEdit={setEditingCategory}
+                      onDelete={handleDeleteCategory}
+                      setIsCategoryFormOpen={setIsCategoryFormOpen}
+                    />
+                  </>
+                )
+              default:
+                break;
+            }
+          })(activeTab)}
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
 

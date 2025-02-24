@@ -6,7 +6,7 @@ import { FiLogOut } from "react-icons/fi";
 import { AiFillProduct } from "react-icons/ai";
 import { MdMapsHomeWork } from "react-icons/md";
 import { user_store } from "../store/user";
-import { Users } from "lucide-react";
+import { ShoppingCart, Users } from "lucide-react";
 
 function Sidebar({ tab }: { tab: string | undefined }) {
 
@@ -49,6 +49,10 @@ function Sidebar({ tab }: { tab: string | undefined }) {
                         <Link to="/products" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-gray-700 hover:text-gray-300')} >
                             <AiFillProduct />
                             <span className="ml-2 text-sm font-medium md:inline hidden">Produits</span>
+                        </Link>
+                        <Link to="/cart" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-gray-700 hover:text-gray-300')} >
+                            <ShoppingCart />
+                            <span className="ml-2 text-sm font-medium md:inline hidden">Panier</span>
                         </Link>
                         <Link to="/clients" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-gray-700 hover:text-gray-300')} >
                             <Users />
