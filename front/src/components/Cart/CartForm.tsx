@@ -101,7 +101,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                         value={formData.reference}
                         onChange={(e) => setFormData(prev => ({ ...prev, reference: e.target.value }))}
                         required
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
                     />
                 </div>
 
@@ -114,7 +114,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                         value={formData.clientId}
                         onChange={(e) => setFormData(prev => ({ ...prev, clientId: e.target.value }))}
                         required
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
                     >
                         <option value="">Sélectionner un client</option>
                         {clients.map(client => (
@@ -134,7 +134,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                         value={formData.status}
                         onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as Cart['status'] }))}
                         required
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
                     >
                         <option value="pending">En attente</option>
                         <option value="completed">Terminée</option>
@@ -149,7 +149,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                     <button
                         type="button"
                         onClick={handleAddItem}
-                        className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-orange-600 bg-orange-100 hover:bg-orange-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
                     >
                         <PlusCircle className="h-4 w-4 mr-1" />
                         Ajouter un produit
@@ -166,7 +166,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                                 value={item.productId}
                                 onChange={(e) => handleItemChange(index, 'productId', e.target.value)}
                                 required
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
                             >
                                 <option value="">Sélectionner un produit</option>
                                 {products.map(product => (
@@ -188,7 +188,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                                 required
                                 min="0"
                                 step="0.01"
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
                             />
                         </div>
 
@@ -202,7 +202,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                                 onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))}
                                 required
                                 min="1"
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
                             />
                         </div>
 
@@ -225,7 +225,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                 </div>
                 <button
                     type="submit"
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-orange-500 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
                 >
                     {isEditing ? (
                         <>
