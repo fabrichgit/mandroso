@@ -3,6 +3,7 @@ import { Plus, Save, MinusCircle, PlusCircle } from 'lucide-react';
 import { useClientStore } from '../../store/useClientStore';
 import { useProductStore } from '../../store/useProductStore';
 import { Cart, CartFormData } from '../../types/cart';
+import ClientDropdown from '../Client/ClientDropdown';
 
 interface CartFormProps {
     onSubmit: (cart: CartFormData) => void;
@@ -106,24 +107,30 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                     />
                 </div>
 
-                <div>
-                    <label htmlFor="clientId" className="block text-sm font-medium text-gray-700">
-                        Client
-                    </label>
-                    <select
-                        id="clientId"
-                        value={formData.clientId}
-                        onChange={(e) => setFormData(prev => ({ ...prev, clientId: e.target.value }))}
-                        required
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
-                    >
-                        <option value="">Sélectionner un client</option>
-                        {clients.map(client => (
-                            <option key={client.id} value={client.id}>
-                                {client.name}
-                            </option>
-                        ))}
-                    </select>
+                <div className='flex items-end gap-3'>
+                    <div className='w-full'>
+                        <label htmlFor="clientId" className="block text-sm font-medium text-gray-700">
+                            Client
+                        </label>
+                        <select
+                            id="clientId"
+                            value={formData.clientId}
+                            onChange={(e) => setFormData(prev => ({ ...prev, clientId: e.target.value }))}
+                            required
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
+                        >
+                            <option value="">Sélectionner un client</option>
+                            {clients.map(client => (
+                                <option key={client.id} value={client.id}>
+                                    {client.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <ClientDropdown onSubmit={(data) => {
+                        const {id} = useClientStore.getState().addClient(data);
+                        setFormData(prev => ({ ...prev, clientId: id }))
+                    }}/>
                 </div>
 
                 <div>

@@ -4,7 +4,7 @@ import { Client, ClientFormData } from '../types/client';
 interface ClientStore {
   clients: Client[];
   editingClient: Client | null;
-  addClient: (clientData: ClientFormData) => void;
+  addClient: (clientData: ClientFormData) => Client;
   editClient: (clientData: ClientFormData) => void;
   deleteClient: (id: string) => void;
   setEditingClient: (client: Client | null) => void;
@@ -19,6 +19,7 @@ export const useClientStore = create<ClientStore>((set) => ({
       id: crypto.randomUUID(),
     };
     set((state) => ({ clients: [...state.clients, newClient] }));
+    return newClient
   },
   editClient: (clientData) => {
     set((state) => {
