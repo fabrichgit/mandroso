@@ -37,7 +37,7 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
 
     const { add, local } = useLocalStore()
 
-    
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         onSubmit(formData);
@@ -196,7 +196,7 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
                     <AutocompleteInput initialSuggestions={local} onAddSuggestion={(local) => {
                         add(local);
                         handleAddLocal();
-                    }} onChange={(local) => setNewLocal(local)} placeholder='' value={newLocal}/>
+                    }} onChange={(local) => setNewLocal(local)} placeholder='' value={newLocal} />
                     <div className="mt-2 flex flex-wrap gap-2">
                         {formData.local?.map((lc, index) => (
                             <span
@@ -281,17 +281,32 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
                     </div>
                 </div>
 
-                <div>
-                    <label htmlFor="color" className="block text-sm font-medium text-gray-700">
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <label htmlFor="color" className="block text-sm font-medium text-gray-700">
                         Couleur
-                    </label>
-                    <input
-                        type="text"
-                        id="color"
-                        value={formData.color}
-                        onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    />
+                        </label>
+                        <input
+                            type="text"
+                            id="color"
+                            value={formData.color}
+                            onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+                            Prix unitaire
+                        </label>
+                        <input
+                            type="number"
+                            id="price"
+                            value={formData.price}
+                            onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            min="0"
+                        />
+                    </div>
                 </div>
 
                 <div>

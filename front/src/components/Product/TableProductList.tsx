@@ -22,6 +22,7 @@ export default function TableProductList({ products, categories, onEdit, onDelet
             <tr>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Nom</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Quantité</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Prix unitaire</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Condition</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Catégorie</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Marque</th>
@@ -36,6 +37,7 @@ export default function TableProductList({ products, categories, onEdit, onDelet
               <tr key={product.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3 text-sm text-gray-900">{product.name}</td>
                 <td className="px-4 py-3 text-sm text-gray-600">{product.quantity}</td>
+                <td className="px-4 py-3 text-sm text-gray-600">{product.price} ar</td>
                 <td className="px-4 py-3 text-sm">
                   <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getConditionColor(product.condition)}`}>
                     {getConditionLabel(product.condition)}
