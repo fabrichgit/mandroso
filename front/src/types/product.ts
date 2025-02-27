@@ -12,7 +12,9 @@ export interface Product {
   weight: number;
   color: string;
   materials: string[];
+  price?: number;
   volume: number;
+  local?: string[];
   condition: 'neuf' | 'usagé' | "reconditionné" ;
   images?: string[];
   // Métadonnées

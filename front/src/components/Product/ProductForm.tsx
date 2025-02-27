@@ -3,6 +3,8 @@ import { Plus, X } from 'lucide-react';
 import type { Product } from '../../types/product';
 import type { Category } from '../../types/category';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import AutocompleteInput from '../ui/AutocompleteInput';
+import { useLocalStore } from '../../store/useLocal';
 
 interface ProductFormProps {
     onSubmit: (product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => void;
@@ -22,6 +24,7 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
         weight: initialProduct?.weight ?? 0,
         color: initialProduct?.color ?? '',
         materials: initialProduct?.materials ?? [],
+        local: initialProduct?.local ?? [],
         volume: initialProduct?.volume ?? 0,
         quantity: initialProduct?.quantity ?? 0,
         condition: initialProduct?.condition ?? 'neuf',
@@ -29,11 +32,25 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
     });
 
     const [newMaterial, setNewMaterial] = useState('');
+    const [newLocal, setNewLocal] = useState('');
     const [newPhoto, setNewPhoto] = useState('');
 
+    const { add, local } = useLocalStore()
+
+    
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         onSubmit(formData);
+    };
+
+    const handleAddLocal = () => {
+        if (newLocal.trim()) {
+            setFormData({
+                ...formData,
+                local: [newLocal.trim(), ...(formData.local || [])]
+            });
+            setNewLocal('');
+        }
     };
 
     const handleAddMaterial = () => {
@@ -68,6 +85,13 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
         setFormData({
             ...formData,
             images: formData.images?.filter((_, i) => i !== index)
+        });
+    };
+
+    const handleRemoveLocal = (index: number) => {
+        setFormData({
+            ...formData,
+            local: formData.local?.filter((_, i) => i !== index)
         });
     };
 
@@ -163,6 +187,33 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
                         rows={3}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     />
+                </div>
+
+                <div>
+                    <label htmlFor="emplacement" className="block text-sm font-medium text-gray-700">
+                        Emplacement
+                    </label>
+                    <AutocompleteInput initialSuggestions={local} onAddSuggestion={(local) => {
+                        add(local);
+                        handleAddLocal();
+                    }} onChange={(local) => setNewLocal(local)} placeholder='' value={newLocal}/>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                        {formData.local?.map((lc, index) => (
+                            <span
+                                key={index}
+                                className="inline-flex items-center px-2.5 py-0.5 rounded-full font-medium bg-orange-100 text-orange-800"
+                            >
+                                {lc}
+                                <button
+                                    type="button"
+                                    onClick={() => handleRemoveLocal(index)}
+                                    className="ml-1 inline-flex items-center p-0.5 rounded-full text-orange-400 hover:bg-orange-200 hover:text-orange-600"
+                                >
+                                    <X className="h-3 w-3" />
+                                </button>
+                            </span>
+                        ))}
+                    </div>
                 </div>
             </div>
 
