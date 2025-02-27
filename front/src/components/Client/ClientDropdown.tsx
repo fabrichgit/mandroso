@@ -42,7 +42,7 @@ export default function ClientDropdown({ onSubmit }: { onSubmit?: (data: ClientF
       </button>
 
       {isOpen && (
-        <div className="absolute right-10 top-0 bg-gray-50 shadow-lg rounded-2xl p-3 w-64">
+        <div className="absolute right-2 top-0 bg-gray-50 shadow-lg rounded-2xl p-3 w-64">
           <div className="flex justify-between items-center">
             <button type="button" onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-700">&times;</button>
           </div>
