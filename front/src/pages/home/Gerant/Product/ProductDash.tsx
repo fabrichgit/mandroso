@@ -6,17 +6,21 @@ import { ProductForm } from '../../../../components/Product/ProductForm';
 import { ProductCard } from '../../../../components/Product/ProductCard';
 import { CategoryForm } from '../../../../components/Product/CategoryForm';
 import { CategoryList } from '../../../../components/Product/CategoryList';
-import { AiFillCloseCircle, AiFillProduct } from 'react-icons/ai';
+import { AiFillCloseCircle } from 'react-icons/ai';
 import FloatingActionButton from '../../../../components/Product/FloatingActionButton';
 import resize from '../../../../utils/maximise';
 import { HiOutlineViewGridAdd } from 'react-icons/hi';
-import { MdOutlineProductionQuantityLimits } from "react-icons/md";
+import { MdOutlineDashboard, MdOutlineProductionQuantityLimits } from "react-icons/md";
 import { useProductStore } from '../../../../store/useProductStore';
+import useStorage from '../../../../hook/useStorage';
+import TableProductList from '../../../../components/Product/TableProductList';
+import { reactiveClass } from '../../../../utils/class';
+import { FaTable } from 'react-icons/fa';
 
 function ProductDash() {
 
-  const {products, setProducts} = useProductStore()
-  // const [products, setProducts] = useState<Product[]>([]);
+  const { products, setProducts } = useProductStore()
+  const { tab: view, setTab: setView } = useStorage("cards", 'view-product');
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
@@ -127,7 +131,22 @@ function ProductDash() {
               activeTab === "categories" ?
                 <FolderTree />
                 :
-                <AiFillProduct />
+                <div className="flex w-max p-1 bg-neutral-100 border rounded-lg mx-2">
+                  <button
+                    title="voir en tant que tableau"
+                    onClick={() => setView("table")}
+                    className={`text-sm h-max px-2 py-1 rounded-lg ${reactiveClass('table', view, 'bg-white border', '')}`}
+                  >
+                    <FaTable />
+                  </button>
+                  <button
+                    title="voir en tant que carte"
+                    onClick={() => setView("cards")}
+                    className={`text-sm h-max px-2 py-1 rounded-lg ${reactiveClass('cards', view, 'bg-white border', '')}`}
+                  >
+                    <MdOutlineDashboard />
+                  </button>
+                </div>
             }
           </div>
 
@@ -187,17 +206,26 @@ function ProductDash() {
               case 'products':
                 return (
                   <>
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                      {products?.map(product => (
-                        <ProductCard
-                          key={product.id}
-                          product={product}
-                          categorie={categories?.find(cg => cg.id === product.category)?.name}
+                    {
+                      view === "cards" ?
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                          {products?.map(product => (
+                            <ProductCard
+                              key={product.id}
+                              product={product}
+                              categorie={categories?.find(cg => cg.id === product.category)?.name}
+                              onEdit={setEditingProduct}
+                              onDelete={handleDeleteProduct}
+                            />
+                          ))}
+                        </div>
+                        : <TableProductList
+                          products={products}
+                          categories={categories}
                           onEdit={setEditingProduct}
                           onDelete={handleDeleteProduct}
                         />
-                      ))}
-                    </div>
+                    }
 
                     {products.length === 0 && (
                       <div className="flex flex-col gap-5 items-center text-center py-12">

@@ -23,7 +23,8 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
         materials: initialProduct?.materials ?? [],
         volume: initialProduct?.volume ?? 0,
         quantity: initialProduct?.quantity ?? 0,
-        condition: initialProduct?.condition ?? 'new',
+        condition: initialProduct?.condition ?? 'neuf',
+        images: initialProduct?.images || []
     });
 
     const [newMaterial, setNewMaterial] = useState('');
@@ -277,9 +278,9 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
                         onChange={(e) => setFormData({ ...formData, condition: e.target.value as Product['condition'] })}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     >
-                        <option value="new">Neuf</option>
-                        <option value="used">Usagé</option>
-                        <option value="refurbished">Reconditionné</option>
+                        <option value="neuf">Neuf</option>
+                        <option value="usagé">Usagé</option>
+                        <option value="reconditionné">Reconditionné</option>
                     </select>
                 </div>
             </div>

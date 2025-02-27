@@ -11,11 +11,11 @@ interface ProductCardProps {
 export function ProductCard({ product, onEdit, onDelete, categorie }: ProductCardProps) {
   const getConditionLabel = (condition: Product['condition']) => {
     switch (condition) {
-      case 'new':
+      case 'neuf':
         return 'Neuf';
-      case 'used':
+      case 'usagé':
         return 'Usagé';
-      case 'refurbished':
+      case 'reconditionné':
         return 'Reconditionné';
       default:
         return condition;
@@ -24,11 +24,11 @@ export function ProductCard({ product, onEdit, onDelete, categorie }: ProductCar
 
   const getConditionColor = (condition: Product['condition']) => {
     switch (condition) {
-      case 'new':
+      case 'neuf':
         return 'bg-green-100 text-green-800';
-      case 'used':
+      case 'usagé':
         return 'bg-yellow-100 text-yellow-800';
-      case 'refurbished':
+      case 'reconditionné':
         return 'bg-blue-100 text-blue-800';
       default:
         return 'bg-gray-100 text-gray-800';
@@ -41,22 +41,22 @@ export function ProductCard({ product, onEdit, onDelete, categorie }: ProductCar
         <div className="flex justify-between items-start mb-2">
           <div>
             <h3 className="text-lg font-semibold text-gray-900">{product.name}</h3>
-            <p className="text-sm text-gray-500">Réf: {product.reference}</p>
+            <p className="text-sm text-gray-500">Quantité: {product.quantity}</p>
           </div>
           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getConditionColor(product.condition)}`}>
             {getConditionLabel(product.condition)}
           </span>
         </div>
-        
+
         <div className="mt-2">
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
             {categorie}
           </span>
           <span className="ml-2 text-sm text-gray-500">{product.brand}</span>
         </div>
-        
+
         <p className="mt-2 text-gray-500 text-sm line-clamp-2">{product.description}</p>
-        
+
         <div className="mt-4 grid grid-cols-2 gap-4">
           <div className="text-sm">
             <p className="text-gray-500">Dimensions</p>
@@ -68,7 +68,7 @@ export function ProductCard({ product, onEdit, onDelete, categorie }: ProductCar
           </div>
         </div>
 
-        <div className="mt-2">
+        {product.materials ? <div className="mt-2">
           <p className="text-sm text-gray-500">Matériaux</p>
           <div className="mt-1 flex flex-wrap gap-1">
             {product.materials.map((material, index) => (
@@ -80,7 +80,7 @@ export function ProductCard({ product, onEdit, onDelete, categorie }: ProductCar
               </span>
             ))}
           </div>
-        </div>
+        </div> : null}
 
         <div className="mt-4 flex justify-end space-x-2">
           <button

@@ -13,8 +13,8 @@ export interface Product {
   color: string;
   materials: string[];
   volume: number;
-  condition: 'new' | 'used' | 'refurbished';
-
+  condition: 'neuf' | 'usagé' | "reconditionné" ;
+  images?: string[];
   // Métadonnées
   createdAt: Date;
   updatedAt: Date;
