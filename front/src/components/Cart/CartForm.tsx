@@ -68,7 +68,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                         return {
                             ...item,
                             [field]: value,
-                            unitPrice: 0
+                            unitPrice: products.find(p => p.id === value)?.price || 0
                         };
                     }
                     return { ...item, [field]: value };
@@ -77,6 +77,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
             })
         }));
     };
+
 
     const calculateTotal = () => {
         return formData.items.reduce((total, item) => {
@@ -171,7 +172,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                                 <option value="">Sélectionner un produit</option>
                                 {products.map(product => (
                                     <option key={product.id} value={product.id}>
-                                        {product.name} - {0?.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                                        {product.name} {product.price ? ` - ${product.price} ar` : null}
                                     </option>
                                 ))}
                             </select>
