@@ -153,7 +153,10 @@ function ProductDash() {
           {(isProductFormOpen || editingProduct) && (
             <div className="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black/70 overflow-y-auto">
               <div className="bg-white p-6 md:rounded-2xl md:shadow-2xl modal-field my-modal relative">
-                <button onClick={() => setIsProductFormOpen(false)} className="absolute top-4 left-4 text-gray-500 hover:text-gray-800">
+                <button onClick={() => {
+                  setIsProductFormOpen(false);
+                  setEditingProduct(null);
+                }} className="absolute top-4 left-4 text-gray-500 hover:text-gray-800">
                   <AiFillCloseCircle size={24} />
                 </button>
                 <button type="button" onClick={resize} className="maximise absolute top-4 right-4 text-gray-500 hover:text-gray-800" title="pleine ecran">
@@ -205,6 +208,7 @@ function ProductDash() {
             switch (tab) {
               case 'products':
                 return (
+                  (isProductFormOpen || editingProduct) ? null :
                   <>
                     {
                       view === "cards" ?

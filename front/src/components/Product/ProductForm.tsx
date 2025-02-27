@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus, X } from 'lucide-react';
 import type { Product } from '../../types/product';
 import type { Category } from '../../types/category';
+import { AiFillCloseCircle } from 'react-icons/ai';
 
 interface ProductFormProps {
     onSubmit: (product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => void;
@@ -24,10 +25,11 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
         volume: initialProduct?.volume ?? 0,
         quantity: initialProduct?.quantity ?? 0,
         condition: initialProduct?.condition ?? 'neuf',
-        images: initialProduct?.images || []
+        images: initialProduct?.images ?? []
     });
 
     const [newMaterial, setNewMaterial] = useState('');
+    const [newPhoto, setNewPhoto] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -44,10 +46,28 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
         }
     };
 
+    const handleAddPhoto = () => {
+        if (newPhoto.trim() && (formData.images || [])?.length <= 7) {
+            setFormData({
+                ...formData,
+                images: [...(formData.images || []), newPhoto.trim()]
+            });
+            setNewPhoto('');
+        }
+    };
+
+
     const handleRemoveMaterial = (index: number) => {
         setFormData({
             ...formData,
             materials: formData.materials.filter((_, i) => i !== index)
+        });
+    };
+
+    const handleRemovePhoto = (index: number) => {
+        setFormData({
+            ...formData,
+            images: formData.images?.filter((_, i) => i !== index)
         });
     };
 
@@ -264,6 +284,54 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
                                     <X className="h-3 w-3" />
                                 </button>
                             </span>
+                        ))}
+                    </div>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                        Photos
+                    </label>
+                    <div className="mt-1 flex gap-2">
+                        <input
+                            type="url"
+                            value={newPhoto}
+                            onChange={(e) => setNewPhoto(e.target.value)}
+                            placeholder="Insérer un lien"
+                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    handleAddPhoto();
+                                }
+                            }}
+                        />
+                        <button
+                            type="button"
+                            onClick={handleAddPhoto}
+                            className="inline-flex items-center px-3 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-orange-600"
+                        >
+                            <Plus className="h-4 w-4" />
+                        </button>
+                    </div>
+                    <div className="mt-2 flex flex-nowrap gap-2 w-full overflow-x-auto">
+                        {formData.images?.map((img, index) => (
+                            <div
+                                key={index}
+                                className="relative min-w-24 h-24 rounded-md px-1.5 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 overflow-hidden"
+                            >
+                                <img src={img} alt="" className='w-full h-full' />
+                                {/* <button
+                                    type="button"
+                                    onClick={() => handleRemovePhoto(index)}
+                                    className="ml-1 inline-flex items-center p-0.5 rounded-full text-blue-400 hover:bg-blue-200 hover:text-blue-600"
+                                >
+                                    <X className="h-3 w-3" />
+                                </button> */}
+                                <button type='button' onClick={() => handleRemovePhoto(index)} className="absolute top-1 right-1 text-gray-500 hover:text-gray-800">
+                                    <AiFillCloseCircle className="h-5 w-5" />
+                                </button>
+                            </div>
                         ))}
                     </div>
                 </div>
