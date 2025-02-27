@@ -28,6 +28,9 @@ export function ClientList({ clients, onEdit, onDelete }: ClientListProps) {
               Contact
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Type
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               NIF
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -48,11 +51,14 @@ export function ClientList({ clients, onEdit, onDelete }: ClientListProps) {
                 {client.contact}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {client.type}
+              </td>
+              {client.nif && <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {client.nif}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              </td>}
+              {client.stat && <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {client.stat}
-              </td>
+              </td>}
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <button
                   onClick={() => onEdit(client)}

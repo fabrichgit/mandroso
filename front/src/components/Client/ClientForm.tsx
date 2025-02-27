@@ -14,6 +14,7 @@ export function ClientForm({ onSubmit, initialData, isEditing = false }: ClientF
     contact: '',
     nif: '',
     stat: '',
+    type: ''
   });
 
   useEffect(() => {
@@ -23,6 +24,7 @@ export function ClientForm({ onSubmit, initialData, isEditing = false }: ClientF
         contact: initialData.contact,
         nif: initialData.nif,
         stat: initialData.stat,
+        type: initialData.type
       });
     }
   }, [initialData]);
@@ -45,7 +47,7 @@ export function ClientForm({ onSubmit, initialData, isEditing = false }: ClientF
       <h2 className="text-xl font-semibold mb-4">
         {isEditing ? 'Modifier le client' : 'Nouveau client'}
       </h2>
-      
+
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -87,7 +89,6 @@ export function ClientForm({ onSubmit, initialData, isEditing = false }: ClientF
             name="nif"
             value={formData.nif}
             onChange={handleChange}
-            required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
           />
         </div>
@@ -102,16 +103,29 @@ export function ClientForm({ onSubmit, initialData, isEditing = false }: ClientF
             name="stat"
             value={formData.stat}
             onChange={handleChange}
-            required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
           />
         </div>
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex flex-nowrap justify-between items-end gap-4">
+        <div>
+          <label htmlFor="type" className="block text-sm font-medium text-gray-700">
+            Type
+          </label>
+          <input
+            type="text"
+            id="type"
+            name="type"
+            value={formData.type}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+          />
+        </div>
         <button
           type="submit"
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-orange-500 hover:bg-orange-600"
+          className="inline-flex items-center h-max px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-orange-500 hover:bg-orange-600"
         >
           {isEditing ? (
             <>
