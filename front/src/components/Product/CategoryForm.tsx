@@ -10,10 +10,11 @@ interface CategoryFormProps {
 }
 
 export function CategoryForm({ onSubmit, onCancel, categories, initialCategory }: CategoryFormProps) {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<Omit<Category, 'id' | 'createdAt' | 'updatedAt'>>({
         name: initialCategory?.name ?? '',
         description: initialCategory?.description ?? '',
         parentId: initialCategory?.parentId ?? null,
+        defaultPrice: initialCategory?.defaultPrice ?? 0
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -69,6 +70,21 @@ export function CategoryForm({ onSubmit, onCancel, categories, initialCategory }
                             </option>
                         ))}
                 </select>
+            </div>
+
+            <div>
+                <label htmlFor="defaultPrice" className="block text-sm font-medium text-gray-700">
+                    Prix par defaut
+                </label>
+                <input
+                    type="number"
+                    id="defaultPrice"
+                    value={formData.defaultPrice}
+                    onChange={(e) => setFormData({ ...formData, defaultPrice: Number(e.target.value) })}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    min={0}
+                    required
+                />
             </div>
 
             <div className="flex justify-end space-x-2 pt-4">

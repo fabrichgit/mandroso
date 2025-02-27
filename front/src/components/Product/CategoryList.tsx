@@ -38,10 +38,17 @@ export function CategoryList({ categories, onEdit, onDelete, setIsCategoryFormOp
       <div key={category.id} className="border rounded-lg p-4 space-y-2">
         <div className="flex items-start justify-between">
           <div>
-            <h3 className="text-lg font-medium text-gray-900">{category.name}</h3>
-            {category.description && (
-              <p className="text-sm text-gray-500">{category.description}</p>
-            )}
+            <div className='flex items-center gap-6'>
+              <div>
+                <h3 className="text-lg font-medium text-gray-900">{category.name}</h3>
+                {category.description && (
+                  <p className="text-sm text-gray-500">{category.description}</p>
+                )}
+              </div>
+              {category.defaultPrice && (
+                <p className="text-sm text-gray-500">Prix: {category.defaultPrice} Ar</p>
+              )}
+            </div>
             {category.parentId && (
               <div className="flex items-center gap-1 text-sm text-gray-500 mt-1">
                 <FolderTree className="h-4 w-4" />

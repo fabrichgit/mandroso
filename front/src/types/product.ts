@@ -6,7 +6,7 @@ export interface Product {
   category: string;
   brand: string;
   description: string;
-
+  quantity: number;
   // Caractéristiques techniques
   dimensions: string;
   weight: number;

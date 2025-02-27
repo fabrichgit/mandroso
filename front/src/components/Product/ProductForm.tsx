@@ -11,7 +11,7 @@ interface ProductFormProps {
 }
 
 export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: ProductFormProps) {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<Omit<Product, "id" | "createdAt" | "updatedAt">>({
         reference: initialProduct?.reference ?? '',
         name: initialProduct?.name ?? '',
         category: initialProduct?.category ?? '',
@@ -22,6 +22,7 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
         color: initialProduct?.color ?? '',
         materials: initialProduct?.materials ?? [],
         volume: initialProduct?.volume ?? 0,
+        quantity: initialProduct?.quantity ?? 0,
         condition: initialProduct?.condition ?? 'new',
     });
 
@@ -147,18 +148,34 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
             {/* Caractéristiques techniques */}
             <div className="space-y-4">
                 <h3 className="text-lg font-medium text-gray-900">Caractéristiques techniques</h3>
-                <div>
-                    <label htmlFor="dimensions" className="block text-sm font-medium text-gray-700">
-                        Dimensions
-                    </label>
-                    <input
-                        type="text"
-                        id="dimensions"
-                        value={formData.dimensions}
-                        onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })}
-                        placeholder="ex: 20 x 10 x 5 cm"
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    />
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <label htmlFor="dimensions" className="block text-sm font-medium text-gray-700">
+                            Dimensions
+                        </label>
+                        <input
+                            type="text"
+                            id="dimensions"
+                            value={formData.dimensions}
+                            onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })}
+                            placeholder="ex: 20 x 10 x 5 cm"
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
+                            Quantite
+                        </label>
+                        <input
+                            type="number"
+                            id="quantity"
+                            value={formData.quantity}
+                            onChange={(e) => setFormData({ ...formData, quantity: Number(e.target.value) })}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            min="0"
+                            step="1"
+                        />
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
