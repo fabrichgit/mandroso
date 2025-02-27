@@ -4,7 +4,7 @@ import Users from "./Users/Users"
 import Dashbord from "./Dashbord/Dashbord"
 import ProductDash from "./Product/ProductDash"
 import ClientDash from "../Vendeur/Client/ClientDash"
-import Commande from "../Vendeur/Commande/Commande"
+import Commande from "../Vendeur/Cart/Cart"
 
 function HomeGerant() {
   return (

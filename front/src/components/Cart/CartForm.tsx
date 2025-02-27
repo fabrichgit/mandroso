@@ -235,7 +235,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                     ) : (
                         <>
                             <Plus className="h-4 w-4 mr-2" />
-                            Créer la commande
+                            Créer la panier
                         </>
                     )}
                 </button>

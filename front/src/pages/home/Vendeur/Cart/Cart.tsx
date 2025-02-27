@@ -4,7 +4,7 @@ import { CartForm } from "../../../../components/Cart/CartForm";
 import { CartList } from "../../../../components/Cart/CartList";
 import { CartModal } from "../../../../components/Cart/CartModal";
 
-function Commande() {
+function Cart() {
 
     const { carts, editingCart, setEditingCart } = useCartStore();
 
@@ -47,4 +47,4 @@ function Commande() {
     )
 }
 
-export default Commande
+export default Cart
