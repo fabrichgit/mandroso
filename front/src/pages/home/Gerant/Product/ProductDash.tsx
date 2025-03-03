@@ -58,7 +58,7 @@ function ProductDash() {
     setFormData(prev => ({
       ...prev,
       reference: Date.now().toString(),
-      items: [...prev.items, { productId: product.id, quantity: 1, unitPrice: 0 }]
+      items: [...prev.items, { productId: product.id, quantity: 1, unitPrice: product.price || 0 }]
     }));
   };
 

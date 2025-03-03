@@ -1,4 +1,4 @@
-import { Pencil, Trash2 } from "lucide-react";
+import { Minus, Pencil, PlusSquare, Trash2 } from "lucide-react";
 import { Product } from "../../types/product";
 import { useState } from "react";
 import ModalImages from "./ModalImages";
@@ -78,6 +78,7 @@ function getConditionLabel(condition: string) {
 function ProductElement({ product, onEdit, onDelete, categorie, oncartin, handleAddItem, handleRemoveItem, handleItemChange }: ProductCardProps) {
 
   const [see, setSee] = useState<boolean>(false);
+  const [itCart, setIt] = useState(false)
 
   return (
     <tr key={product.id} className="hover:bg-gray-50">
@@ -118,18 +119,66 @@ function ProductElement({ product, onEdit, onDelete, categorie, oncartin, handle
         }
       </td>
       <td className="px-4 py-3 text-sm flex space-x-2">
-        <button
-          onClick={() => onEdit(product)}
-          className="px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 flex items-center"
-        >
-          <Pencil className="h-4 w-4 mr-1" />
-        </button>
-        <button
-          onClick={() => onDelete(product.id)}
-          className="px-3 py-1.5 border border-transparent rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 flex items-center"
-        >
-          <Trash2 className="h-4 w-4 mr-1" />
-        </button>
+        {oncartin ?
+          !itCart ?
+            <button className='inline w-max h-max' onClick={() => {
+              setIt(i => !i);
+              handleAddItem(product);
+            }}>
+              <PlusSquare className='text-sky-600' />
+            </button>
+            :
+            <button className='inline w-max h-max' onClick={() => {
+              setIt(i => !i);
+              handleRemoveItem(product.id);
+            }}>
+              <Minus className='text-red-500' />
+            </button>
+          : null}
+        {itCart ?
+          <div className='flex items-start gap-2 w-full'>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Prix unitaire
+              </label>
+              <input
+                type="number"
+                name="price"
+                defaultValue={product.price}
+                onChange={(e) => handleItemChange(product.id, 'unitPrice', parseFloat(e.target.value))}
+                className="w-full p-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Quantity
+              </label>
+              <input
+                type="number"
+                name="quantity"
+                defaultValue={1}
+                className="w-full p-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                onChange={(e) => handleItemChange(product.id, 'quantity', parseInt(e.target.value))}
+              />
+            </div>
+          </div> : null}
+        {
+          oncartin ? null :
+            <>
+              <button
+                onClick={() => onEdit(product)}
+                className="px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 flex items-center"
+              >
+                <Pencil className="h-4 w-4 mr-1" />
+              </button>
+              <button
+                onClick={() => onDelete(product.id)}
+                className="px-3 py-1.5 border border-transparent rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 flex items-center"
+              >
+                <Trash2 className="h-4 w-4 mr-1" />
+              </button>
+            </>
+        }
       </td>
     </tr>
   )
