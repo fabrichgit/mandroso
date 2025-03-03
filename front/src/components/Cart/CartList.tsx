@@ -98,7 +98,7 @@ export function CartList({ carts, onEdit, onDelete }: CartListProps) {
                                             const product = products.find(p => p.id === item.productId);
                                             return product ? (
                                                 <li key={index}>
-                                                    {product.name} (x{item.quantity}) - {item.unitPrice.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })} /unité
+                                                    {product.name} (x{item.quantity}) - {item.unitPrice.toLocaleString('fr-FR', { style: 'currency', currency: 'MGA' })} /unité
                                                 </li>
                                             ) : null;
                                         })}

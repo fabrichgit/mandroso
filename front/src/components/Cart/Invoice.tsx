@@ -117,8 +117,8 @@ export function Invoice({ cart, onClose }: InvoiceProps) {
                                 <tr key={index}>
                                     <td>{product?.name}</td>
                                     <td>{item.quantity}</td>
-                                    <td>{item.unitPrice.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</td>
-                                    <td>{(item.quantity * item.unitPrice).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</td>
+                                    <td>{item.unitPrice.toLocaleString('fr-FR', { style: 'currency', currency: 'MGA' })}</td>
+                                    <td>{(item.quantity * item.unitPrice).toLocaleString('fr-FR', { style: 'currency', currency: 'MGA' })}</td>
                                 </tr>
                             );
                         })}
@@ -128,15 +128,15 @@ export function Invoice({ cart, onClose }: InvoiceProps) {
                 <div className="total-section border-t pt-4">
                     <div className="total-line">
                         <span>Sous-total HT:</span>
-                        <span>{cart.totalAmount.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
+                        <span>{cart.totalAmount.toLocaleString('fr-FR', { style: 'currency', currency: 'MGA' })}</span>
                     </div>
                     <div className="total-line">
                         <span>TVA (20%):</span>
-                        <span>{calculateTVA().toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
+                        <span>{calculateTVA().toLocaleString('fr-FR', { style: 'currency', currency: 'MGA' })}</span>
                     </div>
                     <div className="total-line font-bold">
                         <span>Total TTC:</span>
-                        <span>{calculateTotal().toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
+                        <span>{calculateTotal().toLocaleString('fr-FR', { style: 'currency', currency: 'MGA' })}</span>
                     </div>
                 </div>
 
