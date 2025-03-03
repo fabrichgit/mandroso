@@ -105,7 +105,7 @@ export function CartList({ carts, onEdit, onDelete }: CartListProps) {
                                     </ul>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {cart.totalAmount.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                                    {cart.totalAmount.toLocaleString('fr-FR', { style: 'currency', currency: 'MGA' })}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(cart.status)}`}>

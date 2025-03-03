@@ -79,7 +79,6 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
         }));
     };
 
-
     const calculateTotal = () => {
         return formData.items.reduce((total, item) => {
             return total + (item.unitPrice || 0) * item.quantity;
@@ -100,7 +99,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                     <input
                         type="text"
                         id="reference"
-                        value={formData.reference}
+                        value={formData.reference || Date.now().toString()}
                         onChange={(e) => setFormData(prev => ({ ...prev, reference: e.target.value }))}
                         required
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
@@ -128,9 +127,9 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                         </select>
                     </div>
                     <ClientDropdown onSubmit={(data) => {
-                        const {id} = useClientStore.getState().addClient(data);
+                        const { id } = useClientStore.getState().addClient(data);
                         setFormData(prev => ({ ...prev, clientId: id }))
-                    }}/>
+                    }} />
                 </div>
 
                 <div>
@@ -229,7 +228,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
 
             <div className="flex justify-between items-center pt-4">
                 <div className="text-lg font-semibold">
-                    Total: {calculateTotal().toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                    Total: {calculateTotal().toLocaleString('fr-FR', { style: 'currency', currency: 'MGA' })}
                 </div>
                 <button
                     type="submit"

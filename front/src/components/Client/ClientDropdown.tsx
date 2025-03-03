@@ -92,7 +92,7 @@ export default function ClientDropdown({ onSubmit }: { onSubmit?: (data: ClientF
               className="w-full p-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <button
-            onClick={handleSubmit}
+              onClick={handleSubmit}
               type="button"
               className="w-full bg-gray-900 text-white p-2 rounded-md hover:bg-gray-800 text-sm"
             >

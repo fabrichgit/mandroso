@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FolderTree, Maximize } from 'lucide-react';
+import { FolderTree, Maximize, Plus } from 'lucide-react';
 import type { Product } from '../../../../types/product';
 import type { Category } from '../../../../types/category';
 import { ProductForm } from '../../../../components/Product/ProductForm';
@@ -15,12 +15,17 @@ import { useProductStore } from '../../../../store/useProductStore';
 import useStorage from '../../../../hook/useStorage';
 import TableProductList from '../../../../components/Product/TableProductList';
 import { reactiveClass } from '../../../../utils/class';
-import { FaTable } from 'react-icons/fa';
+import { FaCartPlus, FaTable } from 'react-icons/fa';
+import { Cart, CartFormData } from '../../../../types/cart';
+import { useCartStore } from '../../../../store/useCartStore';
+import ClientDropdown from '../../../../components/Client/ClientDropdown';
+import { useClientStore } from '../../../../store/useClientStore';
+import { useNavigate } from 'react-router-dom';
 
 function ProductDash() {
 
   const { products, setProducts } = useProductStore()
-  const { tab: view, setTab: setView } = useStorage("cards", 'view-product');
+  const { tab: view, setTab: setView } = useStorage("table", 'view-product');
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
@@ -28,6 +33,60 @@ function ProductDash() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [activeTab, setActiveTab] = useState<'products' | 'categories' | 'cart'>('products');
+
+  const nav = useNavigate()
+
+  const [oncartin, setOncart] = useState(false);
+
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const [formData, setFormData] = useState<CartFormData>({
+    reference: '',
+    clientId: '',
+    items: [],
+    status: 'pending',
+  });
+
+  const clients = useClientStore((state) => state.clients);
+
+  const addToCart = () => {
+    useCartStore.getState().addCart(formData);
+    nav('/cart')
+  };
+
+  const handleAddItem = (product: Product) => {
+    setFormData(prev => ({
+      ...prev,
+      reference: Date.now().toString(),
+      items: [...prev.items, { productId: product.id, quantity: 1, unitPrice: 0 }]
+    }));
+  };
+
+  const handleRemoveItem = (productId: string) => {
+    setFormData(prev => ({
+      ...prev,
+      items: prev.items.filter((p) => p.productId !== productId)
+    }));
+  };
+
+  const handleItemChange = (productId: string, field: any, value: string | number) => {
+    setFormData(prev => ({
+      ...prev,
+      items: prev.items.map((item) => {
+        if (item.productId === productId) {
+          if (field === 'productId') {
+            return {
+              ...item,
+              [field]: value,
+              unitPrice: products.find(p => p.id === value)?.price || 0
+            };
+          }
+          return { ...item, [field]: value };
+        }
+        return item;
+      })
+    }));
+  };
 
   const handleCreateProduct = (productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
     const newProduct: Product = {
@@ -127,27 +186,44 @@ function ProductDash() {
                 Catégories
               </button>
             </nav>
-            {
-              activeTab === "categories" ?
-                <FolderTree />
-                :
-                <div className="flex w-max p-1 bg-neutral-100 border rounded-lg mx-2">
-                  <button
-                    title="voir en tant que tableau"
-                    onClick={() => setView("table")}
-                    className={`text-sm h-max px-2 py-1 rounded-lg ${reactiveClass('table', view, 'bg-white border', '')}`}
-                  >
-                    <FaTable />
-                  </button>
-                  <button
-                    title="voir en tant que carte"
-                    onClick={() => setView("cards")}
-                    className={`text-sm h-max px-2 py-1 rounded-lg ${reactiveClass('cards', view, 'bg-white border', '')}`}
-                  >
-                    <MdOutlineDashboard />
-                  </button>
-                </div>
-            }
+
+            <div className='flex items-center gap-3'>
+              {oncartin ? <button
+                onClick={() => setIsCartOpen(true)}
+                className="inline-flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+              >
+                <FaCartPlus className="h-4 w-4 mr-1 text-orange-500" />
+                <span className='hidden md:inline'>Voir le panier ({formData.items.length})</span>
+              </button> : null}
+              {oncartin ? null : <button
+                onClick={() => setOncart(true)}
+                className="inline-flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+              >
+                <FaCartPlus className="h-4 w-4 mr-1 text-orange-500" />
+                <span className='hidden md:inline'>Ajouter un panier</span>
+              </button>}
+              {
+                activeTab === "categories" ?
+                  <FolderTree />
+                  :
+                  <div className="flex w-max p-1 bg-neutral-100 border rounded-lg mx-2">
+                    <button
+                      title="voir en tant que tableau"
+                      onClick={() => setView("table")}
+                      className={`text-sm h-max px-2 py-1 rounded-lg ${reactiveClass('table', view, 'bg-white border', '')}`}
+                    >
+                      <FaTable />
+                    </button>
+                    <button
+                      title="voir en tant que carte"
+                      onClick={() => setView("cards")}
+                      className={`text-sm h-max px-2 py-1 rounded-lg ${reactiveClass('cards', view, 'bg-white border', '')}`}
+                    >
+                      <MdOutlineDashboard />
+                    </button>
+                  </div>
+              }
+            </div>
           </div>
 
           {(isProductFormOpen || editingProduct) && (
@@ -204,45 +280,147 @@ function ProductDash() {
             </div>
           )}
 
+          {isCartOpen && (
+            <div className="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black/70 overflow-y-auto">
+              <form onSubmit={addToCart} className="bg-white p-6 md:rounded-2xl md:shadow-2xl modal-field my-modal relative">
+                <button onClick={() => setIsCartOpen(false)} className="absolute top-4 left-4 text-gray-500 hover:text-gray-800">
+                  <AiFillCloseCircle size={24} />
+                </button>
+                <button type="button" onClick={resize} className="maximise absolute top-4 right-4 text-gray-500 hover:text-gray-800" title="pleine ecran">
+                  <Maximize size={24} />
+                </button>
+                {formData.items.length > 0 ? (
+                  <>
+                    {
+                      formData.items.map((item) => (
+                        <div key={item.productId} className="flex justify-between items-center p-2 border-b">
+                          <span>{products.find(p => p.id === item.productId)?.name} x{item.quantity}</span>
+                          <span>{item.unitPrice * item.quantity} ar</span>
+                        </div>
+                      ))
+                    }
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="reference" className="block text-sm font-medium text-gray-700">
+                          Référence
+                        </label>
+                        <input
+                          type="text"
+                          id="reference"
+                          value={formData.reference || Date.now().toString()}
+                          onChange={(e) => setFormData(prev => ({ ...prev, reference: e.target.value }))}
+                          required
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
+                        />
+                      </div>
+
+                      <div className='flex items-end gap-3'>
+                        <div className='w-full'>
+                          <label htmlFor="clientId" className="block text-sm font-medium text-gray-700">
+                            Client
+                          </label>
+                          <select
+                            id="clientId"
+                            value={formData.clientId}
+                            onChange={(e) => setFormData(prev => ({ ...prev, clientId: e.target.value }))}
+                            required
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
+                          >
+                            <option value="">Sélectionner un client</option>
+                            {clients.map(client => (
+                              <option key={client.id} value={client.id}>
+                                {client.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <ClientDropdown onSubmit={(data) => {
+                          const { id } = useClientStore.getState().addClient(data);
+                          setFormData(prev => ({ ...prev, clientId: id }))
+                        }} />
+                      </div>
+
+                      <div>
+                        <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+                          Statut
+                        </label>
+                        <select
+                          id="status"
+                          value={formData.status}
+                          onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as Cart['status'] }))}
+                          required
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
+                        >
+                          <option value="pending">En attente</option>
+                          <option value="completed">Terminée</option>
+                          <option value="cancelled">Annulée</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className='flex gap-3 w-full'>
+                      <button type='button' className="mt-3 w-full bg-gray-900 text-white p-2 rounded-md hover:bg-gray-800 " onClick={() => setFormData(prv => ({ ...prv, items: [] }))}>Vider le panier</button>
+                      <button
+                        type="submit"
+                        className="mt-3 w-full bg-orange-500 text-white p-2 rounded-md hover:bg-orange-800 "
+                      >
+                        <Plus className="inline h-4 w-4 mr-2" />
+                        Créer la panier
+                      </button>
+                    </div>
+
+                  </>
+                ) : null}
+              </form>
+            </div>
+          )}
+
           {((tab: typeof activeTab) => {
             switch (tab) {
               case 'products':
                 return (
                   (isProductFormOpen || editingProduct) ? null :
-                  <>
-                    {
-                      view === "cards" ?
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                          {products?.map(product => (
-                            <ProductCard
-                              key={product.id}
-                              product={product}
-                              categorie={categories?.find(cg => cg.id === product.category)?.name}
-                              onEdit={setEditingProduct}
-                              onDelete={handleDeleteProduct}
-                            />
-                          ))}
-                        </div>
-                        : <TableProductList
-                          products={products}
-                          categories={categories}
-                          onEdit={setEditingProduct}
-                          onDelete={handleDeleteProduct}
-                        />
-                    }
+                    <>
+                      {
+                        view === "cards" ?
+                          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                            {products?.map(product => (
+                              <ProductCard
+                                key={product.id}
+                                product={product}
+                                categorie={categories?.find(cg => cg.id === product.category)?.name}
+                                onEdit={setEditingProduct}
+                                onDelete={handleDeleteProduct}
+                                oncartin={oncartin}
+                                handleAddItem={handleAddItem}
+                                handleRemoveItem={handleRemoveItem}
+                                handleItemChange={handleItemChange}
+                              />
+                            ))}
+                          </div>
+                          : <TableProductList
+                            products={products}
+                            categories={categories}
+                            onEdit={setEditingProduct}
+                            onDelete={handleDeleteProduct}
+                            oncartin={oncartin}
+                            handleAddItem={handleAddItem}
+                            handleRemoveItem={handleRemoveItem}
+                            handleItemChange={handleItemChange}
+                          />
+                      }
 
-                    {products.length === 0 && (
-                      <div className="flex flex-col gap-5 items-center text-center py-12">
-                        <p className="text-gray-500">
-                          Aucun produit pour le moment.
-                        </p>
-                        <button onClick={() => setIsProductFormOpen(true)} className="flex items-center gap-2 p-3 rounded-lg hover:bg-gray-100 bg-gray-50 transition">
-                          <HiOutlineViewGridAdd className="text-orange-500" />
-                          nouveau produit
-                        </button>
-                      </div>
-                    )}
-                  </>
+                      {products.length === 0 && (
+                        <div className="flex flex-col gap-5 items-center text-center py-12">
+                          <p className="text-gray-500">
+                            Aucun produit pour le moment.
+                          </p>
+                          <button onClick={() => setIsProductFormOpen(true)} className="flex items-center gap-2 p-3 rounded-lg hover:bg-gray-100 bg-gray-50 transition">
+                            <HiOutlineViewGridAdd className="text-orange-500" />
+                            nouveau produit
+                          </button>
+                        </div>
+                      )}
+                    </>
                 )
               case 'categories':
                 return (

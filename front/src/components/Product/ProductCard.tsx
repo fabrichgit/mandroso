@@ -1,16 +1,20 @@
-import { Pencil, Trash2 } from 'lucide-react';
+import { Minus, Pencil, PlusSquare, Trash2 } from 'lucide-react';
 import type { Product } from '../../types/product';
 import { useState } from 'react';
 import ModalImages from './ModalImages';
 
-interface ProductCardProps {
+export interface ProductCardProps {
   product: Product;
   onEdit: (product: Product) => void;
   onDelete: (id: string) => void;
-  categorie?: string
+  categorie?: string;
+  oncartin: boolean;
+  handleAddItem: (product: Product) => void;
+  handleRemoveItem: (productId: string) => void;
+  handleItemChange: (productId: string, field: any, value: string | number) => void
 }
 
-export function ProductCard({ product, onEdit, onDelete, categorie }: ProductCardProps) {
+export function ProductCard({ product, onEdit, onDelete, categorie, oncartin, handleAddItem, handleRemoveItem, handleItemChange }: ProductCardProps) {
 
   const [see, setSee] = useState<boolean>(false);
 
@@ -39,6 +43,8 @@ export function ProductCard({ product, onEdit, onDelete, categorie }: ProductCar
         return 'bg-gray-100 text-gray-800';
     }
   };
+
+  const [itCart, setIt] = useState(false)
 
   return (
     see && product.images ? <ModalImages images={product.images} onClose={() => setSee(false)} /> :
@@ -110,21 +116,75 @@ export function ProductCard({ product, onEdit, onDelete, categorie }: ProductCar
             : 'null'
           }
 
-          <div className="mt-4 flex justify-end space-x-2">
-            <button
-              onClick={() => onEdit(product)}
+          <div className="mt-4 flex justify-end space-x-7">
+            {/* {oncartin ? <buttonu
+              onClick={() => onAddToCart(product)}
               className="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
             >
-              <Pencil className="h-4 w-4 mr-1" />
-              Modifier
-            </button>
-            <button
-              onClick={() => onDelete(product.id)}
-              className="inline-flex items-center px-3 py-1.5 border border-transparent rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700"
-            >
-              <Trash2 className="h-4 w-4 mr-1" />
-              Supprimer
-            </button>
+              <FaCartPlus className="h-4 w-4 mr-1 text-orange-500" />
+            </buttonu> : null} */}
+            {oncartin ?
+              !itCart ?
+                <button className='inline w-max h-max' onClick={() => {
+                  setIt(i => !i);
+                  handleAddItem(product);
+                }}>
+                  <PlusSquare className='text-sky-600' />
+                </button>
+                :
+                <button className='inline w-max h-max' onClick={() => {
+                  setIt(i => !i);
+                  handleRemoveItem(product.id);
+                }}>
+                  <Minus className='text-red-500' />
+                </button>
+              : null}
+            {itCart ?
+              <div className='flex items-start gap-2 w-full'>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Prix unitaire
+                  </label>
+                  <input
+                    type="number"
+                    name="price"
+                    defaultValue={product.price}
+                    onChange={(e) => handleItemChange(product.id, 'unitPrice', parseFloat(e.target.value))}
+                    className="w-full p-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Quantity
+                  </label>
+                  <input
+                    type="number"
+                    name="quantity"
+                    defaultValue={1}
+                    className="w-full p-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    onChange={(e) => handleItemChange(product.id, 'quantity', parseInt(e.target.value))}
+                  />
+                </div>
+              </div> : null}
+            {
+              oncartin ? null :
+                <>
+                  <button
+                    onClick={() => onEdit(product)}
+                    className="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                  >
+                    <Pencil className="h-4 w-4 mr-1" />
+                    Modifier
+                  </button>
+                  <button
+                    onClick={() => onDelete(product.id)}
+                    className="inline-flex items-center px-3 py-1.5 border border-transparent rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700"
+                  >
+                    <Trash2 className="h-4 w-4 mr-1" />
+                    Supprimer
+                  </button>
+                </>
+            }
           </div>
         </div>
       </div>

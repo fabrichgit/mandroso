@@ -15,7 +15,7 @@ interface ProductFormProps {
 
 export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: ProductFormProps) {
     const [formData, setFormData] = useState<Omit<Product, "id" | "createdAt" | "updatedAt">>({
-        reference: initialProduct?.reference ?? '',
+        reference: initialProduct?.reference ?? Date.now().toString(),
         name: initialProduct?.name ?? '',
         category: initialProduct?.category ?? '',
         brand: initialProduct?.brand ?? '',
