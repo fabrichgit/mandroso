@@ -45,9 +45,9 @@ export function CategoryList({ categories, onEdit, onDelete, setIsCategoryFormOp
                   <p className="text-sm text-gray-500">{category.description}</p>
                 )}
               </div>
-              {category.defaultPrice && (
+              {category.defaultPrice && category.defaultPrice !== 0 ? (
                 <p className="text-sm text-gray-500">Prix: {category.defaultPrice} Ar</p>
-              )}
+              ) : null}
             </div>
             {category.parentId && (
               <div className="flex items-center gap-1 text-sm text-gray-500 mt-1">
