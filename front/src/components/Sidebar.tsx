@@ -20,7 +20,6 @@ function Sidebar({ tab }: { tab: string | undefined }) {
     }
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Ferme le dropdown si on clique en dehors
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -32,7 +31,7 @@ function Sidebar({ tab }: { tab: string | undefined }) {
     }, []);
 
     return (
-        <aside className="flex flex-col justify-between md:w-56 w-max h-full overflow-hidden text-white bg-black/90 rounded">
+        <aside className="flex flex-col justify-between md:min-w-56 w-max h-full overflow-hidden text-white bg-black/90 rounded">
             <div className="w-full">
                 <a className="flex items-center w-full px-3 mt-3" href="#">
                     <svg className="w-8 h-8 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -52,7 +51,7 @@ function Sidebar({ tab }: { tab: string | undefined }) {
                         </Link>
                         <Link to="/cart" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-gray-700 hover:text-gray-300')} >
                             <ShoppingCart />
-                            <span className="ml-2 text-sm font-medium md:inline hidden">Panier</span>
+                            <span className="ml-2 text-sm font-medium md:inline hidden">Panier et Livraison</span>
                         </Link>
                         <Link to="/clients" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-gray-700 hover:text-gray-300')} >
                             <Users />

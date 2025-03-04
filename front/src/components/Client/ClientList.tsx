@@ -53,12 +53,12 @@ export function ClientList({ clients, onEdit, onDelete }: ClientListProps) {
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {client.type}
               </td>
-              {client.nif && <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {client.nif}
-              </td>}
-              {client.stat && <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {client.stat}
-              </td>}
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {client.nif && client.nif}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {client.stat && client.stat}
+              </td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <button
                   onClick={() => onEdit(client)}

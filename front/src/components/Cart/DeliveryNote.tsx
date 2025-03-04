@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { Printer } from 'lucide-react';
 import { Cart } from '../../types/cart';
 import { useProductStore } from '../../store/useProductStore';
+import { useClientStore } from '../../store/useClientStore';
 
 interface DeliveryNoteProps {
     cart: Cart;
@@ -10,7 +11,9 @@ interface DeliveryNoteProps {
 
 export function DeliveryNote({ cart, onClose }: DeliveryNoteProps) {
     const printRef = useRef<HTMLDivElement>(null);
+    const clients = useClientStore((state) => state.clients);
     const products = useProductStore((state) => state.products);
+    const client = clients.find(c => c.id === cart.clientId);
 
     const handlePrint = () => {
         const content = printRef.current;
@@ -74,6 +77,17 @@ export function DeliveryNote({ cart, onClose }: DeliveryNoteProps) {
                             <h1 className="text-2xl font-bold mb-4">BON DE LIVRAISON</h1>
                             <p className="text-gray-600">Référence: {cart.reference}</p>
                             <p className="text-gray-600">Date: {new Date(cart.createdAt).toLocaleDateString('fr-FR')}</p>
+                        </div>
+                        <div className="text-right">
+                            <h2 className="text-xl font-semibold mb-2">Client</h2>
+                            {client && (
+                                <>
+                                    <p className="text-gray-600">{client.name}</p>
+                                    <p className="text-gray-600">{client.contact}</p>
+                                    <p className="text-gray-600">NIF: {client.nif}</p>
+                                    <p className="text-gray-600">STAT: {client.stat}</p>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
