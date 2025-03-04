@@ -1,9 +1,10 @@
-import { FileText, Pencil, Trash2 } from 'lucide-react';
+import { FilePlus, FileText, Pencil, Trash2 } from 'lucide-react';
 import { Cart } from '../../types/cart';
 import { useClientStore } from '../../store/useClientStore';
 import { useProductStore } from '../../store/useProductStore';
 import { useState } from 'react';
 import { Invoice } from './Invoice';
+import { DeliveryNote } from './DeliveryNote';
 
 interface CartListProps {
     carts: Cart[];
@@ -14,7 +15,7 @@ interface CartListProps {
 export function CartList({ carts, onEdit, onDelete }: CartListProps) {
     const clients = useClientStore((state) => state.clients);
     const products = useProductStore((state) => state.products);
-    const [selectedCart, setSelectedCart] = useState<Cart | null>(null);
+    const [selectedCart, setSelectedCart] = useState<{cart: Cart, action: 'invoice' | 'deliveryNote'} | null>(null);
 
     const getClientName = (clientId: string) => {
         return clients.find(c => c.id === clientId)?.name || 'Client inconnu';
@@ -117,7 +118,14 @@ export function CartList({ carts, onEdit, onDelete }: CartListProps) {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <button
-                                        onClick={() => setSelectedCart(cart)}
+                                        onClick={() => setSelectedCart({cart, action: 'deliveryNote'})}
+                                        className="text-orange-600 hover:text-green-900 mr-4"
+                                        title="bon de livraison"
+                                    >
+                                        <FilePlus className="h-4 w-4" />
+                                    </button>
+                                    <button
+                                        onClick={() => setSelectedCart({cart, action: 'invoice'})}
                                         className="text-green-600 hover:text-green-900 mr-4"
                                         title="Voir la facture"
                                     >
@@ -142,9 +150,12 @@ export function CartList({ carts, onEdit, onDelete }: CartListProps) {
                         ))}
                     </tbody>
                 </table>
-                {selectedCart && (
-                    <Invoice cart={selectedCart} onClose={() => setSelectedCart(null)} />
-                )}
+                {selectedCart && selectedCart.action === 'invoice' ? (
+                    <Invoice cart={selectedCart.cart} onClose={() => setSelectedCart(null)} />
+                ) : null}
+                {selectedCart && selectedCart.action === 'deliveryNote' ? (
+                    <DeliveryNote cart={selectedCart.cart} onClose={() => setSelectedCart(null)} />
+                ) : null}
             </div>
         </>
     );
