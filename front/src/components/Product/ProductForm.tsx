@@ -3,8 +3,6 @@ import { Plus, X } from 'lucide-react';
 import type { Product } from '../../types/product';
 import type { Category } from '../../types/category';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import AutocompleteInput from '../ui/AutocompleteInput';
-import { useLocalStore } from '../../store/useLocal';
 
 interface ProductFormProps {
     onSubmit: (product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => void;
@@ -24,7 +22,6 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
         weight: initialProduct?.weight ?? 0,
         color: initialProduct?.color ?? '',
         materials: initialProduct?.materials ?? [],
-        local: initialProduct?.local ?? [],
         volume: initialProduct?.volume ?? 0,
         quantity: initialProduct?.quantity ?? 0,
         condition: initialProduct?.condition ?? 'neuf',
@@ -32,10 +29,10 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
     });
 
     const [newMaterial, setNewMaterial] = useState('');
-    const [newLocal, setNewLocal] = useState('');
+    // const [newLocal, setNewLocal] = useState('');
     const [newPhoto, setNewPhoto] = useState('');
 
-    const { add, local } = useLocalStore()
+    // const { add, local } = useLocalStore()
 
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -43,15 +40,15 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
         onSubmit(formData);
     };
 
-    const handleAddLocal = () => {
-        if (newLocal.trim()) {
-            setFormData({
-                ...formData,
-                local: [newLocal.trim(), ...(formData.local || [])]
-            });
-            setNewLocal('');
-        }
-    };
+    // const handleAddLocal = () => {
+    //     if (newLocal.trim()) {
+    //         setFormData({
+    //             ...formData,
+    //             local: [newLocal.trim(), ...(formData.local || [])]
+    //         });
+    //         setNewLocal('');
+    //     }
+    // };
 
     const handleAddMaterial = () => {
         if (newMaterial.trim()) {
@@ -88,12 +85,12 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
         });
     };
 
-    const handleRemoveLocal = (index: number) => {
-        setFormData({
-            ...formData,
-            local: formData.local?.filter((_, i) => i !== index)
-        });
-    };
+    // const handleRemoveLocal = (index: number) => {
+    //     setFormData({
+    //         ...formData,
+    //         local: formData.local?.filter((_, i) => i !== index)
+    //     });
+    // };
 
     const getCategoryHierarchy = (categoryId: string): string => {
         const result: string[] = [];
@@ -189,7 +186,7 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
                     />
                 </div>
 
-                <div>
+                {/* <div>
                     <label htmlFor="emplacement" className="block text-sm font-medium text-gray-700">
                         Emplacement
                     </label>
@@ -214,7 +211,7 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
                             </span>
                         ))}
                     </div>
-                </div>
+                </div> */}
             </div>
 
             {/* Caractéristiques techniques */}
