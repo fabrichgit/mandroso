@@ -25,7 +25,7 @@ import { useNavigate } from 'react-router-dom';
 function ProductDash() {
 
   const { products, setProducts } = useProductStore()
-  const { tab: view, setTab: setView } = useStorage("table", 'view-product');
+  const { tab: view, setTab: setView } = useStorage<"table" | "cards">("table", 'view-product');
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);

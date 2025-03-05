@@ -5,6 +5,7 @@ import Dashbord from "./Dashbord/Dashbord"
 import ProductDash from "./Product/ProductDash"
 import ClientDash from "../Vendeur/Client/ClientDash"
 import Commande from "../Vendeur/Cart/Cart"
+import Fournisseur from "../Magasinier/Fournisseur/Fournisseur"
 
 function HomeGerant() {
   return (
@@ -15,6 +16,7 @@ function HomeGerant() {
             <Route path="/products" element={<ProductDash/>}/>
             <Route path="/clients" element={<ClientDash/>}/>
             <Route path="/cart" element={<Commande />} />
+            <Route path="/fournisseur_vendeur" element={<Fournisseur />} />
         </Routes>
     </Layout>
   )

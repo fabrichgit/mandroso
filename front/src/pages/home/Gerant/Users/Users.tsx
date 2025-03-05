@@ -24,8 +24,8 @@ function Users() {
     const { data: users } = useStore_Users();
     const { data: roles } = useData_roles()
 
-    const { tab, setTab } = useStorage("", 'user');
-    const { tab: view, setTab: setView } = useStorage("cards");
+    const { tab, setTab } = useStorage<string>("", 'user');
+    const { tab: view, setTab: setView } = useStorage<"cards" | "table">("cards", "view-weqkwe");
 
     if (add && type === "user") {
         return (

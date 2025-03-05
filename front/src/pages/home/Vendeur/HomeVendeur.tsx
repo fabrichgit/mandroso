@@ -4,6 +4,7 @@ import ProductDash from "../Gerant/Product/ProductDash"
 import Dashbord from "../Gerant/Product/Dashbord/Dashbord"
 import ClientDash from "./Client/ClientDash"
 import Commande from "./Cart/Cart"
+import Fournisseur from "../Magasinier/Fournisseur/Fournisseur"
 
 function HomeVendeur() {
     return (
@@ -13,6 +14,7 @@ function HomeVendeur() {
                 <Route path="/products" element={<ProductDash />} />
                 <Route path="/clients" element={<ClientDash />} />
                 <Route path="/cart" element={<Commande />} />
+                <Route path="/fournisseur_vendeur" element={<Fournisseur />} />
             </Routes>
         </Layout>
     )

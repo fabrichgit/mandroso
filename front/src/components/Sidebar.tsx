@@ -6,7 +6,7 @@ import { FiLogOut } from "react-icons/fi";
 import { AiFillProduct } from "react-icons/ai";
 import { MdMapsHomeWork } from "react-icons/md";
 import { user_store } from "../store/user";
-import { ShoppingCart, Users } from "lucide-react";
+import { HousePlug, ShoppingCart, Users, UserSquareIcon } from "lucide-react";
 
 function Sidebar({ tab }: { tab: string | undefined }) {
 
@@ -51,11 +51,21 @@ function Sidebar({ tab }: { tab: string | undefined }) {
                         </Link>
                         <Link to="/cart" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-gray-700 hover:text-gray-300')} >
                             <ShoppingCart />
-                            <span className="ml-2 text-sm font-medium md:inline hidden">Panier et Livraison</span>
+                            <span className="ml-2 text-sm font-medium md:inline hidden">Panier & Livraison</span>
+                        </Link>
+                        <Link to="/entrepôts" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-gray-700 hover:text-gray-300')} >
+                            <HousePlug />
+                            <span className="ml-2 text-sm font-medium md:inline hidden">Entrepôts</span>
                         </Link>
                         <Link to="/clients" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-gray-700 hover:text-gray-300')} >
                             <Users />
                             <span className="ml-2 text-sm font-medium md:inline hidden">Clients</span>
+                        </Link>
+                        <Link to="/fournisseur_vendeur" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-gray-700 hover:text-gray-300')} >
+                            <UserSquareIcon />
+                            <span className="ml-2 text-sm font-medium md:inline hidden">
+                                Fournisseur & Vendeur
+                            </span>
                         </Link>
                         {user?.Role === "gerant" ? <Link to="/users" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-gray-700 hover:text-gray-300')} >
                             <FaUser />

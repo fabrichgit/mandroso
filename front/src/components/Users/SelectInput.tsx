@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Button, Input } from "@mui/joy";
-import { Select } from "./ui/Select";
-import { SelectTrigger } from "./ui/SelectTrigger";
-import { SelectValue } from "./ui/SelectValue";
-import { SelectItem } from "./ui/SelectItem";
-import { SelectContent } from "./ui/SelectContent";
+import { Select } from "../ui/Select";
+import { SelectTrigger } from "../ui/SelectTrigger";
+import { SelectValue } from "../ui/SelectValue";
+import { SelectItem } from "../ui/SelectItem";
+import { SelectContent } from "../ui/SelectContent";
 
 const SelectInput = () => {
   const [options, setOptions] = useState(["Option 1", "Option 2", "Option 3"]);

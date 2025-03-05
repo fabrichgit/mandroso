@@ -11,7 +11,7 @@ import { Maximize } from "lucide-react";
 import resize from "../../utils/maximise";
 
 function UserDetails({ idQuery }: { idQuery: string | null }) {
-  const { tab, setTab } = useStorage("");
+  const { tab, setTab } = useStorage<string>("", "user-details");
   const user: User | undefined = useStore_Users((u) => u.data).find(
     (u) => u.ID === idQuery
   );
