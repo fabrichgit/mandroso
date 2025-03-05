@@ -7,7 +7,7 @@ function EntrepotDash() {
     const [showForm, setShowForm] = useState(false);
 
     return (
-        <div className="min-h-screen w-full bg-gray-100 p-6">
+        <div className="min-h-screen w-full p-6">
             <div className="w-full mx-auto space-y-6">
                 <div className="flex justify-between items-center">
                     <h1 className="text-2xl font-bold text-gray-900">Gestion des Entrepôts</h1>

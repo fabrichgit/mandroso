@@ -86,7 +86,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-sm">
+        <form onSubmit={handleSubmit} className="space-y-6 p-6 rounded-lg shadow-sm">
             <h2 className="text-xl font-semibold mb-4">
                 {isEditing ? 'Modifier ...' : '+ Nouveau'}
             </h2>

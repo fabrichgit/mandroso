@@ -12,7 +12,6 @@ function Cart() {
 
     return (
         <div className="flex flex-col w-full">
-
             <div className="flex justify-between items-center w-full border-b border-gray-200 mb-6 px-4">
                 <nav className="-mb-px flex space-x-8">
                     <button
