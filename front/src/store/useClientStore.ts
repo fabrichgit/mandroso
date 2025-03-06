@@ -8,9 +8,10 @@ interface ClientStore {
   editClient: (clientData: ClientFormData) => void;
   deleteClient: (id: string) => void;
   setEditingClient: (client: Client | null) => void;
+  getById: (id: string) => Client | undefined;
 }
 
-export const useClientStore = create<ClientStore>((set) => ({
+export const useClientStore = create<ClientStore>((set, prev) => ({
   clients: [],
   editingClient: null,
   addClient: (clientData) => {
@@ -41,5 +42,8 @@ export const useClientStore = create<ClientStore>((set) => ({
   },
   setEditingClient: (client) => {
     set({ editingClient: client });
+  },
+  getById(id) {
+    return prev().clients.find(c => c.id === id)
   },
 }));

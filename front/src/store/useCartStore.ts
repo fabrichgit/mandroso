@@ -9,6 +9,7 @@ interface CartStore {
   deleteCart: (id: string) => void;
   setEditingCart: (cart: Cart | null) => void;
   reset?: () => void;
+  delivery: (id: string) => void;
 }
 
 export const useCartStore = create<CartStore>((set) => ({
@@ -16,7 +17,6 @@ export const useCartStore = create<CartStore>((set) => ({
   editingCart: null,
   addCart: (cartData) => {
 
-    // Ajouter le prix unitaire à chaque item
     const itemsWithPrices = cartData.items.map(item => {
       return {
         ...item,
@@ -42,7 +42,6 @@ export const useCartStore = create<CartStore>((set) => ({
     set((state) => {
       if (!state.editingCart) return state;
 
-      // Conserver les prix unitaires existants ou utiliser les nouveaux prix pour les nouveaux items
       const itemsWithPrices = cartData.items.map(item => {
         const existingItem = state.editingCart?.items.find(i => i.productId === item.productId);
         if (existingItem) {
@@ -87,5 +86,8 @@ export const useCartStore = create<CartStore>((set) => ({
   },
   reset() {
     set({ carts: [] })
+  },
+  delivery(id) {
+    set(prev => ({...prev, carts: prev.carts.map(ct => ct.id !== id ? ct : {...ct, isDelivery: true})}))
   },
 }));

@@ -1,63 +1,27 @@
-import { FileCheck } from "lucide-react";
+import { CheckCircleIcon, FileCheck } from "lucide-react";
 import { FaTable } from "react-icons/fa";
 import { MdOutlineDashboard } from "react-icons/md";
-import { reactiveClass } from "../../../../utils/class";
+import { reactiveClass, reactiveClassV2 } from "../../../../utils/class";
 import useStorage from "../../../../hook/useStorage";
-
-// Définition des types
-export interface CartItem {
-  productId: string;
-  quantity: number;
-  unitPrice: number; // Prix unitaire au moment de la commande
-}
-
-export interface Cart {
-  id: string;
-  reference: string;
-  clientId: string;
-  items: CartItem[];
-  status: "pending" | "completed" | "cancelled";
-  totalAmount: number;
-  createdAt: string;
-  isDelivery?: boolean;
-}
-
-// Exemple de données pour les carts
-const carts: Cart[] = [
-  {
-    id: "1",
-    reference: "REF123",
-    clientId: "CLIENT1",
-    items: [
-      { productId: "prod1", quantity: 2, unitPrice: 20 },
-      { productId: "prod2", quantity: 1, unitPrice: 50 }
-    ],
-    status: "pending",
-    totalAmount: 90,
-    createdAt: "2025-03-01T10:00:00Z",
-    isDelivery: true
-  },
-  {
-    id: "2",
-    reference: "REF124",
-    clientId: "CLIENT2",
-    items: [
-      { productId: "prod3", quantity: 1, unitPrice: 100 }
-    ],
-    status: "completed",
-    totalAmount: 100,
-    createdAt: "2025-03-02T12:00:00Z",
-    isDelivery: true
-  },
-  // Ajoute d'autres carts ici
-];
+import { useDeliveryStore } from "../../../../store/useDeliveryStore";
+import { useCartStore } from "../../../../store/useCartStore";
+import { useMemo } from "react";
+import { useClientStore } from "../../../../store/useClientStore";
+import { user_store } from "../../../../store/user";
 
 function Delivery() {
-  const { setTab: setView, tab: view } = useStorage<'cards' | 'table'>('cards', 'del'); // État pour alterner le mode d'affichage
+  const me = user_store.getState().data
+  const { carts } = useCartStore();
+  const { delivery, validate } = useDeliveryStore();
+  const { getById } = useClientStore()
+  const { setTab: setView, tab: view } = useStorage<'cards' | 'table'>('cards', 'del');
+
+  const deliveries = useMemo(() => {
+    return delivery.map(del => ({ ...del, carts: { ...carts.find(ct => ct.id === del.cartId), client: getById(carts.find(ct => ct.id === del.cartId)?.id!) } }))
+  }, [carts, delivery])
 
   const handleValidate = (id: string) => {
-    console.log(`Validation de la commande ${id}`);
-    // Logique de validation ici
+    validate(id)
   };
 
   return (
@@ -90,108 +54,114 @@ function Delivery() {
 
       {view === 'cards' ? (
         <div className="flex flex-wrap gap-6">
-          {carts
-            .filter(cart => cart.isDelivery === true)
-            .map(cart => (
+          {deliveries
+            .map(del => (
               <div
-                key={cart.id}
+                key={del.id}
                 className="flex flex-col justify-between bg-gray-100 border border-gray-300 rounded-lg p-6 w-72 shadow transform transition-transform hover:translate-y-[-2px] hover:shadow-lg"
               >
                 <div>
                   <div className="mb-4">
-                    <h3 className="text-xl font-semibold text-gray-800">Référence: {cart.reference}</h3>
-                    <p className="text-gray-600">Client: {cart.clientId}</p>
+                    {/* <h3 className="text-xl font-semibold text-gray-800">Référence: {del.carts?.id}</h3> */}
+                    <p className="text-gray-600">Client: {del.carts.client?.name}</p>
                     <p className="text-gray-600">
                       Statut:{" "}
                       <span
-                        className={`text-${cart.status === "completed"
+                        className={`text-${del.carts.status === "completed"
                           ? "green"
-                          : cart.status === "cancelled"
+                          : del.carts.status === "cancelled"
                             ? "red"
                             : "yellow"
                           }-500`}
                       >
-                        {cart.status}
+                        {del.carts.status}
                       </span>
                     </p>
-                    <p className="text-gray-600">Créé le: {new Date(cart.createdAt).toLocaleDateString()}</p>
+                    <p className="text-gray-600">Créé le: {new Date(del.carts.createdAt as string).toLocaleDateString()}</p>
                   </div>
 
                   <div className="mb-4">
                     <h4 className="text-lg font-semibold text-gray-800">Articles:</h4>
                     <ul className="list-none">
-                      {cart.items.map(item => (
+                      {del.carts.items?.map(item => (
                         <li key={item.productId} className="text-gray-600">
-                          {item.quantity} x {item.productId} - {item.unitPrice}€ = {item.quantity * item.unitPrice} MGA
+                          {item.quantity} x {item.unitPrice} - {item.unitPrice}MGA = {item.quantity * item.unitPrice} MGA
                         </li>
                       ))}
                     </ul>
                   </div>
 
                   <div className="mb-4">
-                    <p className="text-gray-800 font-semibold">Total: {cart.totalAmount}MGA</p>
+                    <p className="text-gray-800 font-semibold">Total: {del.carts.totalAmount}MGA</p>
                   </div>
                 </div>
 
-                <button
-                  onClick={() => handleValidate(cart.id)}
-                  className="w-full bg-zinc-700 text-white py-1 px-2 rounded-md transition-colors duration-300 hover:bg-orange-600 focus:outline-none"
-                >
-                  Valider
-                </button>
+                {!del.carts.isDelivery ?
+                  <button
+                    disabled={!!del.validation.find(vl => vl.ID === me?.ID)}
+                    onClick={() => handleValidate(del.carts.id!)}
+                    className={"w-full py-1 px-2 rounded-md focus:outline-none "+reactiveClassV2(!!del.validation.find(vl => vl.ID === me?.ID), 'opacity-5 bg-zinc-700/20 text-white', 'transition-colors duration-300 hover:bg-orange-600 bg-zinc-700 text-white')}
+                  >
+                    Valider
+                  </button>
+                  :
+                  <p className="flex justify-end w-full">
+                    <CheckCircleIcon className="text-lg text-green-500" />
+                  </p>
+                }
               </div>
             ))}
         </div>
       ) : (
-
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-300">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Référence</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Client</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Statut</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Total</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {carts
-                .filter(cart => cart.isDelivery === true)
-                .map(cart => (
-                  <tr key={cart.id} className="border-b hover:bg-gray-50">
-                    <td className="px-6 py-3 text-sm text-gray-800">{cart.reference}</td>
-                    <td className="px-6 py-3 text-sm text-gray-600">{cart.clientId}</td>
-                    <td className="px-6 py-3 text-sm">
-                      <span
-                        className={`text-${cart.status === "completed"
-                          ? "green"
-                          : cart.status === "cancelled"
-                            ? "red"
-                            : "yellow"
-                          }-500`}
-                      >
-                        {cart.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-3 text-sm text-gray-800">{cart.totalAmount}MGA</td>
-                    <td className="px-6 py-3 text-sm text-gray-600">
-                      {new Date(cart.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-3 text-sm">
-                      <button
-                        onClick={() => handleValidate(cart.id)}
-                        className="bg-orange-500 text-white py-1 px-3 rounded-md text-sm transition-colors duration-300 hover:bg-orange-600"
-                      >
-                        Valider
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
+        <></>
+        // <div className="overflow-x-auto">
+        //   <table className="min-w-full bg-white border border-gray-300">
+        //     <thead>
+        //       <tr className="bg-gray-100">
+        //         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Référence</th>
+        //         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Client</th>
+        //         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Statut</th>
+        //         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Total</th>
+        //         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
+        //         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Action</th>
+        //       </tr>
+        //     </thead>
+        //     <tbody>
+        //       {carts
+        //         .filter(cart => cart.isDelivery === true)
+        //         .map(cart => (
+        //           <tr key={cart.id} className="border-b hover:bg-gray-50">
+        //             <td className="px-6 py-3 text-sm text-gray-800">{cart.reference}</td>
+        //             <td className="px-6 py-3 text-sm text-gray-600">{cart.clientId}</td>
+        //             <td className="px-6 py-3 text-sm">
+        //               <span
+        //                 className={`text-${cart.status === "completed"
+        //                   ? "green"
+        //                   : cart.status === "cancelled"
+        //                     ? "red"
+        //                     : "yellow"
+        //                   }-500`}
+        //               >
+        //                 {cart.status}
+        //               </span>
+        //             </td>
+        //             <td className="px-6 py-3 text-sm text-gray-800">{cart.totalAmount}MGA</td>
+        //             <td className="px-6 py-3 text-sm text-gray-600">
+        //               {new Date(cart.createdAt).toLocaleDateString()}
+        //             </td>
+        //             <td className="px-6 py-3 text-sm">
+        //               <button
+        //                 onClick={() => handleValidate(cart.id)}
+        //                 className="bg-orange-500 text-white py-1 px-3 rounded-md text-sm transition-colors duration-300 hover:bg-orange-600"
+        //               >
+        //                 Valider
+        //               </button>
+        //             </td>
+        //           </tr>
+        //         ))}
+        //     </tbody>
+        //   </table>
+        // </div>
       )}
     </div>
   );
