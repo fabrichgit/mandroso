@@ -1,5 +1,4 @@
 import { FileCheck } from "lucide-react";
-import React, { useState } from "react";
 import { FaTable } from "react-icons/fa";
 import { MdOutlineDashboard } from "react-icons/md";
 import { reactiveClass } from "../../../../utils/class";
@@ -123,14 +122,14 @@ function Delivery() {
                     <ul className="list-none">
                       {cart.items.map(item => (
                         <li key={item.productId} className="text-gray-600">
-                          {item.quantity} x {item.productId} - {item.unitPrice}€ = {item.quantity * item.unitPrice}€
+                          {item.quantity} x {item.productId} - {item.unitPrice}€ = {item.quantity * item.unitPrice} MGA
                         </li>
                       ))}
                     </ul>
                   </div>
 
                   <div className="mb-4">
-                    <p className="text-gray-800 font-semibold">Total: {cart.totalAmount}€</p>
+                    <p className="text-gray-800 font-semibold">Total: {cart.totalAmount}MGA</p>
                   </div>
                 </div>
 
@@ -176,7 +175,7 @@ function Delivery() {
                         {cart.status}
                       </span>
                     </td>
-                    <td className="px-6 py-3 text-sm text-gray-800">{cart.totalAmount}€</td>
+                    <td className="px-6 py-3 text-sm text-gray-800">{cart.totalAmount}MGA</td>
                     <td className="px-6 py-3 text-sm text-gray-600">
                       {new Date(cart.createdAt).toLocaleDateString()}
                     </td>

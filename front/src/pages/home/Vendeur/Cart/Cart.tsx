@@ -1,4 +1,4 @@
-import { FileCheck, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { useCartStore } from "../../../../store/useCartStore";
 import { CartForm } from "../../../../components/Cart/CartForm";
 import { CartList } from "../../../../components/Cart/CartList";
@@ -9,7 +9,7 @@ import Delivery from "./Delivery";
 function Cart() {
 
     const { tab: activeTab, setTab: setActiveTab } = useStorage<'cart' | 'delivery'>('cart', 'tab-cart');
-    const { carts, editingCart, setEditingCart, editCart } = useCartStore();
+    const { carts, editingCart, setEditingCart } = useCartStore();
 
     return (
         <div className="flex flex-col w-full">

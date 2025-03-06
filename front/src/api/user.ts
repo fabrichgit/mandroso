@@ -27,7 +27,7 @@ export async function deleteUser(id: string) {
         },
         params: {
             id
-        }
+        },
     })
 
     return res.data
