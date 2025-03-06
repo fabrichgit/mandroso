@@ -3,6 +3,9 @@ import { Product } from "../../types/product";
 import { useState } from "react";
 import ModalImages from "./ModalImages";
 import { ProductCardProps } from "./ProductCard";
+import { useDeliveryStore } from "../../store/useDeliveryStore";
+import { useCommandeStore } from "../../store/useCommandeStore";
+import { useEntrepot } from "../../store/useEntrepot";
 
 interface Props {
   products: Product[];
@@ -26,7 +29,9 @@ export default function TableProductList({ products, categories, onEdit, onDelet
           <thead className="bg-gray-100">
             <tr>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Nom</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Quantité</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Quantité en stock</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Quantité réservé</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Quantité commandé</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Prix unitaire</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Condition</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Catégorie</th>
@@ -77,13 +82,19 @@ function getConditionLabel(condition: string) {
 
 function ProductElement({ product, onEdit, onDelete, categorie, oncartin, handleAddItem, handleRemoveItem, handleItemChange }: ProductCardProps) {
 
+  const countProductByDeliveryStatus = useDeliveryStore.getState().countProductByDeliveryStatus
+  const countProductInCommandes = useCommandeStore.getState().countProductInCommandes
+  const countProductQuantity = useEntrepot.getState().countProductQuantity
+
   const [see, setSee] = useState<boolean>(false);
   const [itCart, setIt] = useState(false)
 
   return (
     <tr key={product.id} className="hover:bg-gray-50">
       <td className="px-4 py-3 text-sm text-gray-900">{product.name}</td>
-      <td className="px-4 py-3 text-sm text-gray-600">{product.quantity}</td>
+      <td className="px-4 py-3 text-sm text-gray-600">{countProductQuantity(product.id)}</td>
+      <td className="px-4 py-3 text-sm text-gray-600">{countProductByDeliveryStatus(product.id, false)}</td>
+      <td className="px-4 py-3 text-sm text-gray-600">{countProductInCommandes(product.id)}</td>
       <td className="px-4 py-3 text-sm text-gray-600">{product.price} ar</td>
       <td className="px-4 py-3 text-sm">
         <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getConditionColor(product.condition)}`}>

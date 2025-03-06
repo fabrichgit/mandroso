@@ -17,9 +17,10 @@ interface CommandeStore {
   setEditing: (data: Commande | null) => void;
   reset?: () => void;
   delete: (id: string) => void;
+  countProductInCommandes: (productId: string) => number;
 }
 
-export const useCommandeStore = create<CommandeStore>((set) => ({
+export const useCommandeStore = create<CommandeStore>((set, get) => ({
   commande: [],
   editing: null,
   add: (data) => {
@@ -43,5 +44,10 @@ export const useCommandeStore = create<CommandeStore>((set) => ({
   },
   reset() {
     set({ commande: [] })
+  },
+  countProductInCommandes: (productId) => {
+    return get().commande.reduce((count, cmd) => {
+      return count + cmd.productItems.reduce((sum, item) => item.productId === productId ? sum + item.quantity : sum, 0);
+    }, 0);
   },
 }));
