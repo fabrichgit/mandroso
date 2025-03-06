@@ -9,7 +9,7 @@ import Delivery from "./Delivery";
 function Cart() {
 
     const { tab: activeTab, setTab: setActiveTab } = useStorage<'cart' | 'delivery'>('cart', 'tab-cart');
-    const { carts, editingCart, setEditingCart } = useCartStore();
+    const { carts, editingCart, setEditingCart, editCart } = useCartStore();
 
     return (
         <div className="flex flex-col w-full">
@@ -57,7 +57,9 @@ function Cart() {
                             />
 
                             <CartList
+                                setActiveTab={setActiveTab}
                                 carts={carts}
+                                editCart={editCart}
                                 onEdit={setEditingCart}
                                 onDelete={useCartStore.getState().deleteCart}
                             />

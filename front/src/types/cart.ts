@@ -13,6 +13,7 @@ export interface Cart {
     status: 'pending' | 'completed' | 'cancelled';
     totalAmount: number;
     createdAt: string;
+    isDelivery?: boolean;
 }
 
 export type CartFormData = Omit<Cart, 'id' | 'totalAmount' | 'createdAt'>;
