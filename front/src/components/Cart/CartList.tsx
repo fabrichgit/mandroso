@@ -50,7 +50,7 @@ export function CartList({ carts, onEdit, onDelete }: CartListProps) {
     if (carts.length === 0) {
         return (
             <div className="text-center py-8 bg-white rounded-lg shadow-sm">
-                <p className="text-gray-500">Aucune commande enregistrée</p>
+                <p className="text-gray-500">Aucune panier enregistrée</p>
             </div>
         );
     }

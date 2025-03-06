@@ -6,6 +6,7 @@ export type Commande = {
   id?: string;
   productItems: CartItem[];
   fournisseur: Fournisseur | null;
+  createdAt: string | Date;
 }
 
 interface CommandeStore {

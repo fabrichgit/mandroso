@@ -6,7 +6,7 @@ import { FounisseurList } from "../../../../components/Founisseur/FounisseurList
 import { useState } from "react";
 import { VendeurList } from "../../../../components/Founisseur/VendeurList";
 import VendeurDropdown from "../../../../components/Founisseur/VendeurDropdown";
-import CommandeDash from "./Commande";
+import CommandeDash from "./Commande/Commande";
 
 function Fournisseur() {
 

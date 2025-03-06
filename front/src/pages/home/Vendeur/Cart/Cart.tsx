@@ -57,9 +57,7 @@ function Cart() {
                             />
 
                             <CartList
-                                // setActiveTab={setActiveTab}
                                 carts={carts}
-                                // editCart={editCart}
                                 onEdit={setEditingCart}
                                 onDelete={useCartStore.getState().deleteCart}
                             />
