@@ -4,11 +4,12 @@ import { CartForm } from "../../../../components/Cart/CartForm";
 import { CartList } from "../../../../components/Cart/CartList";
 import { CartModal } from "../../../../components/Cart/CartModal";
 import useStorage from "../../../../hook/useStorage";
+import Delivery from "./Delivery";
 
 function Cart() {
 
     const { tab: activeTab, setTab: setActiveTab } = useStorage<'cart' | 'delivery'>('cart', 'tab-cart');
-    const { carts, editingCart, setEditingCart } = useCartStore();
+    const { carts, editingCart, setEditingCart, editCart } = useCartStore();
 
     return (
         <div className="flex flex-col w-full">
@@ -56,7 +57,9 @@ function Cart() {
                             />
 
                             <CartList
+                                setActiveTab={setActiveTab}
                                 carts={carts}
+                                editCart={editCart}
                                 onEdit={setEditingCart}
                                 onDelete={useCartStore.getState().deleteCart}
                             />
@@ -76,36 +79,7 @@ function Cart() {
             {
                 activeTab === 'delivery' ?
                     <>
-                        <div className="flex items-center justify-between mb-8">
-                            <div className="flex items-center p-6 pb-0">
-                                <FileCheck className="h-5 w-5 text-sky-500 mr-3" />
-                                <h1 className="text-2xl font-bold text-gray-900">
-                                    Bon de livraison
-                                </h1>
-                            </div>
-                        </div>
-
-                        <div className="space-y-8">
-                            <CartForm
-                                onSubmit={useCartStore.getState().addCart}
-                                isEditing={false}
-                            />
-
-                            <CartList
-                                carts={carts}
-                                onEdit={setEditingCart}
-                                onDelete={useCartStore.getState().deleteCart}
-                            />
-                        </div>
-
-                        {editingCart && (
-                            <CartModal
-                                isOpen={!!editingCart}
-                                onClose={() => setEditingCart(null)}
-                                cart={editingCart}
-                                onSubmit={useCartStore.getState().editCart}
-                            />
-                        )}
+                        <Delivery carts={carts}/>
                     </>
                     : null
             }

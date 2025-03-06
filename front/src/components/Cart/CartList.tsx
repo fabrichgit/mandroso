@@ -1,21 +1,26 @@
 import { FilePlus, FileText, Pencil, Trash2 } from 'lucide-react';
-import { Cart } from '../../types/cart';
+import { Cart, CartFormData } from '../../types/cart';
 import { useClientStore } from '../../store/useClientStore';
 import { useProductStore } from '../../store/useProductStore';
 import { useState } from 'react';
 import { Invoice } from './Invoice';
-import { DeliveryNote } from './DeliveryNote';
+import { useDeliveryStore } from '../../store/useDeliveryStore';
+import toast from 'react-hot-toast';
 
 interface CartListProps {
-    carts: Cart[];
+    carts: Cart[],
     onEdit: (cart: Cart) => void;
     onDelete: (id: string) => void;
+    editCart: (cartData: CartFormData) => void
+    setActiveTab: React.Dispatch<React.SetStateAction<"delivery" | "cart">>
 }
 
-export function CartList({ carts, onEdit, onDelete }: CartListProps) {
+export function CartList({ onEdit, onDelete, editCart, carts, setActiveTab }: CartListProps) {
     const clients = useClientStore((state) => state.clients);
     const products = useProductStore((state) => state.products);
-    const [selectedCart, setSelectedCart] = useState<{cart: Cart, action: 'invoice' | 'deliveryNote'} | null>(null);
+    const [selectedCart, setSelectedCart] = useState<{ cart: Cart, action: 'invoice' | 'deliveryNote' } | null>(null);
+
+    const { add, delivery: delv } = useDeliveryStore()
 
     const getClientName = (clientId: string) => {
         return clients.find(c => c.id === clientId)?.name || 'Client inconnu';
@@ -47,6 +52,13 @@ export function CartList({ carts, onEdit, onDelete }: CartListProps) {
         }
     };
 
+    const delivery = (cart: Cart) => {
+        add(cart.id)
+        editCart({ ...cart, isDelivery: true })
+        toast.success('ok !');
+        setActiveTab('delivery')
+    }
+
     if (carts.length === 0) {
         return (
             <div className="text-center py-8 bg-white rounded-lg shadow-sm">
@@ -54,6 +66,7 @@ export function CartList({ carts, onEdit, onDelete }: CartListProps) {
             </div>
         );
     }
+
 
     return (
         <>
@@ -85,7 +98,7 @@ export function CartList({ carts, onEdit, onDelete }: CartListProps) {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {carts.map((cart) => (
+                        {carts?.map((cart) => (
                             <tr key={cart.id} className="hover:bg-gray-50">
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {cart.reference}
@@ -117,15 +130,15 @@ export function CartList({ carts, onEdit, onDelete }: CartListProps) {
                                     {new Date(cart.createdAt).toLocaleDateString('fr-FR')}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <button
-                                        onClick={() => setSelectedCart({cart, action: 'deliveryNote'})}
+                                    {delv.find(del => del.cartId === cart.id) ? null : <button
+                                        onClick={() => delivery(cart)}
                                         className="text-orange-600 hover:text-green-900 mr-4"
                                         title="bon de livraison"
                                     >
                                         <FilePlus className="h-4 w-4" />
-                                    </button>
+                                    </button> }
                                     <button
-                                        onClick={() => setSelectedCart({cart, action: 'invoice'})}
+                                        onClick={() => setSelectedCart({ cart, action: 'invoice' })}
                                         className="text-green-600 hover:text-green-900 mr-4"
                                         title="Voir la facture"
                                     >
@@ -153,9 +166,9 @@ export function CartList({ carts, onEdit, onDelete }: CartListProps) {
                 {selectedCart && selectedCart.action === 'invoice' ? (
                     <Invoice cart={selectedCart.cart} onClose={() => setSelectedCart(null)} />
                 ) : null}
-                {selectedCart && selectedCart.action === 'deliveryNote' ? (
+                {/* {selectedCart && selectedCart.action === 'deliveryNote' ? (
                     <DeliveryNote cart={selectedCart.cart} onClose={() => setSelectedCart(null)} />
-                ) : null}
+                ) : null} */}
             </div>
         </>
     );

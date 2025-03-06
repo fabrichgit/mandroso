@@ -34,6 +34,7 @@ export const useCartStore = create<CartStore>((set) => ({
       id: crypto.randomUUID(),
       totalAmount,
       createdAt: new Date().toISOString(),
+      isDelivery: false
     };
     set((state) => ({ carts: [...state.carts, newCart] }));
   },
