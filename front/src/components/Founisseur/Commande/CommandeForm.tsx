@@ -110,8 +110,8 @@ export function CommandeForm({ onSubmit, initialData, isEditing = false }: Props
                         Fournisseur
                     </label>
                     <select
-                        value={formData.fournisseur?.id}
-                        onChange={(e) => setFormData(prev => ({ ...prev, fournisseur: fournisseur.find(f => f.id === e.currentTarget.id)! }))}
+                        value={formData?.fournisseur?.id}
+                        onChange={(e) => setFormData(prev => ({ ...prev, fournisseur: fournisseur?.find(f => f.id === e.currentTarget.value)! }))}
                         required
                         className="mt-1 block mb-5 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm w-max"
                     >

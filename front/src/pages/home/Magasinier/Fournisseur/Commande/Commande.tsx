@@ -1,10 +1,11 @@
 import { useCommandeStore } from "../../../../../store/useCommandeStore";
 import { CommandeModal } from "../../../../../components/Founisseur/Commande/CommandeModal";
 import { CommandeForm } from "../../../../../components/Founisseur/Commande/CommandeForm";
+import { CommandeList } from "../../../../../components/Founisseur/Commande/CommandeList";
 
 export default function CommandeDash() {
 
-    const { commande, editing, setEditing, edit, add } = useCommandeStore()
+    const { commande, editing, setEditing, edit, add, delete: dt } = useCommandeStore()
 
     return (
         <div className="w-full p-4">
@@ -14,13 +15,12 @@ export default function CommandeDash() {
                     isEditing={false}
                 />
 
-                {/* <CartList
+                <CommandeList
                     // setActiveTab={setActiveTab}
-                    carts={carts}
-                    // editCart={editCart}
-                    onEdit={setEditingCart}
-                    onDelete={useCartStore.getState().deleteCart}
-                /> */}
+                    commande={commande}
+                    onEdit={setEditing}
+                    onDelete={dt}
+                />
             </div>
 
             {editing && (
