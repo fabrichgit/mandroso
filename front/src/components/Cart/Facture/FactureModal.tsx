@@ -1,8 +1,8 @@
 import { CheckCircleIcon, Maximize } from 'lucide-react';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import resize from '../../utils/maximise';
-import { Facture } from '../../store/useFactureStore';
-import { useCartStore } from '../../store/useCartStore';
+import resize from '../../../utils/maximise';
+import { Facture } from '../../../store/useFactureStore';
+import { useCartStore } from '../../../store/useCartStore';
 import { useMemo } from 'react';
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 export function FactureModal({ isOpen, onClose, facture }: Props) {
   if (!isOpen) return null;
 
-  const getById = useCartStore.getState().getById
+  const getById = useCartStore.getState().getById;
 
   const carts = useMemo(() => {
     return getById(facture.cartId)
@@ -30,14 +30,13 @@ export function FactureModal({ isOpen, onClose, facture }: Props) {
           <Maximize size={24} />
         </button>
 
-        <div className="bg-white px-4 pb-4 pt-5 sm:p-6">
+        <div className="bg-white px-4 pb-4 pt-5 sm:p-6 w-full h-full">
           <div
             key={facture.id}
-            className="flex flex-col justify-between bg-gray-100 border border-gray-300 rounded-lg p-6 w-72 shadow transform transition-transform hover:translate-y-[-2px] hover:shadow-lg"
+            className="flex flex-col justify-between w-full h-full bg-gray-100 border border-gray-300 rounded-lg p-6 shadow transform transition-transform hover:translate-y-[-2px] hover:shadow-lg"
           >
             <div>
               <div className="mb-4">
-                {/* <h3 className="text-xl font-semibold text-gray-800">Référence: {del.carts?.id}</h3> */}
                 <p className="text-gray-600">Client: {carts.client?.name}</p>
                 <p className="text-gray-600">
                   Statut:{" "}
@@ -77,15 +76,12 @@ export function FactureModal({ isOpen, onClose, facture }: Props) {
               </p>
               : null
             }
-
-
             <button
               onClick={onClose}
-              className={"w-full py-1 px-2 rounded-md focus:outline-none opacity-5 bg-zinc-700/20 text-white"}
+              className={"w-full py-1 px-2 rounded-md focus:outline-none bg-zinc-700 text-white"}
             >
               retour
             </button>
-            :
           </div>
         </div>
 

@@ -3,13 +3,13 @@ import { useCartStore } from "../../../../store/useCartStore";
 import { CartForm } from "../../../../components/Cart/CartForm";
 import { CartList } from "../../../../components/Cart/CartList";
 import { CartModal } from "../../../../components/Cart/CartModal";
-import useStorage from "../../../../hook/useStorage";
 import Delivery from "./Delivery";
 import Facture from "./Facture";
+import { useState } from "react";
 
 function Cart() {
 
-    const { tab: activeTab, setTab: setActiveTab } = useStorage<'cart' | 'delivery' | 'facture'>('cart', 'tab-cart');
+    const [activeTab, setActiveTab] = useState<'cart' | 'delivery' | 'facture'>('cart');
     const { carts, editingCart, setEditingCart, editCart } = useCartStore();
 
     return (
