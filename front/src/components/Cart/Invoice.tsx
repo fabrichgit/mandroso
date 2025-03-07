@@ -1,11 +1,10 @@
-import { useRef } from 'react';
+import { Key, useRef } from 'react';
 import { Printer } from 'lucide-react';
-import { Cart } from '../../types/cart';
 import { useClientStore } from '../../store/useClientStore';
 import { useProductStore } from '../../store/useProductStore';
 
 interface InvoiceProps {
-    cart: Cart;
+    cart: any;
     onClose: () => void;
 }
 
@@ -14,7 +13,7 @@ export function Invoice({ cart, onClose }: InvoiceProps) {
     const clients = useClientStore((state) => state.clients);
     const products = useProductStore((state) => state.products);
 
-    const client = clients.find(c => c.id === cart.clientId);
+    const client = clients.find(c => c.id === cart.carts.clientId);
 
     const handlePrint = () => {
         const content = printRef.current;
@@ -51,11 +50,11 @@ export function Invoice({ cart, onClose }: InvoiceProps) {
     };
 
     const calculateTVA = () => {
-        return cart.totalAmount * 0.2; // TVA à 20%
+        return cart.carts.totalAmount * 0.2; // TVA à 20%
     };
 
     const calculateTotal = () => {
-        return cart.totalAmount + calculateTVA();
+        return cart.carts.totalAmount + calculateTVA();
     };
 
     return (
@@ -85,7 +84,7 @@ export function Invoice({ cart, onClose }: InvoiceProps) {
                         <div>
                             <h1 className="text-2xl font-bold mb-4">FACTURE</h1>
                             <p className="text-gray-600">Référence: {cart.reference}</p>
-                            <p className="text-gray-600">Date: {new Date(cart.createdAt).toLocaleDateString('fr-FR')}</p>
+                            <p className="text-gray-600">Date: {new Date(cart.carts.createdAt).toLocaleDateString('fr-FR')}</p>
                         </div>
                         <div className="text-right">
                             <h2 className="text-xl font-semibold mb-2">Client</h2>
@@ -111,7 +110,7 @@ export function Invoice({ cart, onClose }: InvoiceProps) {
                         </tr>
                     </thead>
                     <tbody>
-                        {cart.items.map((item, index) => {
+                        {cart?.carts?.items?.map((item: any, index: Key | null | undefined) => {
                             const product = products.find(p => p.id === item.productId);
                             return (
                                 <tr key={index}>
@@ -128,7 +127,7 @@ export function Invoice({ cart, onClose }: InvoiceProps) {
                 <div className="total-section border-t pt-4">
                     <div className="total-line">
                         <span>Sous-total HT:</span>
-                        <span>{cart.totalAmount.toLocaleString('fr-FR', { style: 'currency', currency: 'MGA' })}</span>
+                        <span>{cart.carts.totalAmount.toLocaleString('fr-FR', { style: 'currency', currency: 'MGA' })}</span>
                     </div>
                     <div className="total-line">
                         <span>TVA (20%):</span>

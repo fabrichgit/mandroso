@@ -170,6 +170,9 @@ function Delivery() {
                     </td>
                   </tr>
                 ))}
+              {/* {selectedCart && selectedCart.action === 'invoice' ? (
+                <Invoice cart={selectedCart.cart} onClose={() => setSelectedCart(null)} />
+              ) : null} */}
             </tbody>
           </table>
         </div>
