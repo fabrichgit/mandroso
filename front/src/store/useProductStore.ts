@@ -9,9 +9,10 @@ interface ProductStore {
   deleteProduct: (id: string) => void;
   setEditingProduct: (product: Product | null) => void;
   setProducts: (products: Product[]) => void
+  getById: (id: string) => Product | undefined
 }
 
-export const useProductStore = create<ProductStore>((set) => ({
+export const useProductStore = create<ProductStore>((set, get) => ({
   products: [],
   editingProduct: null,
   setProducts(products) {
@@ -44,5 +45,8 @@ export const useProductStore = create<ProductStore>((set) => ({
   },
   setEditingProduct: (product) => {
     set({ editingProduct: product });
+  },
+  getById(id) {
+    return get().products.find(p => p.id === id)
   },
 }));

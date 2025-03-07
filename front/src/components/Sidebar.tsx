@@ -6,7 +6,7 @@ import { FiLogOut } from "react-icons/fi";
 import { AiFillProduct } from "react-icons/ai";
 import { MdMapsHomeWork } from "react-icons/md";
 import { user_store } from "../store/user";
-import { HousePlug, ShoppingCart, Users, UserSquareIcon } from "lucide-react";
+import { HousePlug, PiggyBank, ShoppingCart, Users, UserSquareIcon } from "lucide-react";
 
 function Sidebar({ tab }: { tab: string | undefined }) {
 
@@ -45,6 +45,10 @@ function Sidebar({ tab }: { tab: string | undefined }) {
                             <Link to="/" className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-black/60 hover:text-gray-300" >
                                 <MdMapsHomeWork />
                                 <span className="ml-2 text-sm font-medium md:inline hidden">Tableau de Bord</span>
+                            </Link>
+                            <Link to="/caisse" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-black/60 hover:text-gray-300')} >
+                                <PiggyBank />
+                                <span className="ml-2 text-sm font-medium md:inline hidden">Caisse</span>
                             </Link>
                             <Link to="/products" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-black/60 hover:text-gray-300')} >
                                 <AiFillProduct />

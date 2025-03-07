@@ -6,18 +6,18 @@ import useStorage from "../../../../hook/useStorage";
 import { useDeliveryStore } from "../../../../store/useDeliveryStore";
 import { useCartStore } from "../../../../store/useCartStore";
 import { useMemo } from "react";
-import { useClientStore } from "../../../../store/useClientStore";
 import { user_store } from "../../../../store/user";
+import { useProductStore } from "../../../../store/useProductStore";
 
 function Delivery() {
   const me = user_store.getState().data
-  const { carts } = useCartStore();
+  const { carts, getById } = useCartStore();
   const { delivery, validate } = useDeliveryStore();
-  const { getById } = useClientStore()
+  // const { getById } = useClientStore()
   const { setTab: setView, tab: view } = useStorage<'cards' | 'table'>('cards', 'del');
 
   const deliveries = useMemo(() => {
-    return delivery.map(del => ({ ...del, carts: { ...carts.find(ct => ct.id === del.cartId), client: getById(carts.find(ct => ct.id === del.cartId)?.clientId!) } }))
+    return delivery.map(del => ({ ...del, carts: getById(del.cartId) }))
   }, [carts, delivery])
 
   const handleValidate = (id: string) => {
@@ -81,19 +81,19 @@ function Delivery() {
                   </div>
 
                   <div className="mb-4">
-                    <h4 className="text-lg font-semibold text-gray-800">Articles:</h4>
+                    <h4 className="text-lg font-semibold text-gray-800">Produits:</h4>
                     <ul className="list-none">
                       {del.carts.items?.map(item => (
                         <li key={item.productId} className="text-gray-600">
-                          {item.quantity} x {item.unitPrice} - {item.unitPrice}MGA = {item.quantity * item.unitPrice} MGA
+                          {item.quantity} - {useProductStore.getState().getById(item.productId)?.name}
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="mb-4">
+                  {/* <div className="mb-4">
                     <p className="text-gray-800 font-semibold">Total: {del.carts.totalAmount}MGA</p>
-                  </div>
+                  </div> */}
                 </div>
 
                 {!del.carts.isDelivery ?
@@ -119,7 +119,7 @@ function Delivery() {
               <tr className="bg-gray-100">
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Client</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Statut</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Total</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Produit</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Action</th>
               </tr>
@@ -141,7 +141,18 @@ function Delivery() {
                         {del.carts.status}
                       </span>
                     </td>
-                    <td className="px-6 py-3 text-sm text-gray-800">{del.carts.totalAmount}MGA</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">
+                      <ul className="list-disc list-inside">
+                        {del.carts.items?.map((item, index) => {
+                          const product = getById(item.productId)
+                          return product ? (
+                            <li key={index}>
+                              {item.quantity} - {useProductStore.getState().getById(item.productId)?.name}
+                            </li>
+                          ) : null;
+                        })}
+                      </ul>
+                    </td>
                     <td className="px-6 py-3 text-sm text-gray-600">
                       {new Date(del.carts.createdAt as string).toLocaleDateString()}
                     </td>
