@@ -111,7 +111,7 @@ export function CommandeForm({ onSubmit, initialData, isEditing = false }: Props
                     </label>
                     <select
                         value={formData?.fournisseur?.id}
-                        onChange={(e) => setFormData(prev => ({ ...prev, fournisseur: fournisseur?.find(f => f.id === e.currentTarget.value)! }))}
+                        onChange={(e) => setFormData(prev => ({ ...prev, fournisseur: fournisseur?.find(f => f.id === e.currentTarget?.value)! }))}
                         required
                         className="mt-1 block mb-5 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm w-max"
                     >
@@ -217,7 +217,7 @@ export function CommandeForm({ onSubmit, initialData, isEditing = false }: Props
                     ) : (
                         <>
                             <Plus className="h-4 w-4 mr-2" />
-                            Créer la panier
+                            Créer
                         </>
                     )}
                 </button>

@@ -100,7 +100,7 @@ function Delivery() {
                   <button
                     disabled={!!del.validation.find(vl => vl.ID === me?.ID)}
                     onClick={() => handleValidate(del.carts.id!)}
-                    className={"w-full py-1 px-2 rounded-md focus:outline-none "+reactiveClassV2(!!del.validation.find(vl => vl.ID === me?.ID), 'opacity-5 bg-zinc-700/20 text-white', 'transition-colors duration-300 hover:bg-orange-600 bg-zinc-700 text-white')}
+                    className={"w-full py-1 px-2 rounded-md focus:outline-none " + reactiveClassV2(!!del.validation.find(vl => vl.ID === me?.ID), 'opacity-5 bg-zinc-700/20 text-white', 'transition-colors duration-300 hover:bg-orange-600 bg-zinc-700 text-white')}
                   >
                     Valider
                   </button>
@@ -113,55 +113,55 @@ function Delivery() {
             ))}
         </div>
       ) : (
-        <></>
-        // <div className="overflow-x-auto">
-        //   <table className="min-w-full bg-white border border-gray-300">
-        //     <thead>
-        //       <tr className="bg-gray-100">
-        //         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Référence</th>
-        //         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Client</th>
-        //         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Statut</th>
-        //         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Total</th>
-        //         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
-        //         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Action</th>
-        //       </tr>
-        //     </thead>
-        //     <tbody>
-        //       {carts
-        //         .filter(cart => cart.isDelivery === true)
-        //         .map(cart => (
-        //           <tr key={cart.id} className="border-b hover:bg-gray-50">
-        //             <td className="px-6 py-3 text-sm text-gray-800">{cart.reference}</td>
-        //             <td className="px-6 py-3 text-sm text-gray-600">{cart.clientId}</td>
-        //             <td className="px-6 py-3 text-sm">
-        //               <span
-        //                 className={`text-${cart.status === "completed"
-        //                   ? "green"
-        //                   : cart.status === "cancelled"
-        //                     ? "red"
-        //                     : "yellow"
-        //                   }-500`}
-        //               >
-        //                 {cart.status}
-        //               </span>
-        //             </td>
-        //             <td className="px-6 py-3 text-sm text-gray-800">{cart.totalAmount}MGA</td>
-        //             <td className="px-6 py-3 text-sm text-gray-600">
-        //               {new Date(cart.createdAt).toLocaleDateString()}
-        //             </td>
-        //             <td className="px-6 py-3 text-sm">
-        //               <button
-        //                 onClick={() => handleValidate(cart.id)}
-        //                 className="bg-orange-500 text-white py-1 px-3 rounded-md text-sm transition-colors duration-300 hover:bg-orange-600"
-        //               >
-        //                 Valider
-        //               </button>
-        //             </td>
-        //           </tr>
-        //         ))}
-        //     </tbody>
-        //   </table>
-        // </div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border border-gray-300">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Client</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Statut</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Total</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {deliveries
+                .map(del => (
+                  <tr key={del.id} className="border-b hover:bg-gray-50">
+                    <td className="px-6 py-3 text-sm text-gray-600">{del.carts.client?.name}</td>
+                    <td className="px-6 py-3 text-sm">
+                      <span
+                        className={`text-${del.carts.status === "completed"
+                          ? "green"
+                          : del.carts.status === "cancelled"
+                            ? "red"
+                            : "yellow"
+                          }-500`}
+                      >
+                        {del.carts.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-3 text-sm text-gray-800">{del.carts.totalAmount}MGA</td>
+                    <td className="px-6 py-3 text-sm text-gray-600">
+                      {new Date(del.carts.createdAt as string).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-3 text-sm">
+                      {!del.carts.isDelivery ?
+                        <button
+                          disabled={!!del.validation.find(vl => vl.ID === me?.ID)}
+                          onClick={() => handleValidate(del.carts.id!)}
+                          className={"text-white py-1 px-3 rounded-md text-sm " + reactiveClassV2(!!del.validation.find(vl => vl.ID === me?.ID), 'opacity-5 bg-zinc-700/20 text-white', 'bg-orange-500 transition-colors duration-300 hover:bg-orange-600')}
+                        >
+                          Valider
+                        </button>
+                        : <CheckCircleIcon className="text-lg text-green-500" />
+                      }
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

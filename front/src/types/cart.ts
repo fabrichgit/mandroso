@@ -14,6 +14,7 @@ export interface Cart {
     totalAmount: number;
     createdAt: string;
     isDelivery?: boolean;
+    isFacture?: boolean;
 }
 
 export type CartFormData = Omit<Cart, 'id' | 'totalAmount' | 'createdAt'>;

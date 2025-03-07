@@ -10,6 +10,7 @@ interface CartStore {
   setEditingCart: (cart: Cart | null) => void;
   reset?: () => void;
   delivery: (id: string) => void;
+  fact: (id: string) => void;
 }
 
 export const useCartStore = create<CartStore>((set) => ({
@@ -34,7 +35,8 @@ export const useCartStore = create<CartStore>((set) => ({
       id: crypto.randomUUID(),
       totalAmount,
       createdAt: new Date().toISOString(),
-      isDelivery: false
+      isDelivery: false,
+      isFacture: false
     };
     set((state) => ({ carts: [...state.carts, newCart] }));
   },
@@ -88,6 +90,9 @@ export const useCartStore = create<CartStore>((set) => ({
     set({ carts: [] })
   },
   delivery(id) {
-    set(prev => ({...prev, carts: prev.carts.map(ct => ct.id !== id ? ct : {...ct, isDelivery: true})}))
+    set(prev => ({ ...prev, carts: prev.carts.map(ct => ct.id !== id ? ct : { ...ct, isDelivery: true }) }))
+  },
+  fact(id) {
+    set(prev => ({ ...prev, carts: prev.carts.map(ct => ct.id !== id ? ct : { ...ct, isFacture: true }) }))
   },
 }));

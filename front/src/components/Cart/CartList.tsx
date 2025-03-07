@@ -6,13 +6,14 @@ import { useState } from 'react';
 import { Invoice } from './Invoice';
 import { useDeliveryStore } from '../../store/useDeliveryStore';
 import toast from 'react-hot-toast';
+import { useFactureStore } from '../../store/useFactureStore';
 
 interface CartListProps {
     carts: Cart[],
     onEdit: (cart: Cart) => void;
     onDelete: (id: string) => void;
     editCart: (cartData: CartFormData) => void
-    setActiveTab: React.Dispatch<React.SetStateAction<"delivery" | "cart">>
+    setActiveTab: React.Dispatch<React.SetStateAction<any>>
 }
 
 export function CartList({ onEdit, onDelete, editCart, carts, setActiveTab }: CartListProps) {
@@ -21,6 +22,7 @@ export function CartList({ onEdit, onDelete, editCart, carts, setActiveTab }: Ca
     const [selectedCart, setSelectedCart] = useState<{ cart: Cart, action: 'invoice' | 'deliveryNote' } | null>(null);
 
     const { add, delivery: delv } = useDeliveryStore()
+    const { add: addFac, factures } = useFactureStore()
 
     const getClientName = (clientId: string) => {
         return clients.find(c => c.id === clientId)?.name || 'Client inconnu';
@@ -57,6 +59,13 @@ export function CartList({ onEdit, onDelete, editCart, carts, setActiveTab }: Ca
         editCart({ ...cart, isDelivery: true })
         toast.success('ok !');
         setActiveTab('delivery')
+    }
+
+    const facture = (cart: Cart) => {
+        addFac(cart.id)
+        editCart({ ...cart, isFacture: true })
+        toast.success('ok !');
+        setActiveTab('facture')
     }
 
     if (carts.length === 0) {
@@ -137,13 +146,20 @@ export function CartList({ onEdit, onDelete, editCart, carts, setActiveTab }: Ca
                                     >
                                         <FilePlus className="h-4 w-4" />
                                     </button> }
-                                    <button
-                                        onClick={() => setSelectedCart({ cart, action: 'invoice' })}
+                                    {factures.find(del => del.cartId === cart.id) ? null : <button
+                                        onClick={() => facture(cart)}
                                         className="text-green-600 hover:text-green-900 mr-4"
-                                        title="Voir la facture"
+                                        title="creer la facture"
                                     >
                                         <FileText className="h-4 w-4" />
-                                    </button>
+                                    </button> }
+                                    {/* <button
+                                        onClick={() => setSelectedCart({ cart, action: 'invoice' })}
+                                        className="text-green-600 hover:text-green-900 mr-4"
+                                        title="creer la facture"
+                                    >
+                                        <FileText className="h-4 w-4" />
+                                    </button> */}
                                     <button
                                         onClick={() => onEdit(cart)}
                                         className="text-blue-600 hover:text-blue-900 mr-4"
