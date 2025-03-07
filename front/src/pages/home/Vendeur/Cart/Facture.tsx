@@ -6,24 +6,20 @@ import useStorage from "../../../../hook/useStorage";
 import { useFactureStore } from "../../../../store/useFactureStore";
 import { useCartStore } from "../../../../store/useCartStore";
 import { useMemo } from "react";
-import { useClientStore } from "../../../../store/useClientStore";
 
 function Facture() {
-    const { carts } = useCartStore();
+    const { carts, getById: getByIdCart } = useCartStore();
     const { factures, setStatus } = useFactureStore((state) => ({
         factures: state.factures,
         setStatus: state.setStatus,
     }));
-    const { getById } = useClientStore();
+
     const { setTab: setView, tab: view } = useStorage<'cards' | 'table'>('cards', 'fact');
 
     const factureList = useMemo(() => {
         return factures.map(fact => ({
             ...fact,
-            carts: {
-                ...carts.find(ct => ct.id === fact.cartId),
-                client: getById(carts.find(ct => ct.id === fact.cartId)?.id!)
-            }
+            carts: getByIdCart(fact.cartId)
         }));
     }, [carts, factures]);
 

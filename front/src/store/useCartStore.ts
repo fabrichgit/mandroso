@@ -1,5 +1,7 @@
 import { create } from 'zustand';
-import { Cart, CartFormData } from '../types/cart';
+import { Cart, CartFormData, CartItem } from '../types/cart';
+import { useClientStore } from './useClientStore';
+import { Client } from '../types/client';
 
 interface CartStore {
   carts: Cart[];
@@ -11,9 +13,21 @@ interface CartStore {
   reset?: () => void;
   delivery: (id: string) => void;
   fact: (id: string) => void;
+  getById: (id: string) => {
+    client: Client | undefined;
+    id?: string | undefined;
+    reference?: string | undefined;
+    clientId?: string | undefined;
+    items?: CartItem[] | undefined;
+    status?: "pending" | "completed" | "cancelled" | undefined;
+    totalAmount?: number | undefined;
+    createdAt?: string | undefined;
+    isDelivery?: boolean;
+    isFacture?: boolean;
+};
 }
 
-export const useCartStore = create<CartStore>((set) => ({
+export const useCartStore = create<CartStore>((set, get) => ({
   carts: [],
   editingCart: null,
   addCart: (cartData) => {
@@ -94,5 +108,8 @@ export const useCartStore = create<CartStore>((set) => ({
   },
   fact(id) {
     set(prev => ({ ...prev, carts: prev.carts.map(ct => ct.id !== id ? ct : { ...ct, isFacture: true }) }))
+  },
+  getById(id) {
+    return {...get().carts.find(c => c.id === id), client: useClientStore.getState().getById(get().carts.find(ct => ct.id === id)?.clientId!)}
   },
 }));

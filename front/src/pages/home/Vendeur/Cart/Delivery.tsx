@@ -17,7 +17,7 @@ function Delivery() {
   const { setTab: setView, tab: view } = useStorage<'cards' | 'table'>('cards', 'del');
 
   const deliveries = useMemo(() => {
-    return delivery.map(del => ({ ...del, carts: { ...carts.find(ct => ct.id === del.cartId), client: getById(carts.find(ct => ct.id === del.cartId)?.id!) } }))
+    return delivery.map(del => ({ ...del, carts: { ...carts.find(ct => ct.id === del.cartId), client: getById(carts.find(ct => ct.id === del.cartId)?.clientId!) } }))
   }, [carts, delivery])
 
   const handleValidate = (id: string) => {
