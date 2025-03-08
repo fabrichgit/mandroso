@@ -30,6 +30,7 @@ export default function TableProductList({ products, categories, onEdit, onDelet
             <tr>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Nom</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Quantité en stock</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Quantité a stocker</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Quantité réservé</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Quantité commandé</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-700">Prix unitaire</th>
@@ -83,7 +84,8 @@ function getConditionLabel(condition: string) {
 function ProductElement({ product, onEdit, onDelete, categorie, oncartin, handleAddItem, handleRemoveItem, handleItemChange }: ProductCardProps) {
 
   const countProductByDeliveryStatus = useDeliveryStore.getState().countProductByDeliveryStatus
-  const countProductInCommandes = useCommandeStore.getState().countProductInCommandes
+  // const countProductInCommandes = useCommandeStore.getState().countProductInCommandes
+  const countProductInCommandes = (_: any) => 10
   const countProductQuantity = useEntrepot.getState().countProductQuantity
 
   const [see, setSee] = useState<boolean>(false);
@@ -93,6 +95,7 @@ function ProductElement({ product, onEdit, onDelete, categorie, oncartin, handle
     <tr key={product.id} className="hover:bg-gray-50">
       <td className="px-4 py-3 text-sm text-gray-900">{product.name}</td>
       <td className="px-4 py-3 text-sm text-gray-600">{countProductQuantity(product.id)}</td>
+      <td className="px-4 py-3 text-sm text-gray-600">12</td>
       <td className="px-4 py-3 text-sm text-gray-600">{countProductByDeliveryStatus(product.id, false)}</td>
       <td className="px-4 py-3 text-sm text-gray-600">{countProductInCommandes(product.id)}</td>
       <td className="px-4 py-3 text-sm text-gray-600">{product.price} ar</td>

@@ -29,6 +29,9 @@ export function CommandeList({ commande, onEdit, onDelete }: Props) {
                                 Date
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Fournisseur
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -46,17 +49,19 @@ export function CommandeList({ commande, onEdit, onDelete }: Props) {
                                     {cart.createdAt as string}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {cart.status === "pending" ? "en attente" : "livre"}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {cart.fournisseur?.nom}
                                 </td>
                                 <td className="px-6 py-4 text-sm text-gray-500">
-                                    <ul className="list-disc list-inside">
-                                        {cart.productItems.map((item, index) => {
-                                            const product = products.find(p => p.id === item.productId);
-                                            return product ? (
+                                     <ul className="list-disc list-inside">
+                                        {cart.product?.map((item, index) => {
+                                            return (
                                                 <li key={index}>
-                                                    {product.name} (x{item.quantity}) - {item.unitPrice.toLocaleString('fr-FR', { style: 'currency', currency: 'MGA' })} /unité
+                                                    {item.nom} (x{item.quantity}) - {item.price.toLocaleString('fr-FR', { style: 'currency', currency: 'MGA' })} /unité
                                                 </li>
-                                            ) : null;
+                                            );
                                         })}
                                     </ul>
                                 </td>

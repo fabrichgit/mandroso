@@ -71,7 +71,7 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
         {isEditing ? 'Modifier' : '+ Nouveau'}
       </h2>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="flex flex-wrap gap-8">
         <div>
           <label htmlFor="nom" className="block text-sm font-medium text-gray-700">
             Nom
@@ -87,11 +87,27 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
           />
         </div>
 
+
+        <div>
+          <label htmlFor="Telephone" className="block text-sm font-medium text-gray-700">
+            Telephone
+          </label>
+          <input
+            type="text"
+            id="Telephone"
+            name="telephone"
+            value={formData.telephone}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+          />
+        </div>
+
         <div>
           <label htmlFor="vendeur" className="block text-sm font-medium text-gray-700">
             Vendeur
           </label>
-          <div className='flex items-center w-full justify-between relative'>
+          <div className='flex items-center gap-3 w-full justify-between relative'>
             <div id='vendeur' onClick={() => setOpening(p => !p)} className='inline py-2 border rounded-lg cursor-pointer w-max max-w-[90%] px-3 overflow-hidden'>
               {formData.vendeurs?.length === 0 || !formData.vendeurs ? "selectionnner des vendeurs" : (
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -135,21 +151,6 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
         </div>
 
         <div>
-          <label htmlFor="Telephone" className="block text-sm font-medium text-gray-700">
-            Telephone
-          </label>
-          <input
-            type="text"
-            id="Telephone"
-            name="telephone"
-            value={formData.telephone}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-          />
-        </div>
-
-        <div>
           <label htmlFor="nif" className="block text-sm font-medium text-gray-700">
             NIF
           </label>
@@ -178,7 +179,7 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
         </div>
       </div>
 
-      <div className="flex flex-nowrap justify-between items-end gap-4">
+      <div className="flex flex-wrap justify-between items-end gap-4">
         <div>
           <label htmlFor="adresse" className="block text-sm font-medium text-gray-700">
             Adresse
@@ -195,7 +196,7 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
         </div>
         <div>
           <label htmlFor="compte" className="block text-sm font-medium text-gray-700">
-            Compte
+          Compte
           </label>
           <input
             type="text"
@@ -209,7 +210,7 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
         </div>
         <div>
           <label htmlFor="credit" className="block text-sm font-medium text-gray-700">
-            Credit
+            Durée de Credit
           </label>
           <input
             type="text"
@@ -223,7 +224,7 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
         </div>
         <div>
           <label htmlFor="livraison" className="block text-sm font-medium text-gray-700">
-            Livraison
+          Durée de livraison
           </label>
           <input
             type="text"
