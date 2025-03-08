@@ -1,0 +1,1066 @@
+openapi: 3.0.0
+info:
+  title: API Exemple
+  description: Une API d'exemple avec Swagger, Bearer Token, Request Body et Response Body
+  version: 1.0.0
+
+servers:
+  - url: http://mandroso-prev-server.onirtech.com
+    description: Serveur Golang
+
+paths:
+  /category:
+    post:
+      tags:
+        - Category
+      summary: Créer un category
+      description: Permet de créer un utilisateur avec un Bearer Token
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "c1"
+                description:
+                  type: string
+                  example: "description1"
+                parentId:
+                  type: string
+                  example: "330200002"
+                  nullable: true
+                defaultPrice:
+                  type: number
+                  example: "20000"
+                  nullable: true
+      responses:
+        "201":
+          description: Utilisateur créé avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: "550e8400-e29b-41d4-a716-446655440000"
+        "400":
+          description: Mauvaise requête (données invalides)
+        "401":
+          description: Non autorisé (Token invalide ou manquant)
+
+    get:
+      tags:
+        - Category
+      summary: get categories
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: get categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: "550e8400-e29b-41d4-a716-446655440000"
+                    name:
+                      type: string
+                      example: "c1"
+                    description:
+                      type: string
+                      example: "description1"
+                      nullable: true
+                    defaultPrice:
+                      type: number
+                      example: 20000
+                      nullable: true
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: "2025-03-08T12:34:56Z"
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      example: "2025-03-08T12:34:56Z"
+        "400":
+          description: Mauvaise requête (données invalides)
+        "401":
+          description: Non autorisé (Token invalide ou manquant)
+  /category/{id}:
+    put:
+      tags:
+        - Category
+      summary: Mettre à jour
+      description: Met à jour les informations existant (nécessite un Bearer Token)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "c1"
+                  nullable: true
+                description:
+                  type: string
+                  example: "description1"
+                  nullable: true
+                parentId:
+                  type: string
+                  example: "330200002"
+                  nullable: true
+                defaultPrice:
+                  type: number
+                  example: "20000"
+                  nullable: true
+      responses:
+        "200":
+          description: Utilisateur mis à jour avec succès
+        "400":
+          description: Mauvaise requête (données invalides)
+        "401":
+          description: Non autorisé (Token invalide ou manquant)
+        "404":
+          description: non trouvé
+    delete:
+      tags:
+        - Category
+      summary: Supprimer un categorie
+      description: Supprime un categorie existant (nécessite un Bearer Token)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: supprimé avec succès
+        "401":
+          description: Non autorisé (Token invalide ou manquant)
+        "404":
+          description: categorie non trouvé
+  /products:
+    get:
+      summary: Récupérer la liste des produits
+      operationId: getProducts
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Liste des produits récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+    post:
+      summary: Ajouter un nouveau produit
+      operationId: addProduct
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "201":
+          description: Produit ajouté avec succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+  /products/{id}:
+    get:
+      summary: Récupérer un produit par ID
+      operationId: getProductById
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Produit trouvé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Produit non trouvé
+
+    put:
+      summary: Modifier un produit existant
+      operationId: updateProduct
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "200":
+          description: Produit mis à jour avec succès
+        "404":
+          description: Produit non trouvé
+
+    delete:
+      summary: Supprimer un produit
+      operationId: deleteProduct
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Produit supprimé avec succès
+        "404":
+          description: Produit non trouvé
+
+  /clients:
+    get:
+      summary: Récupérer la liste des clients
+      operationId: getClients
+      tags:
+        - Clients
+      responses:
+        "200":
+          description: Liste des clients récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Client"
+    post:
+      summary: Ajouter un nouveau client
+      operationId: addClient
+      tags:
+        - Clients
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientInput"
+      responses:
+        "201":
+          description: Client ajouté avec succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Client"
+  /clients/{id}:
+    get:
+      summary: Récupérer un client par ID
+      operationId: getClientById
+      tags:
+        - Clients
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Client trouvé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Client"
+        "404":
+          description: Client non trouvé
+
+    put:
+      summary: Modifier un client existant
+      operationId: updateClient
+      tags:
+        - Clients
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientInput"
+      responses:
+        "200":
+          description: Client mis à jour avec succès
+        "404":
+          description: Client non trouvé
+
+    delete:
+      summary: Supprimer un client
+      operationId: deleteClient
+      tags:
+        - Clients
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Client supprimé avec succès
+        "404":
+          description: Client non trouvé
+
+  /carts:
+    get:
+      tags:
+        - Panier
+      summary: Récupérer tous les paniers
+      operationId: getCarts
+      responses:
+        "200":
+          description: Liste des paniers récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cart"
+    post:
+      tags:
+        - Panier
+      summary: Ajouter un panier
+      operationId: addCart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CartFormData"
+      responses:
+        "201":
+          description: Panier créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+  /carts/{id}:
+    get:
+      tags:
+        - Panier
+      summary: Récupérer un panier par ID
+      operationId: getCartById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Panier récupéré avec succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+    put:
+      tags:
+        - Panier
+      summary: Modifier un panier
+      operationId: editCart
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CartFormData"
+      responses:
+        "200":
+          description: Panier mis à jour avec succès
+    delete:
+      tags:
+        - Panier
+      summary: Supprimer un panier
+      operationId: deleteCart
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Panier supprimé avec succès
+  /carts/{id}/delivery:
+    patch:
+      tags:
+        - Panier
+      summary: Marquer un panier comme livré
+      operationId: markAsDelivered
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Panier marqué comme livré
+  /carts/{id}/fact:
+    patch:
+      tags:
+        - Panier
+      summary: Marquer un panier comme facturé
+      operationId: markAsFactured
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Panier marqué comme facturé
+  /factures:
+    get:
+      tags:
+        - Facture
+      summary: Récupérer toutes les factures
+      responses:
+        "200":
+          description: Liste des factures
+    post:
+      tags:
+        - Facture
+      summary: Ajouter une facture
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cartId:
+                  type: string
+      responses:
+        "201":
+          description: Facture ajoutée
+
+  /factures/{id}/status:
+    put:
+      tags:
+        - Facture
+      summary: Modifier le statut d'une facture
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [paye, non paye]
+      responses:
+        "200":
+          description: Statut mis à jour
+  /livraisons:
+    get:
+      summary: Récupérer toutes les livraisons
+      description: Récupère la liste de toutes les livraisons en cours.
+      tags:
+        - "Bon de livraison"
+      responses:
+        "200":
+          description: Liste des livraisons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Livraison"
+        "500":
+          description: Erreur serveur interne
+
+    post:
+      summary: Créer une nouvelle livraison
+      description: Permet de créer une nouvelle livraison.
+      tags:
+        - "Bon de livraison"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Livraison"
+      responses:
+        "201":
+          description: Livraison créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Livraison"
+        "400":
+          description: Données invalides
+
+  /livraisons/{id}:
+    get:
+      summary: Récupérer une livraison par son ID
+      description: Récupère une livraison spécifique à partir de son ID.
+      tags:
+        - "Bon de livraison"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID de la livraison à récupérer
+      responses:
+        "200":
+          description: Détails de la livraison
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Livraison"
+        "404":
+          description: Livraison non trouvée
+        "500":
+          description: Erreur serveur interne
+
+    put:
+      summary: Mettre à jour une livraison
+      description: Permet de mettre à jour les informations d'une livraison existante.
+      tags:
+        - "Bon de livraison"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID de la livraison à mettre à jour
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Livraison"
+      responses:
+        "200":
+          description: Livraison mise à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Livraison"
+        "400":
+          description: Données invalides
+        "404":
+          description: Livraison non trouvée
+
+    delete:
+      summary: Supprimer une livraison
+      description: Permet de supprimer une livraison à partir de son ID.
+      tags:
+        - "Bon de livraison"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID de la livraison à supprimer
+      responses:
+        "204":
+          description: Livraison supprimée avec succès
+        "404":
+          description: Livraison non trouvée
+  /entrepots:
+    get:
+      summary: Récupérer tous les entrepôts
+      description: Récupère la liste de tous les entrepôts.
+      tags:
+        - "Entrepot"
+      responses:
+        "200":
+          description: Liste des entrepôts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Entrepot"
+
+    post:
+      summary: Ajouter un nouvel entrepôt
+      description: Crée un nouvel entrepôt.
+      tags:
+        - "Entrepot"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Entrepot"
+      responses:
+        "201":
+          description: Entrepôt créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Entrepot"
+
+  /entrepots/{id}:
+    get:
+      summary: Récupérer un entrepôt par ID
+      description: Récupère un entrepôt spécifique à partir de son ID.
+      tags:
+        - "Entrepot"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID de l'entrepôt
+      responses:
+        "200":
+          description: Détails de l'entrepôt
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Entrepot"
+        "404":
+          description: Entrepôt non trouvé
+
+    put:
+      summary: Mettre à jour un entrepôt
+      description: Met à jour les informations d'un entrepôt existant.
+      tags:
+        - "Entrepot"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID de l'entrepôt à mettre à jour
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Entrepot"
+      responses:
+        "200":
+          description: Entrepôt mis à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Entrepot"
+        "404":
+          description: Entrepôt non trouvé
+
+    delete:
+      summary: Supprimer un entrepôt
+      description: Supprime un entrepôt à partir de son ID.
+      tags:
+        - "Entrepot"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID de l'entrepôt à supprimer
+      responses:
+        "204":
+          description: Entrepôt supprimé avec succès
+        "404":
+          description: Entrepôt non trouvé
+
+  /entrepots/{id}/places:
+    post:
+      summary: Ajouter un emplacement à un entrepôt
+      description: Permet d'ajouter un emplacement à un entrepôt.
+      tags:
+        - "Entrepot"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID de l'entrepôt auquel l'emplacement doit être ajouté
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                place:
+                  type: string
+                  description: L'emplacement à ajouter
+      responses:
+        "200":
+          description: Emplacement ajouté avec succès
+        "404":
+          description: Entrepôt non trouvé
+
+  /entrepots/{id}/produits:
+    post:
+      summary: Ajouter des produits à un entrepôt
+      description: Permet d'ajouter des produits à un entrepôt.
+      tags:
+        - "Produit"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID de l'entrepôt auquel les produits doivent être ajoutés
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Product"
+      responses:
+        "200":
+          description: Produits ajoutés avec succès
+        "404":
+          description: Entrepôt non trouvé
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Product:
+      type: object
+      required:
+        - id
+        - reference
+        - name
+        - category
+        - brand
+        - description
+        - quantity
+        - dimensions
+        - weight
+        - color
+        - materials
+        - volume
+        - condition
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        reference:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+        brand:
+          type: string
+        description:
+          type: string
+        quantity:
+          type: integer
+        dimensions:
+          type: string
+        weight:
+          type: number
+        color:
+          type: string
+        materials:
+          type: array
+          items:
+            type: string
+        price:
+          type: number
+          nullable: true
+        volume:
+          type: number
+        local:
+          type: array
+          items:
+            type: string
+          nullable: true
+        condition:
+          type: string
+          enum: [neuf, usagé, reconditionné]
+        images:
+          type: array
+          items:
+            type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ProductInput:
+      type: object
+      required:
+        - reference
+        - name
+        - category
+        - brand
+        - description
+        - quantity
+        - dimensions
+        - weight
+        - color
+        - materials
+        - volume
+        - condition
+      properties:
+        reference:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+        brand:
+          type: string
+        description:
+          type: string
+        quantity:
+          type: integer
+        dimensions:
+          type: string
+        weight:
+          type: number
+        color:
+          type: string
+        materials:
+          type: array
+          items:
+            type: string
+        price:
+          type: number
+          nullable: true
+        volume:
+          type: number
+        local:
+          type: array
+          items:
+            type: string
+          nullable: true
+        condition:
+          type: string
+          enum: [neuf, usagé, reconditionné]
+        images:
+          type: array
+          items:
+            type: string
+          nullable: true
+    Client:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        contact:
+          type: string
+          nullable: true
+        nif:
+          type: string
+          nullable: true
+        stat:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+
+    ClientInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        contact:
+          type: string
+          nullable: true
+        nif:
+          type: string
+          nullable: true
+        stat:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+    Cart:
+      type: object
+      properties:
+        id:
+          type: string
+        reference:
+          type: string
+        clientId:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartItem"
+        status:
+          type: string
+          enum: [pending, completed, cancelled]
+        totalAmount:
+          type: number
+        createdAt:
+          type: string
+        isDelivery:
+          type: boolean
+        isFacture:
+          type: boolean
+    CartFormData:
+      type: object
+      properties:
+        reference:
+          type: string
+        clientId:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartItem"
+        status:
+          type: string
+          enum: [pending, completed, cancelled]
+        isDelivery:
+          type: boolean
+        isFacture:
+          type: boolean
+    CartItem:
+      type: object
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
+        unitPrice:
+          type: number
+    Livraison:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant unique de la livraison
+        statut:
+          type: string
+          description: Statut actuel de la livraison -> En attente ou En cours ou Livré
+          enum:
+            - En attente
+            - En cours
+            - Livré
+        adresse:
+          type: string
+          description: Adresse de livraison
+        dateLivraison:
+          type: string
+          format: date
+          description: Date estimée de livraison
+        dateCreation:
+          type: string
+          format: date-time
+          description: Date de création de la livraison
+        dateMiseAJour:
+          type: string
+          format: date-time
+          description: Dernière date de mise à jour de la livraison
+    Entrepot:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant unique de l'entrepôt
+        adress:
+          type: string
+          description: Adresse de l'entrepôt
+        places:
+          type: array
+          items:
+            type: string
+          description: Liste des emplacements dans l'entrepôt
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+          description: Liste des produits dans l'entrepôt
