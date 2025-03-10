@@ -9,6 +9,29 @@ servers:
     description: Serveur Golang
 
 paths:
+
+  /user/auth:
+    get:
+      tags:
+        - User
+      summary: auth user
+      description: Permet d'authentifier un utilisateur avec un Bearer Token
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Utilisateur authentifiée avec succès
+          content:
+            application/json:
+              schema:
+                schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Mauvaise requête (données invalides)
+        "401":
+          description: Non autorisé (Token invalide ou manquant)
+
+
   /category:
     post:
       tags:
