@@ -1,6 +1,4 @@
-import { Pencil, Trash2 } from 'lucide-react';
 import { TableCommande } from '../../../store/useTableCommandeStore';
-import { useProductStore } from '../../../store/useProductStore';
 import TableCommandeItem from './TableCommandeItem';
 
 interface Props {

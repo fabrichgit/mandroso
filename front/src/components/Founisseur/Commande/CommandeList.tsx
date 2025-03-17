@@ -1,6 +1,5 @@
 import { Pencil, Trash2 } from 'lucide-react';
 import { Commande } from '../../../store/useCommandeStore';
-import { useProductStore } from '../../../store/useProductStore';
 
 interface Props {
     commande: Commande[];
@@ -9,7 +8,7 @@ interface Props {
 }
 
 export function CommandeList({ commande, onEdit, onDelete }: Props) {
-    const products = useProductStore((state) => state.products);
+    // const products = useProductStore((state) => state.products);
 
     if (commande.length === 0) {
         return (

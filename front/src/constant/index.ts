@@ -1,2 +1,2 @@
-export const api = () => localStorage.getItem('api') || "http://localhost:2005"
+export const api = () => localStorage.getItem('api') || "https://api-mandroso.onirtech.com"
 export const token = () => `Bearer ${localStorage.getItem('token')}`

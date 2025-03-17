@@ -10,7 +10,7 @@ interface CategoryFormProps {
 }
 
 export function CategoryForm({ onSubmit, onCancel, categories, initialCategory }: CategoryFormProps) {
-    const [formData, setFormData] = useState<Omit<Category, 'id' | 'createdAt' | 'updatedAt'>>({
+    const [formData, setFormData] = useState<Omit<Category, '_id' | 'createdAt' | 'updatedAt'>>({
         name: initialCategory?.name ?? '',
         description: initialCategory?.description ?? '',
         parentId: initialCategory?.parentId ?? null,
@@ -63,9 +63,9 @@ export function CategoryForm({ onSubmit, onCancel, categories, initialCategory }
                 >
                     <option value="">Aucune (catégorie principale)</option>
                     {categories
-                        .filter(cat => cat.id !== initialCategory?.id)
+                        .filter(cat => cat._id !== initialCategory?._id)
                         .map(category => (
-                            <option key={category.id} value={category.id}>
+                            <option key={category._id} value={category._id}>
                                 {category.name}
                             </option>
                         ))}

@@ -10,12 +10,13 @@ interface CategoryListProps {
 }
 
 export function CategoryList({ categories, onEdit, onDelete, setIsCategoryFormOpen }: CategoryListProps) {
+
   const getCategoryHierarchy = (categoryId: string | null): Category[] => {
     const result: Category[] = [];
     let currentId = categoryId;
 
     while (currentId) {
-      const category = categories.find(c => c.id === currentId);
+      const category = categories.find(c => c._id === currentId);
       if (category) {
         result.unshift(category);
         currentId = category.parentId ?? null;
@@ -32,10 +33,12 @@ export function CategoryList({ categories, onEdit, onDelete, setIsCategoryFormOp
   };
 
   const renderCategory = (category: Category) => {
-    const children = getChildCategories(category.id);
+    const children = getChildCategories(category._id || "");
+
+    console.log(category);
 
     return (
-      <div key={category.id} className="border rounded-lg p-4 space-y-2">
+      <div key={category._id} className="border rounded-lg p-4 space-y-2">
         <div className="flex items-start justify-between">
           <div>
             <div className='flex items-center gap-6'>
@@ -66,7 +69,7 @@ export function CategoryList({ categories, onEdit, onDelete, setIsCategoryFormOp
             <button
               onClick={() => {
                 if (children.length === 0 && confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')) {
-                  onDelete(category.id);
+                  onDelete(category._id || "");
                 } else if (children.length > 0) {
                   alert('Impossible de supprimer une catégorie qui contient des sous-catégories.');
                 }
@@ -87,11 +90,14 @@ export function CategoryList({ categories, onEdit, onDelete, setIsCategoryFormOp
     );
   };
 
-  const rootCategories = categories.filter(category => !category.parentId);
+  const rootCategories = categories?.filter(category => category.parentId === "null" || category.parentId === "" || !category.parentId);
+
+  console.log('root', rootCategories);
+  
 
   return (
     <div className="space-y-4">
-      {rootCategories.map(category => renderCategory(category))}
+      {rootCategories?.map(category => renderCategory(category))}
       {categories.length === 0 && (
         <div className="flex flex-col gap-5 items-center text-center py-12">
           <p className="text-center text-gray-500">

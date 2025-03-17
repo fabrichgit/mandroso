@@ -94,11 +94,11 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
 
     const getCategoryHierarchy = (categoryId: string): string => {
         const result: string[] = [];
-        let currentCategory = categories.find(c => c.id === categoryId);
+        let currentCategory = categories.find(c => c._id === categoryId);
 
         while (currentCategory) {
             result.unshift(currentCategory.name);
-            currentCategory = currentCategory.parentId ? categories.find(c => c.id === currentCategory?.parentId) : undefined;
+            currentCategory = currentCategory.parentId ? categories.find(c => c._id === currentCategory?.parentId) : undefined;
         }
 
         return result.join(' > ');
@@ -152,8 +152,8 @@ export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: 
                         >
                             <option value="">Sélectionnez une catégorie</option>
                             {categories.map(category => (
-                                <option key={category.id} value={category.id}>
-                                    {getCategoryHierarchy(category.id)}
+                                <option key={category._id} value={category._id}>
+                                    {getCategoryHierarchy(category._id || "")}
                                 </option>
                             ))}
                         </select>

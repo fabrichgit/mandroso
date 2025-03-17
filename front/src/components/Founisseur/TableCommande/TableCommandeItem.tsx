@@ -1,15 +1,13 @@
 import { MinusCircle, Pencil, Trash2 } from "lucide-react"
 import { TableCommande } from "../../../store/useTableCommandeStore"
-import { useState } from "react"
 import { TbBorderBottomPlus } from "react-icons/tb";
-import { Commande, useCommandeStore } from "../../../store/useCommandeStore";
 
 function TableCommandeItem({ cart, onDelete, onEdit, selectedTable, setSelectedTable }: {
     cart: TableCommande, selectedTable: TableCommande[];
     setSelectedTable: React.Dispatch<React.SetStateAction<TableCommande[]>>, onEdit: (cmd: TableCommande) => void, onDelete: (id: string) => void
 }) {
 
-    const add = useCommandeStore.getState().add;
+    // const add = useCommandeStore.getState().add;
     const onCommande = !!!selectedTable.find(s => s.id === cart.id)
     // const [formData, setFormData] = useState<Commande>({
     //     id: Date.now().toString(),

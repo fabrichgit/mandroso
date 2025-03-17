@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FolderTree, Maximize, Plus } from 'lucide-react';
 import type { Product } from '../../../../types/product';
 import type { Category } from '../../../../types/category';
@@ -21,13 +21,24 @@ import { useCartStore } from '../../../../store/useCartStore';
 import ClientDropdown from '../../../../components/Client/ClientDropdown';
 import { useClientStore } from '../../../../store/useClientStore';
 import { useNavigate } from 'react-router-dom';
+import { useCategory } from '../../../../hook/data';
+import axios from 'axios';
+import { api, token } from '../../../../constant';
+import toast from 'react-hot-toast';
 
 function ProductDash() {
 
   const { products, setProducts } = useProductStore()
   const { tab: view, setTab: setView } = useStorage<"table" | "cards">("table", 'view-product');
 
+  const { data: cat, reFetch } = useCategory()
   const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    setCategories(cat?.map(c => ({ ...c, _id: c._id })) || [])
+  }, [cat])
+  
+
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
   const [isCategoryFormOpen, setIsCategoryFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -119,15 +130,22 @@ function ProductDash() {
     }
   };
 
-  const handleCreateCategory = (categoryData: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleCreateCategory = async (categoryData: Omit<Category, 'id' | '_id' | 'createdAt' | 'updatedAt'>) => {
     const newCategory: Category = {
       ...categoryData,
-      id: crypto.randomUUID(),
       createdAt: new Date(),
       updatedAt: new Date(),
-    };
-    setCategories([...categories, newCategory]);
-    setIsCategoryFormOpen(false);
+    };+
+    // setCategories([...categories, newCategory]);
+    await axios.post(`${api()}/products/categories`, newCategory, {
+      headers: {
+        Authorization: "Bearer " + token()
+      }
+    }).then(() => {
+      setIsCategoryFormOpen(false);
+      reFetch()
+    })
+    .catch((err) => toast.error(err?.response))
   };
 
   const handleUpdateCategory = (categoryData: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>) => {
@@ -135,12 +153,12 @@ function ProductDash() {
 
     const updatedCategory: Category = {
       ...categoryData,
-      id: editingCategory.id,
+      _id: editingCategory._id,
       createdAt: editingCategory.createdAt,
       updatedAt: new Date(),
     };
 
-    setCategories(categories.map(c => c.id === editingCategory.id ? updatedCategory : c));
+    setCategories(categories.map(c => c._id === editingCategory._id ? updatedCategory : c));
     setEditingCategory(null);
   };
 
@@ -150,7 +168,7 @@ function ProductDash() {
       alert('Impossible de supprimer une catégorie qui contient des produits.');
       return;
     }
-    setCategories(categories.filter(c => c.id !== id));
+    setCategories(categories.filter(c => c._id !== id));
   };
 
   return (
@@ -387,7 +405,7 @@ function ProductDash() {
                               <ProductCard
                                 key={product.id}
                                 product={product}
-                                categorie={categories?.find(cg => cg.id === product.category)?.name}
+                                categorie={categories?.find(cg => cg._id === product.category)?.name}
                                 onEdit={setEditingProduct}
                                 onDelete={handleDeleteProduct}
                                 oncartin={oncartin}

@@ -4,12 +4,12 @@ import { useState } from "react";
 import ModalImages from "./ModalImages";
 import { ProductCardProps } from "./ProductCard";
 import { useDeliveryStore } from "../../store/useDeliveryStore";
-import { useCommandeStore } from "../../store/useCommandeStore";
 import { useEntrepot } from "../../store/useEntrepot";
+import { Category } from "../../types/category";
 
 interface Props {
   products: Product[];
-  categories: { id: string; name: string }[];
+  categories: Category[];
   onEdit: (product: Product) => void;
   onDelete: (id: string) => void;
   oncartin: boolean;
@@ -47,7 +47,7 @@ export default function TableProductList({ products, categories, onEdit, onDelet
               see && product.images ? <ModalImages images={product.images} onClose={() => setSee(false)} /> :
                 <ProductElement
                   product={product}
-                  categorie={categories?.find(cg => cg.id === product.category)?.name}
+                  categorie={categories?.find(cg => cg._id === product.category)?.name}
                   onEdit={onEdit}
                   onDelete={onDelete}
                   oncartin={oncartin}

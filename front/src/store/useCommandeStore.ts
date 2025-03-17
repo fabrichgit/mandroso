@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { TableCommande } from './useTableCommandeStore';
 import { Fournisseur } from '../types/fournisseur';
 
 export type Commande = {
@@ -53,9 +52,9 @@ export const useCommandeStore = create<CommandeStore>((set) => ({
   reset() {
     set({ commande: [] })
   },
-  addMultiple(tables) {
+  // addMultiple(tables) {
 
-  },
+  // },
   // countProductInCommandes: (productId) => {
   //   return get().commande.reduce((count, cmd) => {
   //     return count + cmd.table..reduce((sum, item) => item.productId === productId ? sum + item.quantity : sum, 0);

@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import useHandleSession from "../hook/useLogout";
-import { Auth, login } from "../api/auth";
+import { Auth } from "../api/auth";
 import toast from "react-hot-toast";
+import { userService } from "../api/user.service.api";
 
 function Login() {
   useHandleSession();
@@ -15,9 +16,10 @@ function Login() {
       password: String(form.get("password")).trim(),
     };
 
-    await login(data)
-      .then(({ Token }: { Token: string }) => {
-        localStorage.setItem("token", Token);
+    // await login(data)
+    await userService.authenticate({login: data.name, password: data.password})
+      .then(({data: {token}}) => {
+        localStorage.setItem("token", token);
         nav("/");
       })
       .catch(() => toast.error("Auth error"));

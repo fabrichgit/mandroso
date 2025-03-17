@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Save, MinusCircle, PlusCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plus, Save } from 'lucide-react';
 import { useFournisseurStore } from '../../../store/useFournisseurStore';
-import { useProductStore } from '../../../store/useProductStore';
 import { Commande } from '../../../store/useCommandeStore';
 import { TableCommande } from '../../../store/useTableCommandeStore';
 
@@ -11,9 +10,9 @@ interface Props {
     isEditing?: boolean;
 }
 
-export function CommandeForm({ onSubmit, initialData, isEditing = false }: Props) {
+export function CommandeForm({ onSubmit, isEditing = false }: Props) {
     const { fournisseur } = useFournisseurStore();
-    const products = useProductStore((state) => state.products);
+    // const products = useProductStore((state) => state.products);
 
     const [formData, setFormData] = useState<{
         createdAt: string;

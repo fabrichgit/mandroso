@@ -769,7 +769,7 @@ paths:
       summary: Ajouter des produits à un entrepôt
       description: Permet d'ajouter des produits à un entrepôt.
       tags:
-        - "Produit"
+        - "Products"
       parameters:
         - in: path
           name: id
