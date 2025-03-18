@@ -12,7 +12,7 @@ interface ProductFormProps {
     reFetchPr: () => void
 }
 
-export function ProductForm({ onSubmit, onCancel, initialProduct, categories, reFetchPr: reFetch }: ProductFormProps) {
+export function ProductForm({ onSubmit, onCancel, initialProduct, categories }: ProductFormProps) {
     const [formData, setFormData] = useState<Omit<Product, "id" | "createdAt" | "updatedAt">>({
         reference: initialProduct?.reference ?? Date.now().toString(),
         name: initialProduct?.name ?? '',

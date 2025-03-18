@@ -119,17 +119,20 @@ function ProductDash() {
     // setProducts([...products, newProduct]);
   };
 
-  const handleUpdateProduct = (productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleUpdateProduct = async (productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
     if (!editingProduct) return;
 
+    // @ts-ignore
     const updatedProduct: Product = {
       ...productData,
-      _id: editingProduct._id,
-      createdAt: editingProduct.createdAt,
-      updatedAt: new Date(),
     };
 
-    setProducts(products.map(p => p._id! === editingProduct._id ? updatedProduct : p));
+    // @ts-ignore
+    await productServiceApi.update(editingProduct._id, updatedProduct)
+    .then(reFetchPr)
+    .catch(() => toast.error('something wrong'))
+    .finally(() => setIsProductFormOpen(false))
+    // setProducts(products.map(p => p._id! === editingProduct._id ? updatedProduct : p));
     setEditingProduct(null);
   };
 

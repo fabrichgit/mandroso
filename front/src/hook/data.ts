@@ -66,7 +66,7 @@ export const useCategory = () => useFetch<Category[]>(api()+'/products/categorie
 
 
 
-export const useClients = () => useFetch<Client[]>(api()+'/clients', {
+export const useClients = () => useFetch<Client[]>(api()+'/clients/', {
     headers: {
         "Authorization": `Bearer ${token()}`
     }

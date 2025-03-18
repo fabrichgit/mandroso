@@ -5,14 +5,27 @@ import { ClientModal } from '../../../../components/Client/ClientModal';
 import { useClientStore } from '../../../../store/useClientStore';
 import { useEffect } from 'react';
 import { useClients } from '../../../../hook/data';
+import axios from 'axios';
+import { api, token } from '../../../../constant';
+import { ClientFormData } from '../../../../types/client';
 
 function ClientDash() {
-  const {data} = useClients()
+  const {data, reFetch} = useClients()
   const { clients, setClients, editingClient, setEditingClient } = useClientStore();
 
   useEffect(() => {
     setClients(data)
   }, [data])
+
+  const create = async (data: ClientFormData) =>{
+    await axios.post(api()+"/clients/", data, {
+      headers: {
+        Authorization: token()
+      }
+    })
+    .then(reFetch)
+    .catch(() => alert("something wrong !"))
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -26,13 +39,13 @@ function ClientDash() {
               </h1>
             </div>
             <div className="text-sm text-gray-500">
-              Total clients: {clients.length}
+              Total clients: {clients?.length}
             </div>
           </div>
 
           <div className="space-y-8">
             <ClientForm
-              onSubmit={useClientStore.getState().addClient}
+              onSubmit={create}
               isEditing={false}
             />
 

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { api } from '../constant';
 
-const API_URL = api()+"/products/"
+const API_URL = api()+"/products"
 
 export interface Product {
   _id?: string;
@@ -12,7 +12,7 @@ export interface Product {
 
 export class ProductsService {
   async getAll(): Promise<Product[]> {
-    const response = await axios.get<Product[]>(API_URL);
+    const response = await axios.get<Product[]>(API_URL+'/');
     return response.data;
   }
 
@@ -22,7 +22,7 @@ export class ProductsService {
   }
 
   async create(product: Product): Promise<Product> {
-    const response = await axios.post<Product>(API_URL, product);
+    const response = await axios.post<Product>(API_URL+'/', product);
     return response.data;
   }
 

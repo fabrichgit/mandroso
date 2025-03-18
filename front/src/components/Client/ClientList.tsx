@@ -8,7 +8,7 @@ interface ClientListProps {
 }
 
 export function ClientList({ clients, onEdit, onDelete }: ClientListProps) {
-  if (clients.length === 0) {
+  if (clients?.length === 0) {
     return (
       <div className="text-center py-8 bg-white rounded-lg shadow-sm">
         <p className="text-gray-500">Aucun client enregistré</p>
