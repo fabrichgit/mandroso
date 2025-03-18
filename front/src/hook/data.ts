@@ -2,6 +2,7 @@ import { create } from "zustand"
 import useFetch from "http-react"
 import { api, token } from "../constant"
 import { Category } from "../types/category"
+import { Client } from "../types/client"
 
 export function useData_operations() {
 
@@ -58,6 +59,14 @@ export const useData_roles = create<{data: {id:string, label: string, operations
 }))
 
 export const useCategory = () => useFetch<Category[]>(api()+'/products/categories', {
+    headers: {
+        "Authorization": `Bearer ${token()}`
+    }
+})
+
+
+
+export const useClients = () => useFetch<Client[]>(api()+'/clients', {
     headers: {
         "Authorization": `Bearer ${token()}`
     }

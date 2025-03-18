@@ -3,6 +3,7 @@ import { Client, ClientFormData } from '../types/client';
 
 interface ClientStore {
   clients: Client[];
+  setClients: (clients: Client[]) => void;
   editingClient: Client | null;
   addClient: (clientData: ClientFormData) => Client;
   editClient: (clientData: ClientFormData) => void;
@@ -45,5 +46,8 @@ export const useClientStore = create<ClientStore>((set, prev) => ({
   },
   getById(id) {
     return prev().clients.find(c => c.id === id)
+  },
+  setClients(clients) {
+    set({ clients });
   },
 }));

@@ -3,9 +3,16 @@ import { ClientForm } from '../../../../components/Client/ClientForm';
 import { ClientList } from '../../../../components/Client/ClientList';
 import { ClientModal } from '../../../../components/Client/ClientModal';
 import { useClientStore } from '../../../../store/useClientStore';
+import { useEffect } from 'react';
+import { useClients } from '../../../../hook/data';
 
 function ClientDash() {
-  const { clients, editingClient, setEditingClient } = useClientStore();
+  const {data} = useClients()
+  const { clients, setClients, editingClient, setEditingClient } = useClientStore();
+
+  useEffect(() => {
+    setClients(data)
+  }, [data])
 
   return (
     <div className="min-h-screen bg-gray-100">

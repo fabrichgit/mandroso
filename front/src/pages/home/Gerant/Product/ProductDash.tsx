@@ -11,7 +11,7 @@ import FloatingActionButton from '../../../../components/Product/FloatingActionB
 import resize from '../../../../utils/maximise';
 import { HiOutlineViewGridAdd } from 'react-icons/hi';
 import { MdOutlineDashboard, MdOutlineProductionQuantityLimits } from "react-icons/md";
-import { useProductStore } from '../../../../store/useProductStore';
+import { useFetchProducts, useProductStore } from '../../../../store/useProductStore';
 import useStorage from '../../../../hook/useStorage';
 import TableProductList from '../../../../components/Product/TableProductList';
 import { reactiveClass } from '../../../../utils/class';
@@ -25,9 +25,11 @@ import { useCategory } from '../../../../hook/data';
 import axios from 'axios';
 import { api, token } from '../../../../constant';
 import toast from 'react-hot-toast';
+import productServiceApi from '../../../../api/product.service.api';
 
 function ProductDash() {
 
+  const {data: pr, reFetch: reFetchPr} = useFetchProducts()
   const { products, setProducts } = useProductStore()
   const { tab: view, setTab: setView } = useStorage<"table" | "cards">("table", 'view-product');
 
@@ -37,6 +39,10 @@ function ProductDash() {
   useEffect(() => {
     setCategories(cat?.map(c => ({ ...c, _id: c._id })) || [])
   }, [cat])
+
+  useEffect(() => {
+    setProducts(pr)
+  }, [pr])
   
 
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
@@ -69,7 +75,7 @@ function ProductDash() {
     setFormData(prev => ({
       ...prev,
       reference: Date.now().toString(),
-      items: [...prev.items, { productId: product.id, quantity: 1, unitPrice: product.price || 0 }]
+      items: [...prev.items, { productId: product._id!, quantity: 1, unitPrice: product.price || 0 }]
     }));
   };
 
@@ -89,7 +95,7 @@ function ProductDash() {
             return {
               ...item,
               [field]: value,
-              unitPrice: products.find(p => p.id === value)?.price || 0
+              unitPrice: products.find(p => p._id === value)?.price || 0
             };
           }
           return { ...item, [field]: value };
@@ -99,15 +105,18 @@ function ProductDash() {
     }));
   };
 
-  const handleCreateProduct = (productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleCreateProduct = async (productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
     const newProduct: Product = {
       ...productData,
-      id: crypto.randomUUID(),
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    setProducts([...products, newProduct]);
-    setIsProductFormOpen(false);
+    // @ts-ignore
+    await productServiceApi.create(newProduct)
+    .then(reFetchPr)
+    .catch(() => toast.error('something wrong'))
+    .finally(() => setIsProductFormOpen(false))
+    // setProducts([...products, newProduct]);
   };
 
   const handleUpdateProduct = (productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
@@ -115,18 +124,18 @@ function ProductDash() {
 
     const updatedProduct: Product = {
       ...productData,
-      id: editingProduct.id,
+      _id: editingProduct._id,
       createdAt: editingProduct.createdAt,
       updatedAt: new Date(),
     };
 
-    setProducts(products.map(p => p.id === editingProduct.id ? updatedProduct : p));
+    setProducts(products.map(p => p._id! === editingProduct._id ? updatedProduct : p));
     setEditingProduct(null);
   };
 
   const handleDeleteProduct = (id: string) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
-      setProducts(products.filter(p => p.id !== id));
+      setProducts(products.filter(p => p._id !== id));
     }
   };
 
@@ -260,6 +269,7 @@ function ProductDash() {
                   {editingProduct ? 'Modifier le produit' : 'Ajouter un nouveau produit'}
                 </h2>
                 <ProductForm
+                  reFetchPr={reFetchPr}
                   onSubmit={editingProduct ? handleUpdateProduct : handleCreateProduct}
                   onCancel={() => {
                     setIsProductFormOpen(false);
@@ -312,7 +322,7 @@ function ProductDash() {
                     {
                       formData.items.map((item) => (
                         <div key={item.productId} className="flex justify-between items-center p-2 border-b">
-                          <span>{products.find(p => p.id === item.productId)?.name} x{item.quantity}</span>
+                          <span>{products.find(p => p._id === item.productId)?.name} x{item.quantity}</span>
                           <span>{item.unitPrice * item.quantity} ar</span>
                         </div>
                       ))
@@ -403,7 +413,7 @@ function ProductDash() {
                           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                             {products?.map(product => (
                               <ProductCard
-                                key={product.id}
+                                key={product._id}
                                 product={product}
                                 categorie={categories?.find(cg => cg._id === product.category)?.name}
                                 onEdit={setEditingProduct}
@@ -427,7 +437,7 @@ function ProductDash() {
                           />
                       }
 
-                      {products.length === 0 && (
+                      {products?.length === 0 && (
                         <div className="flex flex-col gap-5 items-center text-center py-12">
                           <p className="text-gray-500">
                             Aucun produit pour le moment.

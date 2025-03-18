@@ -43,7 +43,7 @@ export default function TableProductList({ products, categories, onEdit, onDelet
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {products.map((product) => (
+            {products?.map((product) => (
               see && product.images ? <ModalImages images={product.images} onClose={() => setSee(false)} /> :
                 <ProductElement
                   product={product}
@@ -92,12 +92,12 @@ function ProductElement({ product, onEdit, onDelete, categorie, oncartin, handle
   const [itCart, setIt] = useState(false)
 
   return (
-    <tr key={product.id} className="hover:bg-gray-50">
+    <tr key={product._id} className="hover:bg-gray-50">
       <td className="px-4 py-3 text-sm text-gray-900">{product.name}</td>
-      <td className="px-4 py-3 text-sm text-gray-600">{countProductQuantity(product.id)}</td>
+      <td className="px-4 py-3 text-sm text-gray-600">{countProductQuantity(product._id!)}</td>
       <td className="px-4 py-3 text-sm text-gray-600">12</td>
-      <td className="px-4 py-3 text-sm text-gray-600">{countProductByDeliveryStatus(product.id, false)}</td>
-      <td className="px-4 py-3 text-sm text-gray-600">{countProductInCommandes(product.id)}</td>
+      <td className="px-4 py-3 text-sm text-gray-600">{countProductByDeliveryStatus(product._id!, false)}</td>
+      <td className="px-4 py-3 text-sm text-gray-600">{countProductInCommandes(product._id)}</td>
       <td className="px-4 py-3 text-sm text-gray-600">{product.price} ar</td>
       <td className="px-4 py-3 text-sm">
         <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getConditionColor(product.condition)}`}>
@@ -144,7 +144,7 @@ function ProductElement({ product, onEdit, onDelete, categorie, oncartin, handle
             :
             <button className='inline w-max h-max' onClick={() => {
               setIt(i => !i);
-              handleRemoveItem(product.id);
+              handleRemoveItem(product._id!);
             }}>
               <Minus className='text-red-500' />
             </button>
@@ -159,7 +159,7 @@ function ProductElement({ product, onEdit, onDelete, categorie, oncartin, handle
                 type="number"
                 name="price"
                 defaultValue={product.price}
-                onChange={(e) => handleItemChange(product.id, 'unitPrice', parseFloat(e.target.value))}
+                onChange={(e) => handleItemChange(product._id!, 'unitPrice', parseFloat(e.target.value))}
                 className="w-full p-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
               />
             </div>
@@ -172,7 +172,7 @@ function ProductElement({ product, onEdit, onDelete, categorie, oncartin, handle
                 name="quantity"
                 defaultValue={1}
                 className="w-full p-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                onChange={(e) => handleItemChange(product.id, 'quantity', parseInt(e.target.value))}
+                onChange={(e) => handleItemChange(product._id!, 'quantity', parseInt(e.target.value))}
               />
             </div>
           </div> : null}
@@ -186,7 +186,7 @@ function ProductElement({ product, onEdit, onDelete, categorie, oncartin, handle
                 <Pencil className="h-4 w-4 mr-1" />
               </button>
               <button
-                onClick={() => onDelete(product.id)}
+                onClick={() => onDelete(product._id!)}
                 className="px-3 py-1.5 border border-transparent rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 flex items-center"
               >
                 <Trash2 className="h-4 w-4 mr-1" />
