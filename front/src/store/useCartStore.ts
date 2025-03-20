@@ -13,6 +13,7 @@ interface CartStore {
   reset?: () => void;
   delivery: (id: string) => void;
   fact: (id: string) => void;
+  setCarts: (carts: Cart[]) => void;
   getById: (id: string) => {
     client: Client | undefined;
     id?: string | undefined;
@@ -46,7 +47,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
     const newCart: Cart = {
       ...cartData,
       items: itemsWithPrices,
-      id: crypto.randomUUID(),
+      _id: crypto.randomUUID(),
       totalAmount,
       createdAt: new Date().toISOString(),
       isDelivery: false,
@@ -78,11 +79,11 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
       return {
         carts: state.carts.map((cart) =>
-          cart.id === state.editingCart?.id
+          cart._id === state.editingCart?._id
             ? {
               ...cartData,
               items: itemsWithPrices,
-              id: cart.id,
+              _id: cart._id,
               totalAmount,
               createdAt: cart.createdAt
             }
@@ -94,7 +95,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
   },
   deleteCart: (id) => {
     set((state) => ({
-      carts: state.carts.filter((cart) => cart.id !== id),
+      carts: state.carts.filter((cart) => cart._id !== id),
     }));
   },
   setEditingCart: (cart) => {
@@ -104,12 +105,15 @@ export const useCartStore = create<CartStore>((set, get) => ({
     set({ carts: [] })
   },
   delivery(id) {
-    set(prev => ({ ...prev, carts: prev.carts.map(ct => ct.id !== id ? ct : { ...ct, isDelivery: true }) }))
+    set(prev => ({ ...prev, carts: prev.carts.map(ct => ct._id !== id ? ct : { ...ct, isDelivery: true }) }))
   },
   fact(id) {
-    set(prev => ({ ...prev, carts: prev.carts.map(ct => ct.id !== id ? ct : { ...ct, isFacture: true }) }))
+    set(prev => ({ ...prev, carts: prev.carts.map(ct => ct._id !== id ? ct : { ...ct, isFacture: true }) }))
   },
   getById(id) {
-    return {...get().carts.find(c => c.id === id), client: useClientStore.getState().getById(get().carts.find(ct => ct.id === id)?.clientId!)}
+    return {...get().carts.find(c => c._id === id), client: useClientStore.getState().getById(get().carts.find(ct => ct._id === id)?.clientId!)}
+  },
+  setCarts(carts) {
+    set(prv => ({...prv, carts}))
   },
 }));

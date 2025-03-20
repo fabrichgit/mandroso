@@ -5,12 +5,31 @@ import { CartList } from "../../../../components/Cart/CartList";
 import { CartModal } from "../../../../components/Cart/CartModal";
 import Delivery from "./Delivery";
 import Facture from "./Facture";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useCart } from "../../../../hook/data";
+import { CartFormData } from "../../../../types/cart";
+import axios from "axios";
+import { api, token } from "../../../../constant";
 
 function Cart() {
 
+    const {data, reFetch} = useCart()
     const [activeTab, setActiveTab] = useState<'cart' | 'delivery' | 'facture'>('cart');
-    const { carts, editingCart, setEditingCart, editCart } = useCartStore();
+    const { carts, editingCart, setEditingCart, editCart, setCarts } = useCartStore();
+
+    useEffect(() => {
+        setCarts(data)
+    }, [data])
+
+    const addCart = async (data: CartFormData) => {
+        await axios.post(api()+"/carts/", data, {
+            headers: {
+                Authorization: token()
+            }
+        })
+        .then(reFetch)
+        .catch(() => alert('something wrong !'))
+    }
 
     return (
         <div className="flex flex-col w-full">
@@ -56,13 +75,13 @@ function Cart() {
                                 </h1>
                             </div>
                             <div className="text-sm text-gray-500">
-                                Total: {carts.length}
+                                Total: {carts?.length}
                             </div>
                         </div>
 
                         <div className="space-y-8">
                             <CartForm
-                                onSubmit={useCartStore.getState().addCart}
+                                onSubmit={addCart}
                                 isEditing={false}
                             />
 

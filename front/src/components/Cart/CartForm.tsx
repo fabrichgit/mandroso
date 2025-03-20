@@ -69,7 +69,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                         return {
                             ...item,
                             [field]: value,
-                            unitPrice: products.find(p => p.id === value)?.price || 0
+                            unitPrice: products.find(p => p._id === value)?.price || 0
                         };
                     }
                     return { ...item, [field]: value };
@@ -120,15 +120,15 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                         >
                             <option value="">Sélectionner un client</option>
                             {clients.map(client => (
-                                <option key={client.id} value={client.id}>
+                                <option key={client._id} value={client._id}>
                                     {client.name}
                                 </option>
                             ))}
                         </select>
                     </div>
                     <ClientDropdown onSubmit={(data) => {
-                        const { id } = useClientStore.getState().addClient(data);
-                        setFormData(prev => ({ ...prev, clientId: id }))
+                        const { _id } = useClientStore.getState().addClient(data);
+                        setFormData(prev => ({ ...prev, clientId: _id! }))
                     }} />
                 </div>
 
@@ -176,8 +176,8 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
                             >
                                 <option value="">Sélectionner un produit</option>
-                                {products.map(product => (
-                                    <option key={product.id} value={product.id}>
+                                {products?.map(product => (
+                                    <option key={product._id} value={product._id}>
                                         {product.name} {product.price ? ` - ${product.price} ar` : null}
                                     </option>
                                 ))}

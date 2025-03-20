@@ -30,11 +30,11 @@ export function EntrepotList() {
     };
 
     // Sélectionner/Désélectionner un produit
-    const toggleProductSelection = (product: { id: string; name: string }) => {
+    const toggleProductSelection = (product: any) => {
         setSelectedProducts((prev) => {
-            const existing = prev.find((p) => p.id === product.id);
+            const existing = prev.find((p) => p.id === product._id);
             if (existing) {
-                return prev.filter((p) => p.id !== product.id);
+                return prev.filter((p) => p.id !== product._id);
             } else {
                 return [...prev, { ...product, quantity: 1, place: '' }];
             }
@@ -141,28 +141,32 @@ export function EntrepotList() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             {availableProducts.map((product) => (
-                                <div key={product.id} className="flex flex-col gap-2 border p-3 rounded-lg">
+                                <div key={product._id} className="flex flex-col gap-2 border p-3 rounded-lg">
                                     <div className="flex items-center gap-3">
                                         <input
                                             type="checkbox"
-                                            checked={selectedProducts.some((p) => p.id === product.id)}
-                                            onChange={() => toggleProductSelection(product)}
+                                            checked={selectedProducts.some((p) => p.id === product._id)}
+                                            // ts-ignore
+                                            onChange={() => {
+                                                // ts-ignore
+                                                toggleProductSelection(product)
+                                            }}
                                         />
                                         <span className="text-sm flex-1">{product.name}</span>
                                     </div>
 
-                                    {selectedProducts.some((p) => p.id === product.id) && (
+                                    {selectedProducts.some((p) => p.id === product._id) && (
                                         <>
                                             <input
                                                 type="number"
-                                                value={selectedProducts.find((p) => p.id === product.id)?.quantity || 1}
-                                                onChange={(e) => updateQuantity(product.id, parseInt(e.target.value))}
+                                                value={selectedProducts.find((p) => p.id === product._id)?.quantity || 1}
+                                                onChange={(e) => updateQuantity(product._id!, parseInt(e.target.value))}
                                                 className="w-full border rounded px-2 py-1 text-sm"
                                                 min="1"
                                             />
                                             <select
-                                                value={selectedProducts.find((p) => p.id === product.id)?.place || ''}
-                                                onChange={(e) => updatePlace(product.id, e.target.value)}
+                                                value={selectedProducts.find((p) => p.id === product._id)?.place || ''}
+                                                onChange={(e) => updatePlace(product._id!, e.target.value)}
                                                 className="w-full border rounded px-2 py-1 text-sm"
                                             >
                                                 <option value="">Sélectionner un emplacement</option>
@@ -222,7 +226,7 @@ export function EntrepotList() {
                             <ul className="list-disc pl-5 text-sm text-gray-600">
                                 {selectedEntrepotDetails.products?.map((product: any) => (
                                     <li key={product.id}>
-                                        {availableProducts.find(p => p.id === product.id)?.name} - Quantité : {product.quantity} - Emplacement : {product.place}
+                                        {availableProducts.find(p => p._id === product.id)?.name} - Quantité : {product.quantity} - Emplacement : {product.place}
                                     </li>
                                 ))}
                             </ul>

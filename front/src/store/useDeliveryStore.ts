@@ -37,7 +37,7 @@ export const useDeliveryStore = create<DeliveryStore>((set, get) => ({
   countProductInDeliveries: (productId) => {
     const cartStore = useCartStore.getState();
     return get().delivery.reduce((count, del) => {
-      const cart = cartStore.carts.find(c => c.id === del.cartId);
+      const cart = cartStore.carts.find(c => c._id === del.cartId);
       if (!cart) return count;
       return count + cart.items.reduce((sum, item) => item.productId === productId ? sum + item.quantity : sum, 0);
     }, 0);
@@ -46,7 +46,7 @@ export const useDeliveryStore = create<DeliveryStore>((set, get) => ({
   countProductByDeliveryStatus: (productId, isDelivery) => {
     const cartStore = useCartStore.getState();
     return get().delivery.reduce((count, del) => {
-      const cart = cartStore.carts.find(c => c.id === del.cartId && c.isDelivery === isDelivery);
+      const cart = cartStore.carts.find(c => c._id === del.cartId && c.isDelivery === isDelivery);
       if (!cart) return count;
       return count + cart.items.reduce((sum, item) => item.productId === productId ? sum + item.quantity : sum, 0);
     }, 0);

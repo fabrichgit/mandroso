@@ -4,28 +4,31 @@ import { MdOutlineDashboard } from "react-icons/md";
 import { reactiveClass } from "../../../../utils/class";
 import useStorage from "../../../../hook/useStorage";
 import { useFactureStore } from "../../../../store/useFactureStore";
-import { useCartStore } from "../../../../store/useCartStore";
-import { useMemo } from "react";
+import { useEffect } from "react";
 import FactureList from "../../../../components/Cart/Facture/FactureList";
+import { useFactures } from "../../../../hook/data";
 
 function Facture() {
-    const { carts, getById: getByIdCart } = useCartStore();
-    const { factures, setStatus } = useFactureStore((state) => ({
-        factures: state.factures,
-        setStatus: state.setStatus,
-    }));
+    const {data, reFetch} = useFactures()
+    // const { carts, getById: getByIdCart } = useCartStore();
+
+    const { factures, setFatures } = useFactureStore();
+
+    useEffect(() => {
+        setFatures(data)
+    }, [data])
 
     const { setTab: setView, tab: view } = useStorage<'cards' | 'table'>('cards', 'fact');
 
-    const factureList = useMemo(() => {
-        return factures.map(fact => ({
-            ...fact,
-            carts: getByIdCart(fact.cartId)
-        }));
-    }, [carts, factures]);
+    // const factureList = useMemo(() => {
+    //     return factures.map(fact => ({
+    //         ...fact,
+    //         carts: getByIdCart(fact.cartId)
+    //     }));
+    // }, [carts, factures]);
 
-    const handleSetStatus = (id: string) => {
-        setStatus(id, "paye");
+    const handleSetStatus = () => {
+        // setStatus(id, "paye");
     };
 
     return (
@@ -53,7 +56,7 @@ function Facture() {
                     </button>
                 </div>
             </div>
-            <FactureList view={view} factureList={factureList} handleSetStatus={handleSetStatus}/>
+            {factures && factures?.length !== 0 ? <FactureList reFetch={reFetch} view={view} factureList={factures} handleSetStatus={handleSetStatus}/> : null}
         </div>
     );
 }

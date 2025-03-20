@@ -6,7 +6,7 @@ export interface CartItem {
 }
 
 export interface Cart {
-    id: string;
+    _id: string;
     reference: string;
     clientId: string;
     items: CartItem[];
@@ -15,6 +15,7 @@ export interface Cart {
     createdAt: string;
     isDelivery?: boolean;
     isFacture?: boolean;
+ 
 }
 
-export type CartFormData = Omit<Cart, 'id' | 'totalAmount' | 'createdAt'>;
+export type CartFormData = Omit<Cart, 'id' | '_id' | 'totalAmount' | 'createdAt'>;

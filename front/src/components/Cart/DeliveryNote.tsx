@@ -13,7 +13,7 @@ export function DeliveryNote({ cart, onClose }: DeliveryNoteProps) {
     const printRef = useRef<HTMLDivElement>(null);
     const clients = useClientStore((state) => state.clients);
     const products = useProductStore((state) => state.products);
-    const client = clients.find(c => c.id === cart.clientId);
+    const client = clients.find(c => c._id === cart.clientId);
 
     const handlePrint = () => {
         const content = printRef.current;
@@ -101,7 +101,7 @@ export function DeliveryNote({ cart, onClose }: DeliveryNoteProps) {
                     </thead>
                     <tbody>
                         {cart.items.map((item, index) => {
-                            const product = products.find(p => p.id === item.productId);
+                            const product = products.find(p => p._id === item.productId);
                             return (
                                 <tr key={index}>
                                     <td>{product?.name}</td>

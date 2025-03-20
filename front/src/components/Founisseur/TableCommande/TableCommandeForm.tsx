@@ -60,18 +60,18 @@ export function TableCommandeForm({ onSubmit, initialData, isEditing = false }: 
                             Produit
                         </label>
                         <select
-                            value={formData.product?.id || ""}
+                            value={formData.product?._id || ""}
                             onChange={(e) => setFormData(prev => ({
                                 ...prev,
-                                product: products?.find(f => f.id.toString() === e.target.value) || null,
-                                price: products?.find(f => f.id.toString() === e.target.value)?.price
+                                product: products?.find(f => f._id!.toString() === e.target.value) || null,
+                                price: products?.find(f => f._id!.toString() === e.target.value)?.price
                             }))}
                             required
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
                         >
                             <option value="">Sélectionner un produit</option>
                             {products.map(product => (
-                                <option key={product.id} value={product.id}>
+                                <option key={product._id} value={product._id}>
                                     {product.name}
                                 </option>
                             ))}

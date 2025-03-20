@@ -17,11 +17,11 @@ import TableProductList from '../../../../components/Product/TableProductList';
 import { reactiveClass } from '../../../../utils/class';
 import { FaCartPlus, FaTable } from 'react-icons/fa';
 import { Cart, CartFormData } from '../../../../types/cart';
-import { useCartStore } from '../../../../store/useCartStore';
+// import { useCartStore } from '../../../../store/useCartStore';
 import ClientDropdown from '../../../../components/Client/ClientDropdown';
 import { useClientStore } from '../../../../store/useClientStore';
 import { useNavigate } from 'react-router-dom';
-import { useCategory } from '../../../../hook/data';
+import { useCart, useCategory } from '../../../../hook/data';
 import axios from 'axios';
 import { api, token } from '../../../../constant';
 import toast from 'react-hot-toast';
@@ -54,6 +54,7 @@ function ProductDash() {
   const nav = useNavigate()
 
   const [oncartin, setOncart] = useState(false);
+  const {reFetch: rC} = useCart()
 
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -66,9 +67,19 @@ function ProductDash() {
 
   const clients = useClientStore((state) => state.clients);
 
-  const addToCart = () => {
-    useCartStore.getState().addCart(formData);
-    nav('/cart')
+  const addToCart = async (e: any) => {
+    e.preventDefault()
+    // useCartStore.getState().addCart(formData);
+    await axios.post(api()+"/carts/", formData, {
+      headers: {
+        Authorization: token()
+      }
+    })
+    .then(() => {
+      rC()
+      nav('/cart')
+    })
+    .catch(() => toast.error('error'))
   };
 
   const handleAddItem = (product: Product) => {
@@ -359,15 +370,15 @@ function ProductDash() {
                           >
                             <option value="">Sélectionner un client</option>
                             {clients.map(client => (
-                              <option key={client.id} value={client.id}>
+                              <option key={client._id} value={client._id}>
                                 {client.name}
                               </option>
                             ))}
                           </select>
                         </div>
                         <ClientDropdown onSubmit={(data) => {
-                          const { id } = useClientStore.getState().addClient(data);
-                          setFormData(prev => ({ ...prev, clientId: id }))
+                          const { _id } = useClientStore.getState().addClient(data);
+                          setFormData(prev => ({ ...prev, clientId: _id! }))
                         }} />
                       </div>
 

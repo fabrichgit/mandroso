@@ -1,5 +1,7 @@
+// ts-ignore
 export interface Client {
-    id: string;
+    // ts-ignore
+    _id?: string;
     name: string;
     contact?: string;
     nif?: string;
@@ -7,4 +9,4 @@ export interface Client {
     type?: string
 }
 
-export type ClientFormData = Omit<Client, 'id'>;
+export type ClientFormData = Omit<Client, '_id'>;

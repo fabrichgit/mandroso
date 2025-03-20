@@ -10,7 +10,7 @@ export default function ClientDropdown({ onSubmit }: { onSubmit?: (data: ClientF
     contact: '',
     nif: '',
     stat: '',
-    type: ''
+    type: '',
   });
 
   const handleSubmit = () => {

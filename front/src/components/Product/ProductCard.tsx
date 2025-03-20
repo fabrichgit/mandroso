@@ -134,7 +134,7 @@ export function ProductCard({ product, onEdit, onDelete, categorie, oncartin, ha
                 :
                 <button className='inline w-max h-max' onClick={() => {
                   setIt(i => !i);
-                  handleRemoveItem(product.id);
+                  handleRemoveItem(product._id!);
                 }}>
                   <Minus className='text-red-500' />
                 </button>
@@ -149,7 +149,7 @@ export function ProductCard({ product, onEdit, onDelete, categorie, oncartin, ha
                     type="number"
                     name="price"
                     defaultValue={product.price}
-                    onChange={(e) => handleItemChange(product.id, 'unitPrice', parseFloat(e.target.value))}
+                    onChange={(e) => handleItemChange(product._id!, 'unitPrice', parseFloat(e.target.value))}
                     className="w-full p-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
                   />
                 </div>
@@ -162,7 +162,7 @@ export function ProductCard({ product, onEdit, onDelete, categorie, oncartin, ha
                     name="quantity"
                     defaultValue={1}
                     className="w-full p-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    onChange={(e) => handleItemChange(product.id, 'quantity', parseInt(e.target.value))}
+                    onChange={(e) => handleItemChange(product._id!, 'quantity', parseInt(e.target.value))}
                   />
                 </div>
               </div> : null}
@@ -177,7 +177,7 @@ export function ProductCard({ product, onEdit, onDelete, categorie, oncartin, ha
                     Modifier
                   </button>
                   <button
-                    onClick={() => onDelete(product.id)}
+                    onClick={() => onDelete(product._id!)}
                     className="inline-flex items-center px-3 py-1.5 border border-transparent rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700"
                   >
                     <Trash2 className="h-4 w-4 mr-1" />

@@ -3,6 +3,7 @@ import useFetch from "http-react"
 import { api, token } from "../constant"
 import { Category } from "../types/category"
 import { Client } from "../types/client"
+import { Cart } from "../types/cart"
 
 export function useData_operations() {
 
@@ -60,14 +61,43 @@ export const useData_roles = create<{data: {id:string, label: string, operations
 
 export const useCategory = () => useFetch<Category[]>(api()+'/products/categories', {
     headers: {
-        "Authorization": `Bearer ${token()}`
+        "Authorization": token()
     }
 })
 
 
+export const useCart = () => useFetch<Cart[]>(api()+'/carts/', {
+    headers: {
+        "Authorization": token()
+    }
+})
 
 export const useClients = () => useFetch<Client[]>(api()+'/clients/', {
     headers: {
-        "Authorization": `Bearer ${token()}`
+        "Authorization": token()
+    }
+})
+
+export interface Facture2 {
+    cancelMotif: string,
+    cardId: string,
+    discountInPercent: number,
+    discountInValue: number,
+    isCancelled: boolean,
+    isDelivery: boolean,
+    isFactured: boolean;
+    isPaid: boolean,
+    paid: number,
+    productDiscounts: {
+        discountInPercent: number,
+        discountInValue: number,
+        productId: string
+    }[],
+    reference: string
+}
+
+export const useFactures = () => useFetch<Facture2[]>(api()+'/factures/', {
+    headers: {
+        "Authorization": token()
     }
 })

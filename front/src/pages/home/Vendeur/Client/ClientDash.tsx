@@ -27,6 +27,16 @@ function ClientDash() {
     .catch(() => alert("something wrong !"))
   }
 
+  const update = async (data: Partial<ClientFormData>) =>{
+    await axios.put(api()+"/clients/"+editingClient?._id, data, {
+      headers: {
+        Authorization: token()
+      }
+    })
+    .then(reFetch)
+    .catch(() => alert("something wrong !"))
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -63,7 +73,7 @@ function ClientDash() {
           isOpen={!!editingClient}
           onClose={() => setEditingClient(null)}
           client={editingClient}
-          onSubmit={useClientStore.getState().editClient}
+          onSubmit={update}
         />
       )}
     </div>

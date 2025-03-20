@@ -18,18 +18,21 @@ export const useClientStore = create<ClientStore>((set, prev) => ({
   addClient: (clientData) => {
     const newClient: Client = {
       ...clientData,
-      id: crypto.randomUUID(),
+      _id: crypto.randomUUID(),
     };
     set((state) => ({ clients: [...state.clients, newClient] }));
     return newClient
   },
+  // ts-ignore
   editClient: (clientData) => {
+    // ts-ignore
     set((state) => {
+      // ts-ignore
       if (!state.editingClient) return state;
       return {
         clients: state.clients.map((client) =>
-          client.id === state.editingClient?.id
-            ? { ...clientData, id: client.id }
+          client._id === state.editingClient?._id
+            ? { ...clientData, id: client._id }
             : client
         ),
         editingClient: null,
@@ -38,14 +41,14 @@ export const useClientStore = create<ClientStore>((set, prev) => ({
   },
   deleteClient: (id) => {
     set((state) => ({
-      clients: state.clients.filter((client) => client.id !== id),
+      clients: state.clients.filter((client) => client._id !== id),
     }));
   },
   setEditingClient: (client) => {
     set({ editingClient: client });
   },
   getById(id) {
-    return prev().clients.find(c => c.id === id)
+    return prev().clients.find(c => c._id === id)
   },
   setClients(clients) {
     set({ clients });

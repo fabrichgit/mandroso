@@ -1,12 +1,13 @@
 import { FilePlus, FileText, Pencil, Trash2 } from 'lucide-react';
 import { Cart, CartFormData } from '../../types/cart';
-import { useClientStore } from '../../store/useClientStore';
+// import { useClientStore } from '../../store/useClientStore';
 import { useProductStore } from '../../store/useProductStore';
 import { useState } from 'react';
 import { Invoice } from './Invoice';
 import { useDeliveryStore } from '../../store/useDeliveryStore';
 import toast from 'react-hot-toast';
 import { useFactureStore } from '../../store/useFactureStore';
+import CreateFactureModal from './Facture/CreateFactureModal';
 
 interface CartListProps {
     carts: Cart[],
@@ -17,16 +18,18 @@ interface CartListProps {
 }
 
 export function CartList({ onEdit, onDelete, editCart, carts, setActiveTab }: CartListProps) {
-    const clients = useClientStore((state) => state.clients);
+    // const clients = useClientStore((state) => state.clients);
     const products = useProductStore((state) => state.products);
     const [selectedCart, setSelectedCart] = useState<{ cart: Cart, action: 'invoice' | 'deliveryNote' } | null>(null);
 
     const { add, delivery: delv } = useDeliveryStore()
-    const { add: addFac, factures } = useFactureStore()
+    const { factures, productsFac } = useFactureStore()
 
-    const getClientName = (clientId: string) => {
-        return clients.find(c => c.id === clientId)?.name || 'Client inconnu';
-    };
+    const [cartId, ScartId] = useState<string>('')
+
+    // const getClientName = (clientId: string) => {
+    //     return clients.find(c => c._id === clientId)?.name || 'Client inconnu';
+    // };
 
     const getStatusBadgeClass = (status: Cart['status']) => {
         switch (status) {
@@ -55,20 +58,35 @@ export function CartList({ onEdit, onDelete, editCart, carts, setActiveTab }: Ca
     };
 
     const delivery = (cart: Cart) => {
-        add(cart.id)
+        add(cart._id)
         editCart({ ...cart, isDelivery: true })
         toast.success('ok !');
         setActiveTab('delivery')
     }
 
     const facture = (cart: Cart) => {
-        addFac(cart.id)
-        editCart({ ...cart, isFacture: true })
+        // addFac(cart.id)
+        // editCart({ ...cart, isFacture: true })
         toast.success('ok !');
-        setActiveTab('facture')
+
+        const product = cart.items.map((item) => {
+            return products.find(p => p._id === item.productId)!
+        })
+        useFactureStore.setState({productsFac: product})
+        ScartId(cart._id)
+
+        // setActiveTab('facture')
+        
     }
 
-    if (carts.length === 0) {
+    if (productsFac?.length !== 0 && products) {
+        return <CreateFactureModal products={productsFac} onClose={() => {
+            useFactureStore.setState({productsFac: []})
+            setActiveTab('facture')
+        }} cartId={cartId}/>
+    }
+
+    if (carts?.length === 0) {
         return (
             <div className="text-center py-8 bg-white rounded-lg shadow-sm">
                 <p className="text-gray-500">Aucune panier enregistrée</p>
@@ -86,9 +104,9 @@ export function CartList({ onEdit, onDelete, editCart, carts, setActiveTab }: Ca
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Référence
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Client
-                            </th>
+                            </th> */}
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Produits
                             </th>
@@ -108,17 +126,17 @@ export function CartList({ onEdit, onDelete, editCart, carts, setActiveTab }: Ca
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {carts?.map((cart) => (
-                            <tr key={cart.id} className="hover:bg-gray-50">
+                            <tr key={cart._id} className="hover:bg-gray-50">
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {cart.reference}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {getClientName(cart.clientId)}
-                                </td>
+                                </td> */}
                                 <td className="px-6 py-4 text-sm text-gray-500">
                                     <ul className="list-disc list-inside">
                                         {cart.items.map((item, index) => {
-                                            const product = products.find(p => p.id === item.productId);
+                                            const product = products.find(p => p._id === item.productId);
                                             return product ? (
                                                 <li key={index}>
                                                     {product.name} (x{item.quantity}) - {item.unitPrice.toLocaleString('fr-FR', { style: 'currency', currency: 'MGA' })} /unité
@@ -139,14 +157,14 @@ export function CartList({ onEdit, onDelete, editCart, carts, setActiveTab }: Ca
                                     {new Date(cart.createdAt).toLocaleDateString('fr-FR')}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    {delv.find(del => del.cartId === cart.id) ? null : <button
+                                    {delv.find(del => del.cartId === cart._id) ? null : <button
                                         onClick={() => delivery(cart)}
                                         className="text-orange-600 hover:text-green-900 mr-4"
                                         title="bon de livraison"
                                     >
                                         <FilePlus className="h-4 w-4" />
                                     </button> }
-                                    {factures.find(del => del.cartId === cart.id) ? null : <button
+                                    {factures?.find(del => del.cardId === cart._id) ? null : <button
                                         onClick={() => facture(cart)}
                                         className="text-green-600 hover:text-green-900 mr-4"
                                         title="creer la facture"
@@ -168,7 +186,7 @@ export function CartList({ onEdit, onDelete, editCart, carts, setActiveTab }: Ca
                                         <Pencil className="h-4 w-4" />
                                     </button>
                                     <button
-                                        onClick={() => onDelete(cart.id)}
+                                        onClick={() => onDelete(cart._id)}
                                         className="text-red-600 hover:text-red-900"
                                         title="Supprimer"
                                     >
