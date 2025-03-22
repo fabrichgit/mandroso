@@ -1,14 +1,13 @@
-import { api as url } from './../../../../../../constant/index';
+import { token, api as url } from './../../../../../../constant/index';
 import axios from 'axios';
 import { User, Role, AuthData, UserLogin } from '../types';
 
 const API_URL = url(); // Replace with your actual API URL
-const token = localStorage.getItem('token');
 
 const api = axios.create({
   baseURL: API_URL,
   headers: {
-    'Authorization': `${token}`,
+    'Authorization': token(),
   }
 });
 
