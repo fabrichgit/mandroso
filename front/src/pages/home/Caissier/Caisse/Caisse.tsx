@@ -1,8 +1,8 @@
+import CaisseRoot from "./src/CaisseRoot"
+
 function Caisse() {
   return (
-    <div>
-      caisse
-    </div>
+    <CaisseRoot/>
   )
 }
 

@@ -86,6 +86,7 @@ function Cart() {
                             />
 
                             <CartList
+                                onClose={() => setActiveTab('delivery')}
                                 setActiveTab={setActiveTab}
                                 carts={carts}
                                 editCart={editCart}

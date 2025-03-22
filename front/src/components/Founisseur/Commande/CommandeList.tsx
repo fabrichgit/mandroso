@@ -8,9 +8,10 @@ interface Props {
 }
 
 export function CommandeList({ commande, onEdit, onDelete }: Props) {
-    // const products = useProductStore((state) => state.products);
+    //   const getProductById = useProductStore.getState().getById;
+    //   const getProviderById = useFournisseurStore.getState().getById;
 
-    if (commande.length === 0) {
+    if (commande?.length === 0) {
         return (
             <div className="text-center py-8 bg-white rounded-lg shadow-sm">
                 <p className="text-gray-500">Aucune commande enregistrée</p>
@@ -31,12 +32,6 @@ export function CommandeList({ commande, onEdit, onDelete }: Props) {
                                 Status
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Fournisseur
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Produits
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Actions
                             </th>
                         </tr>
@@ -45,24 +40,10 @@ export function CommandeList({ commande, onEdit, onDelete }: Props) {
                         {commande?.map((cart) => (
                             <tr key={cart.id} className="hover:bg-gray-50">
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {cart.createdAt as string}
+                                    {new Date(cart.date).toLocaleString()}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {cart.status === "pending" ? "en attente" : "livre"}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {cart.fournisseur?.nom}
-                                </td>
-                                <td className="px-6 py-4 text-sm text-gray-500">
-                                     <ul className="list-disc list-inside">
-                                        {cart.product?.map((item, index) => {
-                                            return (
-                                                <li key={index}>
-                                                    {item.nom} (x{item.quantity}) - {item.price.toLocaleString('fr-FR', { style: 'currency', currency: 'MGA' })} /unité
-                                                </li>
-                                            );
-                                        })}
-                                    </ul>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <button

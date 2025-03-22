@@ -3,6 +3,9 @@ import { Plus, Save } from 'lucide-react';
 import { useFournisseurStore } from '../../../store/useFournisseurStore';
 import { useProductStore } from '../../../store/useProductStore';
 import { TableCommande } from '../../../store/useTableCommandeStore';
+import axios from 'axios';
+import { api, token } from '../../../constant';
+import toast from 'react-hot-toast';
 
 interface Props {
     onSubmit: (cmd: TableCommande) => void;
@@ -15,33 +18,47 @@ export function TableCommandeForm({ onSubmit, initialData, isEditing = false }: 
     const products = useProductStore((state) => state.products);
 
     const [formData, setFormData] = useState<TableCommande>({
-        id: Date.now().toString(),
-        fournisseur: null,
-        product: null,
-        createdAt: new Date(),
-        price: 0
+        price: 0,
+        product_id: "",
+        provider_id: ""
     });
 
     useEffect(() => {
         if (initialData) {
             setFormData({
-                createdAt: initialData.createdAt,
-                fournisseur: initialData.fournisseur || null,
-                product: initialData.product || null,
-                price: initialData.price || 0
+                price: initialData.price,
+                product_id: initialData.product_id,
+                provider_id: initialData.provider_id
             });
         }
     }, [initialData]);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit(formData);
+        const data = {
+            price: formData.price,
+            product_id: formData.product_id,
+            provider_id: formData.provider_id
+        }
+
+        await axios.post(api()+'/ppp/', data, {
+            headers: {
+                Authorization: token()
+            }
+        })
+        .then(() =>{
+            onSubmit(formData);
+            toast.success('')
+        })
+        .catch(() => {
+            toast.error('')
+        })
+
         if (!isEditing) {
             setFormData({
-                id: Date.now().toString(),
-                fournisseur: null,
-                product: null,
-                createdAt: new Date()
+                price: 0,
+                product_id: "",
+                provider_id: "",
             });
         }
     };
@@ -60,11 +77,11 @@ export function TableCommandeForm({ onSubmit, initialData, isEditing = false }: 
                             Produit
                         </label>
                         <select
-                            value={formData.product?._id || ""}
+                            value={formData.product_id || ""}
                             onChange={(e) => setFormData(prev => ({
                                 ...prev,
-                                product: products?.find(f => f._id!.toString() === e.target.value) || null,
-                                price: products?.find(f => f._id!.toString() === e.target.value)?.price
+                                product_id: e.target.value,
+                                price: products?.find(f => f._id!.toString() === e.target.value)?.price || 0
                             }))}
                             required
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
@@ -107,15 +124,15 @@ export function TableCommandeForm({ onSubmit, initialData, isEditing = false }: 
                             Fournisseur
                         </label>
                         <select
-                            value={formData?.fournisseur?.id}
-                            onChange={(e) => setFormData(prev => ({ ...prev, fournisseur: fournisseur?.find(f => f.id === e.target?.value)! }))}
+                            value={formData?.provider_id}
+                            onChange={(e) => setFormData(prev => ({ ...prev, provider_id: e.target.value }))}
                             required
                             className="mt-1 block mb-5 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm w-max"
                         >
                             <option value="">Sélectionner un fournisseur</option>
                             {fournisseur?.map(fr => (
-                                <option key={fr.id} value={fr.id}>
-                                    {fr.nom}
+                                <option key={fr._id} value={fr._id}>
+                                    {fr.name}
                                 </option>
                             ))}
                         </select>

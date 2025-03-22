@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { User } from '../api/auth';
 import { user_store } from './user';
 import { useCartStore } from './useCartStore';
+import { Delivery2 } from '../hook/data';
 
 export interface Delivery {
   id?: string;
@@ -10,8 +11,9 @@ export interface Delivery {
 }
 
 interface DeliveryStore {
-  delivery: Delivery[];
+  delivery: Delivery2[];
   add: (cartId: string) => void;
+  setDelivery: (data: Delivery2[]) => void;
   validate: (idCart: string) => void;
   countProductByDeliveryStatus: (productId: string, isDelivery: boolean) => number;
   countProductInDeliveries: (productId: string) => number;
@@ -19,15 +21,18 @@ interface DeliveryStore {
 
 export const useDeliveryStore = create<DeliveryStore>((set, get) => ({
   delivery: [],
-  add(cartId) {
-    set(prev => ({ ...prev, delivery: [{ id: Date.now().toString(), cartId, validation: [] }, ...prev.delivery] }))
+  add(_cartId) {
+    // set(prev => ({ ...prev, delivery: [{ id: Date.now().toString(), cartId, validation: [] }, ...prev.delivery] }))
+  },
+  setDelivery(data) {
+    set({delivery: data})
   },
   validate(idCart) {
     const { data: user } = user_store.getState()
     if (!user)
       return;
 
-    set(prev => ({ ...prev, delivery: prev.delivery.map(del => del.cartId !== idCart ? del : { ...del, validation: [user, ...del.validation] }) }))
+    // set(prev => ({ ...prev, delivery: prev.delivery.map(del => del.cartId !== idCart ? del : { ...del, validation: [user, ...del.validation] }) }))
 
     if (user.Role === "gerant") {
       useCartStore.getState().delivery(idCart)
@@ -37,7 +42,7 @@ export const useDeliveryStore = create<DeliveryStore>((set, get) => ({
   countProductInDeliveries: (productId) => {
     const cartStore = useCartStore.getState();
     return get().delivery.reduce((count, del) => {
-      const cart = cartStore.carts.find(c => c._id === del.cartId);
+      const cart = cartStore.carts.find(c => c._id === del.id);
       if (!cart) return count;
       return count + cart.items.reduce((sum, item) => item.productId === productId ? sum + item.quantity : sum, 0);
     }, 0);
@@ -45,8 +50,8 @@ export const useDeliveryStore = create<DeliveryStore>((set, get) => ({
 
   countProductByDeliveryStatus: (productId, isDelivery) => {
     const cartStore = useCartStore.getState();
-    return get().delivery.reduce((count, del) => {
-      const cart = cartStore.carts.find(c => c._id === del.cartId && c.isDelivery === isDelivery);
+    return get().delivery?.reduce((count, del) => {
+      const cart = cartStore.carts.find(c => c._id === del.id && c.isDelivery === isDelivery);
       if (!cart) return count;
       return count + cart.items.reduce((sum, item) => item.productId === productId ? sum + item.quantity : sum, 0);
     }, 0);

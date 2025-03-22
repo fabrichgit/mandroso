@@ -9,7 +9,7 @@ interface FounisseurListProps {
 
 export function FounisseurList({ fournisseur, onEdit, onDelete }: FounisseurListProps) {
 
-  if (fournisseur.length === 0) {
+  if (fournisseur?.length === 0) {
     return (
       <div className="text-center py-8 bg-white rounded-lg shadow-sm">
         <p className="text-gray-500">Aucun fournisseur enregistré</p>
@@ -52,25 +52,25 @@ export function FounisseurList({ fournisseur, onEdit, onDelete }: FounisseurList
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {fournisseur.map((fs) => (
-            <tr key={fs.id} className="hover:bg-gray-50">
+          {fournisseur?.map((fs) => (
+            <tr key={fs._id} className="hover:bg-gray-50">
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {fs.nom}
+                {fs.name}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {fs.telephone}
+                {fs.phone}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {fs.compte}
+                {fs.account}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {fs.adresse}
+                {fs.address}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {fs.credit}
+                {fs.creditDuration}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {fs.livraison}
+                {fs.deliveryMeanTime}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {fs.nif && fs.nif}
@@ -86,7 +86,7 @@ export function FounisseurList({ fournisseur, onEdit, onDelete }: FounisseurList
                   <Pencil className="h-4 w-4" />
                 </button>
                 <button
-                  onClick={() => onDelete(fs.id!)}
+                  onClick={() => onDelete(fs._id!)}
                   className="text-red-600 hover:text-red-900"
                 >
                   <Trash2 className="h-4 w-4" />

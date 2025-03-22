@@ -119,7 +119,7 @@ export function CartForm({ onSubmit, initialData, isEditing = false }: CartFormP
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
                         >
                             <option value="">Sélectionner un client</option>
-                            {clients.map(client => (
+                            {clients?.map(client => (
                                 <option key={client._id} value={client._id}>
                                     {client.name}
                                 </option>

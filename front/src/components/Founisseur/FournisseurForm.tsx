@@ -3,6 +3,9 @@ import { Plus, Save, X } from 'lucide-react';
 import { Fournisseur, FournisseurFormData } from '../../types/fournisseur';
 import { useVendeurStore } from '../../store/useFournisseurStore';
 import VendeurDropdown from './VendeurDropdown';
+import axios from 'axios';
+import { api, token } from '../../constant';
+import toast from 'react-hot-toast';
 
 interface ClientFormProps {
   onSubmit: (client: FournisseurFormData) => void;
@@ -15,47 +18,65 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
   const [isOpen, setOpening] = useState(false)
   const { vendeurs, add: addVendeur } = useVendeurStore()
 
-  const [formData, setFormData] = useState<FournisseurFormData>({
-    nom: '',
-    telephone: '',
+  const [formData, setFormData] = useState<FournisseurFormData & {vendeurs: any[]}>({
+    name: '',
+    phone: '',
     nif: '',
     stat: '',
-    adresse: '',
-    compte: '',
-    credit: '',
-    livraison: '',
+    address: '',
+    account: '',
+    creditDuration: '',
+    deliveryMeanTime: '',
+    contact: [],
     vendeurs: []
   });
 
   useEffect(() => {
     if (initialData) {
       setFormData({
-        nom: initialData.nom,
-        telephone: initialData.telephone,
+        name: initialData.name,
+        phone: initialData.phone,
         nif: initialData.nif,
         stat: initialData.stat,
-        adresse: initialData.adresse,
-        compte: initialData.compte,
-        credit: initialData.credit,
-        livraison: initialData.livraison,
-        vendeurs: initialData.vendeurs
+        address: initialData.address,
+        account: initialData.account,
+        creditDuration: initialData.creditDuration,
+        deliveryMeanTime: initialData.deliveryMeanTime,
+        contact: initialData.contact,
+        vendeurs: []
       });
     }
   }, [initialData]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+
+    await axios.post(api()+"/providers/", formData, {
+      headers: {
+        Authorization: token()
+      }
+    })
+    .then(() => {
+      // @ts-ignore
+      onSubmit(formData);
+      toast.success('')
+    })
+    .catch(() => {
+      toast.error('')
+    })
+
     if (!isEditing) {
       setFormData({
-        nom: '',
-        telephone: '',
+        name: '',
+        phone: '',
         nif: '',
         stat: '',
-        adresse: '',
-        compte: '',
-        credit: '',
-        livraison: '',
+        address: '',
+        account: '',
+        creditDuration: '',
+        deliveryMeanTime: '',
+        contact: [],
+        vendeurs: []
       });
     }
   };
@@ -79,8 +100,8 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
           <input
             type="text"
             id="nom"
-            name="nom"
-            value={formData.nom}
+            name="name"
+            value={formData.name}
             onChange={handleChange}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
@@ -95,8 +116,8 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
           <input
             type="text"
             id="Telephone"
-            name="telephone"
-            value={formData.telephone}
+            name="phone"
+            value={formData.phone}
             onChange={handleChange}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
@@ -116,11 +137,11 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
                       key={index}
                       className="inline-flex items-center px-2.5 py-0.5 rounded-full font-medium bg-orange-100 text-orange-800"
                     >
-                      {vd.nom}
+                      {vd.name}
                       <button
                         type="button"
                         onClick={() => {
-                          setFormData(prev => ({...prev, vendeurs: prev.vendeurs?.filter(vnd => vnd.id !== vd.id)}))
+                          setFormData(prev => ({...prev, vendeurs: prev.vendeurs?.filter(vnd => vnd._id !== vd._id)}))
                         }}
                         className="ml-1 inline-flex items-center p-0.5 h-max rounded-full text-orange-400 hover:bg-orange-200 hover:text-orange-600"
                       >
@@ -140,8 +161,8 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
                 {
                   vendeurs.map(vd => (
                     <div className='flex gap-3 items-center'>
-                      <input type="checkbox" name="" id="" className='cursor-pointer' checked={formData.vendeurs?.includes(vd)} onChange={() => !formData.vendeurs?.includes(vd) ? setFormData(prev => ({ ...prev, vendeurs: [vd, ...(prev.vendeurs || [])] })) : setFormData(prev => ({ ...prev, vendeurs: prev.vendeurs?.filter(vnd => vnd.id !== vd.id) }))}/>
-                      <label htmlFor="">{vd.nom}</label>
+                      <input type="checkbox" name="" id="" className='cursor-pointer' checked={formData.vendeurs?.includes(vd)} onChange={() => !formData.vendeurs?.includes(vd) ? setFormData(prev => ({ ...prev, vendeurs: [vd, ...(prev.vendeurs || [])] })) : setFormData(prev => ({ ...prev, vendeurs: prev.vendeurs?.filter(vnd => vnd._id !== vd._id) }))}/>
+                      <label htmlFor="">{vd.name}</label>
                     </div>
                   ))
                 }
@@ -187,8 +208,8 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
           <input
             type="text"
             id="adresse"
-            name="adresse"
-            value={formData.adresse}
+            name="address"
+            value={formData.address}
             onChange={handleChange}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
@@ -201,8 +222,8 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
           <input
             type="text"
             id="compte"
-            name="compte"
-            value={formData.compte}
+            name="account"
+            value={formData.account}
             onChange={handleChange}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
@@ -215,8 +236,8 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
           <input
             type="text"
             id="credit"
-            name="credit"
-            value={formData.credit}
+            name="creditDuration"
+            value={formData.creditDuration}
             onChange={handleChange}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
@@ -229,8 +250,8 @@ export function FournisseurForm({ onSubmit, initialData, isEditing = false }: Cl
           <input
             type="text"
             id="livraison"
-            name="livraison"
-            value={formData.livraison}
+            name="deliveryMeanTime"
+            value={formData.deliveryMeanTime}
             onChange={handleChange}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"

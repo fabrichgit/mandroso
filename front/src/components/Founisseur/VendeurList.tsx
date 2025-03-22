@@ -38,15 +38,15 @@ export function VendeurList({ vendeur: fournisseur, onDelete }: FounisseurListPr
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {fournisseur.map((fs) => (
-            <tr key={fs.id} className="hover:bg-gray-50">
+            <tr key={fs._id} className="hover:bg-gray-50">
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {fs.nom}
+                {fs.name}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {fs.telephone}
+                {fs.phone}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {fs.aPropos}
+                {fs.description}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 {/* <button
@@ -56,7 +56,7 @@ export function VendeurList({ vendeur: fournisseur, onDelete }: FounisseurListPr
                   <Pencil className="h-4 w-4" />
                 </button> */}
                 <button
-                  onClick={() => onDelete(fs.id!)}
+                  onClick={() => onDelete(fs._id!)}
                   className="text-red-600 hover:text-red-900"
                 >
                   <Trash2 className="h-4 w-4" />

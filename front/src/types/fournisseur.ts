@@ -1,21 +1,35 @@
 export interface Vendeurs {
-    id?: string;
-    nom: string;
-    telephone: string;
-    aPropos: string;
-}
+    _id?: string,
+    description: string,
+    name: string,
+    phone: string,
+    provider_id?: string
+  }
 
 export interface Fournisseur {
-    id?: string,
-    nom: string,
-    telephone: string,
-    adresse: string,
-    compte: string,
+    _id?: string,
+    account: string,
+    address: string,
+    contact: string[],
+    creditDuration: string,
+    deliveryMeanTime: string,
+    name: string,
     nif: string,
-    stat: string,
-    credit: string,
-    livraison: string,
-    vendeurs?: Vendeurs[],
+    phone: string,
+    stat: string
 }
 
-export type FournisseurFormData = Omit<Fournisseur, 'id'>;
+// {
+//     id?: string,
+//     nom: string,
+//     telephone: string,
+//     adresse: string,
+//     compte: string,
+//     nif: string,
+//     stat: string,
+//     credit: string,
+//     livraison: string,
+//     vendeurs?: Vendeurs[],
+// }
+
+export type FournisseurFormData = Omit<Fournisseur, 'id' | '_id'>;

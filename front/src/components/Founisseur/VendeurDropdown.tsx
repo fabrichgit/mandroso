@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Vendeurs } from "../../types/fournisseur";
+import axios from "axios";
+import { api, token } from "../../constant";
+import toast from "react-hot-toast";
 
 export default function VendeurDropdown({ onSubmit, onClose, onOpen }: { onSubmit?: (data: Vendeurs) => void, onOpen?: () => void, onClose?: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
+
   const [formData, setFormData] = useState<Vendeurs>({
-    aPropos: '',
-    nom: '',
-    telephone: '',
+    description: '',
+    name: '',
+    phone: '',
   });
 
   useEffect(() => {
@@ -18,14 +22,32 @@ export default function VendeurDropdown({ onSubmit, onClose, onOpen }: { onSubmi
     }
   }, [isOpen])
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (onSubmit) {
-      onSubmit({...formData, id: Date.now().toString()});
+      const data = {
+        description: formData.description,
+        name: formData.name,
+        phone: formData.phone,
+        provider_id: Date.now().toString()
+      }
+
+      await axios.post(api()+"/vendors/", data, {
+        headers: {
+          Authorization: token()
+        }
+      })
+      .then(() => {
+        toast.success('')
+        onSubmit(data)
+      })
+      .catch(() => {
+        toast.error('')
+      })
     }
     setFormData({
-      aPropos: '',
-      nom: '',
-      telephone: '',
+      description: '',
+      name: '',
+      phone: ''
     });
     setIsOpen(false)
   };
@@ -54,9 +76,9 @@ export default function VendeurDropdown({ onSubmit, onClose, onOpen }: { onSubmi
           <div className="mt-2 space-y-2">
             <input
               type="name"
-              name="nom"
+              name="name"
               placeholder="Nom"
-              value={formData.nom}
+              value={formData.name}
               onChange={handleChange}
               className="w-full p-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
               required
@@ -64,16 +86,16 @@ export default function VendeurDropdown({ onSubmit, onClose, onOpen }: { onSubmi
             <input
               type="tel"
               placeholder="telephone"
-              name="telephone"
-              value={formData.telephone}
+              name="phone"
+              value={formData.phone}
               onChange={handleChange}
               className="w-full p-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
               required
             />
             <textarea
               placeholder="aPropos"
-              name="aPropos"
-              value={formData.aPropos}
+              name="description"
+              value={formData.description}
               onChange={handleChange}
               className="w-full p-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
               required

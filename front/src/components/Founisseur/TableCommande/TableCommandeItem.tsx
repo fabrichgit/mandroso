@@ -1,14 +1,19 @@
 import { MinusCircle, Pencil, Trash2 } from "lucide-react"
 import { TableCommande } from "../../../store/useTableCommandeStore"
 import { TbBorderBottomPlus } from "react-icons/tb";
+import { useProductStore } from "../../../store/useProductStore";
+import { useFournisseurStore } from "../../../store/useFournisseurStore";
 
 function TableCommandeItem({ cart, onDelete, onEdit, selectedTable, setSelectedTable }: {
     cart: TableCommande, selectedTable: TableCommande[];
     setSelectedTable: React.Dispatch<React.SetStateAction<TableCommande[]>>, onEdit: (cmd: TableCommande) => void, onDelete: (id: string) => void
 }) {
 
+    const getProductById = useProductStore.getState().getById
+    const getProviderById = useFournisseurStore.getState().getById
+
     // const add = useCommandeStore.getState().add;
-    const onCommande = !!!selectedTable.find(s => s.id === cart.id)
+    const onCommande = !!selectedTable.find(s => s.id === cart.id)
     // const [formData, setFormData] = useState<Commande>({
     //     id: Date.now().toString(),
     //     createdAt: String(new Date()),
@@ -32,17 +37,17 @@ function TableCommandeItem({ cart, onDelete, onEdit, selectedTable, setSelectedT
     return (
         <tr key={cart.id} className="hover:bg-gray-50">
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {cart.fournisseur?.nom}
+                {getProviderById(cart.provider_id)?.name}
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {cart.product?.name}
+                {getProductById(cart.product_id)?.name}
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 {cart.price} MGA
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 {
-                    !onCommande ?
+                    onCommande ?
                         <div className="flex items-center gap-3">
 
                             {!!!selectedTable.find(s => s.id === cart.id) ? <button

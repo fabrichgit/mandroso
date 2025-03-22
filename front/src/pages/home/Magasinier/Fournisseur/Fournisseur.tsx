@@ -3,18 +3,29 @@ import { useFournisseurStore, useVendeurStore } from "../../../../store/useFourn
 import { FournisseurModal } from "../../../../components/Founisseur/FournisseurModal";
 import { FournisseurForm } from "../../../../components/Founisseur/FournisseurForm";
 import { FounisseurList } from "../../../../components/Founisseur/FounisseurList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { VendeurList } from "../../../../components/Founisseur/VendeurList";
 import VendeurDropdown from "../../../../components/Founisseur/VendeurDropdown";
 import CommandeDash from "./Commande/Commande";
 import TableCommande from "./TableCommande/TableCommande";
+import { useProviders, useVendors } from "../../../../hook/data";
 
 function Fournisseur() {
 
     const [activeTab, setActiveTab] = useState<'fournisseur' | 'vendeur' | 'commande' | 'table'>('fournisseur');
-    const { fournisseur, editing, setEditing } = useFournisseurStore();
+    const {data: pr, reFetch: rP} = useProviders()
+    const { fournisseur, editing, setEditing, setFournisseur } = useFournisseurStore();
 
-    const { vendeurs, add, setEditing: setEditingVnd, delete: d } = useVendeurStore()
+    useEffect(() => {
+        setFournisseur(pr)
+    }, [pr])
+
+    const {data: v, reFetch: rV} = useVendors()
+    const { vendeurs, setEditing: setEditingVnd, delete: d, setVendeurs } = useVendeurStore()
+
+    useEffect(() => {
+        setVendeurs(v)
+    }, [v])
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -73,13 +84,13 @@ function Fournisseur() {
                                                 fournisseur
                                             </div>
                                             <div className="text-sm text-gray-500">
-                                                Total: {fournisseur.length}
+                                                Total: {fournisseur?.length}
                                             </div>
                                         </div>
 
                                         <div className="space-y-8">
                                             <FournisseurForm
-                                                onSubmit={useFournisseurStore.getState().add}
+                                                onSubmit={rP}
                                                 isEditing={false}
                                             />
 
@@ -114,7 +125,7 @@ function Fournisseur() {
                                             </div>
                                             <div className="flex justify-end items-center gap-3 w-max">
                                                 <label htmlFor="">Ajouter un vendeur</label>
-                                                <VendeurDropdown onSubmit={add} />
+                                                <VendeurDropdown onSubmit={rV} />
                                             </div>
                                         </div>
 
@@ -141,7 +152,7 @@ function Fournisseur() {
                     case 'commande':
                         return <CommandeDash />
                     case 'table':
-                        return <TableCommande />
+                        return <TableCommande setActiveTab={setActiveTab}/>
                     default:
                         break;
                 }

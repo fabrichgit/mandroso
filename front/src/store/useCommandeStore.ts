@@ -1,19 +1,15 @@
-import { create } from 'zustand';
-import { Fournisseur } from '../types/fournisseur';
+import { create } from "zustand";
 
 export type Commande = {
   id?: string;
-  fournisseur?: Fournisseur | null,
-  product?: {
-    nom: string,
-    price: number,
-    quantity: number
-  }[],
-  // table: TableCommande;
-  createdAt: string;
-  // quantity: number;
+  command_date: string;
+  date: string;
+  products_commanded: {
+    ppp_id: string;
+    quantity: 0;
+  }[];
   status?: "pending" | "delivered";
-}
+};
 
 interface CommandeStore {
   commande: Commande[];
@@ -24,11 +20,15 @@ interface CommandeStore {
   setEditing: (data: Commande | null) => void;
   reset?: () => void;
   delete: (id: string) => void;
+  setCommand: (data: Commande[]) => void
   // countProductInCommandes: (productId: string) => number;
 }
 
 export const useCommandeStore = create<CommandeStore>((set) => ({
   commande: [],
+  setCommand(data) {
+    set({commande: data})
+  },
   editing: null,
   add: (data) => {
     set((state) => ({ commande: [data, ...state.commande] }));
@@ -37,7 +37,11 @@ export const useCommandeStore = create<CommandeStore>((set) => ({
     set((state) => {
       if (!state.editing) return state;
       return {
-        ...state, editing: null, commande: state.commande.map(prev => prev.id === state.editing?.id ? { prev, ...data_ } : prev)
+        ...state,
+        editing: null,
+        commande: state.commande.map((prev) =>
+          prev.id === state.editing?.id ? { prev, ...data_ } : prev
+        ),
       };
     });
   },
@@ -50,7 +54,7 @@ export const useCommandeStore = create<CommandeStore>((set) => ({
     set({ editing: data });
   },
   reset() {
-    set({ commande: [] })
+    set({ commande: [] });
   },
   // addMultiple(tables) {
 

@@ -101,3 +101,48 @@ export const useFactures = () => useFetch<Facture2[]>(api()+'/factures/', {
         "Authorization": token()
     }
 })
+
+export interface Delivery2   {
+    chrono_pause: string[]
+    chrono_play: string[]
+    chrono_start: string
+    chrono_stop: string
+    client_id: string
+    final_validator: string
+    id: string
+    product_list: {
+        product_id: string
+        quantity: number
+        validators: string[]
+    }[]
+  }
+
+export const useDelivery = () => useFetch<Delivery2[]>(api()+'/livraisons/', {
+    headers: {
+        "Authorization": token()
+    }
+})
+
+export const useVendors = () => useFetch(api()+'/vendors/', {
+    headers: {
+        "Authorization": token()
+    }
+})
+
+export const useProviders = () => useFetch(api()+'/providers/', {
+    headers: {
+        "Authorization": token()
+    }
+})
+
+export const usePPP = () => useFetch(api()+'/ppp/', {
+    headers: {
+        "Authorization": token()
+    }
+})
+
+export const useCommands = () => useFetch(api()+'/commands/', {
+    headers: {
+        "Authorization": token()
+    }
+})

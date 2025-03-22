@@ -46,7 +46,7 @@ function Sidebar({ tab }: { tab: string | undefined }) {
                             </Link>
                             <Link to="/caisse" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-black/60 hover:text-gray-300')} >
                                 <PiggyBank />
-                                <span className="ml-2 text-sm font-medium md:inline hidden">Caisse</span>
+                                <span className="ml-2 text-sm font-medium md:inline hidden">Tresorerie</span>
                             </Link>
                             <Link to="/products" className={"flex items-center w-full h-12 px-3 mt-2 rounded " + reactiveClass(tab!, 'users', 'bg-gray-700', 'hover:bg-black/60 hover:text-gray-300')} >
                                 <AiFillProduct />
