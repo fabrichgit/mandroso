@@ -58,7 +58,7 @@ export const RoleForm: React.FC<RoleFormProps> = ({ initialData = initialRoleSta
           type="submit"
           className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
         >
-          {initialData.roleName ? 'Mettre à jour' : 'Créer'}
+          {initialData.RoleName ? 'Mettre à jour' : 'Créer'}
         </button>
       </div>
     </form>

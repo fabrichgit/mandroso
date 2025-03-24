@@ -84,8 +84,8 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData = initialUserSta
         >
           <option value="">Sélectionner un rôle</option>
           {roles.map((role) => (
-            <option key={role.roleName} value={role.roleName}>
-              {role.roleDescription}
+            <option key={role.RoleName} value={role.RoleName}>
+              {role.RoleName}
             </option>
           ))}
         </select>

@@ -102,6 +102,7 @@ export function CartList({
       })),
       client_id: cart.clientId,
     };
+    
 
     await axios
       .post(api() + "/livraisons/", formData, {
@@ -138,6 +139,8 @@ export function CartList({
       </div>
     );
   }
+
+  console.log(carts);
 
   return (
     <>
