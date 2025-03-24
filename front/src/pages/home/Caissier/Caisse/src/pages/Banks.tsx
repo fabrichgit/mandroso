@@ -120,7 +120,7 @@ export default function Banks() {
                   <button
                     onClick={() => {
                       if (confirm('Êtes-vous sûr de vouloir supprimer cette banque ?')) {
-                        deleteMutation.mutate(bank.reference);
+                        deleteMutation.mutate(bank._id);
                       }
                     }}
                     className="text-red-600 hover:text-red-900"
