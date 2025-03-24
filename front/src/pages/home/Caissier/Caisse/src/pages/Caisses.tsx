@@ -4,13 +4,15 @@ import { Plus, Pencil, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { getCaisses, createCaisse, updateCaisse, deleteCaisse } from '../api';
 import { Caisse } from '../types';
+import { useStore } from '../../../../Gerant/Users/src/store/useStore';
 
 export default function Caisses() {
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [selectedCaisse, setSelectedCaisse] = React.useState<Caisse | null>(null);
 
-  const { data: caisses, isLoading } = useQuery('caisses', getCaisses);
+  const { data: caisses } = useQuery('caisses', getCaisses);
+  const {users} = useStore()
 
   const createMutation = useMutation(createCaisse, {
     onSuccess: () => {
@@ -69,7 +71,7 @@ export default function Caisses() {
                 Référence
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                User ID
+                Utilisateur
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Solde
@@ -157,15 +159,19 @@ export default function Caisses() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    User ID
+                    Utilisateur
                   </label>
-                  <input
-                    type="text"
+                  <select
                     name="user_id"
                     defaultValue={selectedCaisse?.user_id}
                     required
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  />
+                  >
+                    {
+                      // @ts-ignore
+                      users?.map(u => <option value={u.id || u._id || u.ID}>{u.name}</option>)
+                    }
+                  </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
